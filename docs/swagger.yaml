@@ -1,0 +1,247 @@
+definitions:
+  helpers.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: integer
+      validation:
+        additionalProperties:
+          type: string
+        type: object
+    type: object
+  request.AdminLoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.MemberLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  request.MemberRegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  request.ResendEmailVerificationRequest:
+    properties:
+      email:
+        type: string
+    type: object
+  request.SuperadminLoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  request.VerifyEmailRequest:
+    properties:
+      token:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /admin/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login Admin
+      parameters:
+      - description: Login Admin
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.AdminLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Login Admin
+      tags:
+      - Auth-Admin
+  /admin/auth/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get Profile Admin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Profile Admin
+      tags:
+      - Auth-Admin
+  /member/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login Member
+      parameters:
+      - description: Login Member
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.MemberLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Login Member
+      tags:
+      - Auth-Member
+  /member/auth/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get Profile Member
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Profile Member
+      tags:
+      - Auth-Member
+  /member/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register Member
+      parameters:
+      - description: Register Member
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.MemberRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Register Member
+      tags:
+      - Auth-Member
+  /member/auth/resend-email-verification:
+    post:
+      consumes:
+      - application/json
+      description: Resend Verify Email Member
+      parameters:
+      - description: Resend Verify Email Member
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.ResendEmailVerificationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Resend Verify Email Member
+      tags:
+      - Auth-Member
+  /member/auth/verify-email:
+    post:
+      consumes:
+      - application/json
+      description: Verify Email Member
+      parameters:
+      - description: Verify Email Member
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.VerifyEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Verify Email Member
+      tags:
+      - Auth-Member
+  /superadmin/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login Superadmin
+      parameters:
+      - description: Login Superadmin
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SuperadminLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Login Superadmin
+      tags:
+      - Auth-Superadmin
+  /superadmin/auth/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get Profile Superadmin
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Profile Superadmin
+      tags:
+      - Auth-Superadmin
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
