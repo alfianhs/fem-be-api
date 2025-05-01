@@ -6,6 +6,7 @@ import (
 	"app/app/delivery/http/middleware"
 	superadmin_http "app/app/delivery/http/superadmin"
 	mongo_repository "app/app/repository/mongo"
+	s3_repository "app/app/repository/s3"
 	admin_usecase "app/app/usecase/admin"
 	member_usecase "app/app/usecase/member"
 	superadmin_usecase "app/app/usecase/superadmin"
@@ -71,9 +72,13 @@ func main() {
 	// init mongo repository
 	mongoDbRepo := mongo_repository.NewMongoDbRepo(mongo)
 
+	// init s3 repository
+	s3Repo := s3_repository.NewS3Repository(timeoutContext)
+
 	// init superadmin usecase
 	superadminUsecase := superadmin_usecase.NewSuperadminAppUsecase(superadmin_usecase.RepoInjection{
 		MongoDbRepo: mongoDbRepo,
+		S3Repo:      s3Repo,
 	}, timeoutContext)
 
 	// init admin usecase

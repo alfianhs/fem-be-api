@@ -5,6 +5,8 @@ import (
 	s3_model "app/domain/model/s3"
 	"context"
 	"io"
+
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type MongoDbRepo interface {
@@ -25,6 +27,13 @@ type MongoDbRepo interface {
 	CreateManyMedia(ctx context.Context, medias []*mongo_model.Media) (err error)
 	UpdatePartialMedia(ctx context.Context, options, field map[string]interface{}) (err error)
 	UpdateManyMediaPartial(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Season
+	FetchListSeason(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountSeason(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneSeason(ctx context.Context, options map[string]interface{}) (row *mongo_model.Season, err error)
+	CreateOneSeason(ctx context.Context, season *mongo_model.Season) (err error)
+	UpdatePartialSeason(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {

@@ -11,6 +11,14 @@ definitions:
           type: string
         type: object
     type: object
+  mongo_model.SeasonStatus:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - SeasonStatusActive
+    - SeasonStatusInactive
   request.AdminLoginRequest:
     properties:
       password:
@@ -38,6 +46,11 @@ definitions:
     properties:
       email:
         type: string
+    type: object
+  request.SeasonStatusUpdateRequest:
+    properties:
+      status:
+        $ref: '#/definitions/mongo_model.SeasonStatus'
     type: object
   request.SuperadminLoginRequest:
     properties:
@@ -239,6 +252,179 @@ paths:
       summary: Get Profile Superadmin
       tags:
       - Auth-Superadmin
+  /superadmin/seasons:
+    get:
+      consumes:
+      - application/json
+      description: Get Seasons
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Seasons
+      tags:
+      - Season-Superadmin
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create Season
+      parameters:
+      - in: formData
+        name: name
+        required: true
+        type: string
+      - description: Logo
+        in: formData
+        name: logo
+        required: true
+        type: file
+      - description: Banner
+        in: formData
+        name: banner
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Season
+      tags:
+      - Season-Superadmin
+  /superadmin/seasons/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Season
+      parameters:
+      - description: Season ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Season
+      tags:
+      - Season-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Season Detail
+      parameters:
+      - description: Season ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Season Detail
+      tags:
+      - Season-Superadmin
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update Season
+      parameters:
+      - description: Season ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: name
+        required: true
+        type: string
+      - description: Logo
+        in: formData
+        name: logo
+        type: file
+      - description: Banner
+        in: formData
+        name: banner
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Season
+      tags:
+      - Season-Superadmin
+  /superadmin/seasons/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Update Season Status
+      parameters:
+      - description: Season ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Season Status
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SeasonStatusUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Season Status
+      tags:
+      - Season-Superadmin
 securityDefinitions:
   BearerAuth:
     in: header
