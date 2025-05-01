@@ -5,12 +5,21 @@ import (
 	"app/helpers"
 	jwt_helpers "app/helpers/jwt"
 	"context"
+	"net/http"
 )
 
 type SuperadminAppUsecase interface {
 	// Auth
 	Login(ctx context.Context, payload request.SuperadminLoginRequest) helpers.Response
 	GetProfile(ctx context.Context, claim jwt_helpers.SuperadminJWTClaims) helpers.Response
+
+	// Season
+	GetSeasonsList(ctx context.Context, options map[string]interface{}) helpers.Response
+	GetSeasonDetail(ctx context.Context, options map[string]interface{}) helpers.Response
+	CreateSeason(ctx context.Context, payload request.SeasonCreateRequest, request *http.Request) helpers.Response
+	UpdateSeason(ctx context.Context, options map[string]interface{}, request *http.Request) helpers.Response
+	DeleteSeason(ctx context.Context, options map[string]interface{}) helpers.Response
+	UpdateSeasonStatus(ctx context.Context, options map[string]interface{}) helpers.Response
 }
 
 type AdminAppUsecase interface {
