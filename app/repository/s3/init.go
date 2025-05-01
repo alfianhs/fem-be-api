@@ -38,7 +38,9 @@ func NewS3Repository(contextTimeout time.Duration) domain.S3Repo {
 		return nil
 	}
 
-	client := s3.NewFromConfig(cfg)
+	client := s3.NewFromConfig(cfg, func(o *s3.Options) {
+		o.UsePathStyle = true
+	})
 	return &s3Repo{
 		client:     client,
 		bucketName: os.Getenv("S3_BUCKET_NAME"),
