@@ -34,6 +34,13 @@ type MongoDbRepo interface {
 	FetchOneSeason(ctx context.Context, options map[string]interface{}) (row *mongo_model.Season, err error)
 	CreateOneSeason(ctx context.Context, season *mongo_model.Season) (err error)
 	UpdatePartialSeason(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Venue
+	FetchListVenue(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountVenue(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneVenue(ctx context.Context, options map[string]interface{}) (row *mongo_model.Venue, err error)
+	CreateOneVenue(ctx context.Context, venue *mongo_model.Venue) (err error)
+	UpdatePartialVenue(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {

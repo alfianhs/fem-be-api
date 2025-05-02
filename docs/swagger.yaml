@@ -59,6 +59,16 @@ definitions:
       password:
         type: string
     type: object
+  request.VenueCreateRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  request.VenueUpdateRequest:
+    properties:
+      name:
+        type: string
+    type: object
   request.VerifyEmailRequest:
     properties:
       token:
@@ -425,6 +435,136 @@ paths:
       summary: Update Season Status
       tags:
       - Season-Superadmin
+  /superadmin/venues:
+    get:
+      consumes:
+      - application/json
+      description: Get Venues List
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Venues List
+      tags:
+      - Venue-Superadmin
+    post:
+      consumes:
+      - application/json
+      description: Create Venue
+      parameters:
+      - description: Create Venue
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.VenueCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Venue
+      tags:
+      - Venue-Superadmin
+  /superadmin/venues/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Venue
+      tags:
+      - Venue-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Venue Detail
+      parameters:
+      - description: Venue ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Venue Detail
+      tags:
+      - Venue-Superadmin
+    put:
+      consumes:
+      - application/json
+      description: Update Venue
+      parameters:
+      - description: Venue ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Venue
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.VenueUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Venue
+      tags:
+      - Venue-Superadmin
 securityDefinitions:
   BearerAuth:
     in: header
