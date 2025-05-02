@@ -20,6 +20,13 @@ type SuperadminAppUsecase interface {
 	UpdateSeason(ctx context.Context, options map[string]interface{}, request *http.Request) helpers.Response
 	DeleteSeason(ctx context.Context, options map[string]interface{}) helpers.Response
 	UpdateSeasonStatus(ctx context.Context, options map[string]interface{}) helpers.Response
+
+	// Venue
+	GetVenueList(ctx context.Context, options map[string]interface{}) helpers.Response
+	GetVenueDetail(ctx context.Context, options map[string]interface{}) helpers.Response
+	CreateVenue(ctx context.Context, payload request.VenueCreateRequest) helpers.Response
+	UpdateVenue(ctx context.Context, options map[string]interface{}) helpers.Response
+	DeleteVenue(ctx context.Context, options map[string]interface{}) helpers.Response
 }
 
 type AdminAppUsecase interface {
