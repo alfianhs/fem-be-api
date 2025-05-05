@@ -274,7 +274,7 @@ func (u *superadminAppUsecase) UpdateSeason(ctx context.Context, options map[str
 		}
 
 		// update old media in bg
-		go u.mediaBackgroundUpdate(context.Background(), []string{season.Logo.ID})
+		go u.markMediaAsUnusedByIds(context.Background(), []string{season.Logo.ID})
 
 		// update season
 		season.Logo = mongo_model.MediaFK{
@@ -319,7 +319,7 @@ func (u *superadminAppUsecase) UpdateSeason(ctx context.Context, options map[str
 		}
 
 		// update old media in bg
-		go u.mediaBackgroundUpdate(context.Background(), []string{season.Banner.ID})
+		go u.markMediaAsUnusedByIds(context.Background(), []string{season.Banner.ID})
 
 		// update season
 		season.Banner = mongo_model.MediaFK{
@@ -353,18 +353,6 @@ func (u *superadminAppUsecase) UpdateSeason(ctx context.Context, options map[str
 	return helpers.NewResponse(http.StatusOK, "Update season success", nil, season.Format())
 }
 
-func (u *superadminAppUsecase) mediaBackgroundUpdate(ctx context.Context, ids []string) {
-	err := u.mongoDbRepo.UpdateManyMediaPartial(ctx, map[string]interface{}{
-		"ids": ids,
-	}, map[string]interface{}{
-		"isUsed":    false,
-		"updatedAt": time.Now(),
-	})
-	if err != nil {
-		logrus.Errorf("Update media error %v", err)
-	}
-}
-
 func (u *superadminAppUsecase) DeleteSeason(ctx context.Context, options map[string]interface{}) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
@@ -389,7 +377,7 @@ func (u *superadminAppUsecase) DeleteSeason(ctx context.Context, options map[str
 		season.Logo.ID,
 		season.Banner.ID,
 	}
-	go u.mediaBackgroundUpdate(context.Background(), mediaIds)
+	go u.markMediaAsUnusedByIds(context.Background(), mediaIds)
 
 	// save
 	err = u.mongoDbRepo.UpdatePartialSeason(ctx, map[string]interface{}{
