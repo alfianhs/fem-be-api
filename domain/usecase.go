@@ -6,6 +6,7 @@ import (
 	jwt_helpers "app/helpers/jwt"
 	"context"
 	"net/http"
+	"net/url"
 )
 
 type SuperadminAppUsecase interface {
@@ -27,6 +28,13 @@ type SuperadminAppUsecase interface {
 	CreateVenue(ctx context.Context, payload request.VenueCreateRequest) helpers.Response
 	UpdateVenue(ctx context.Context, options map[string]interface{}) helpers.Response
 	DeleteVenue(ctx context.Context, options map[string]interface{}) helpers.Response
+
+	// Team
+	GetTeamsList(ctx context.Context, query url.Values) helpers.Response
+	GetTeamDetail(ctx context.Context, id string) helpers.Response
+	CreateTeam(ctx context.Context, payload request.TeamCreateRequest, request *http.Request) helpers.Response
+	UpdateTeam(ctx context.Context, id string, payload request.TeamUpdateRequest, request *http.Request) helpers.Response
+	DeleteTeam(ctx context.Context, id string) helpers.Response
 }
 
 type AdminAppUsecase interface {
