@@ -48,6 +48,13 @@ type MongoDbRepo interface {
 	FetchOneTeam(ctx context.Context, options map[string]interface{}) (row *mongo_model.Team, err error)
 	CreateOneTeam(ctx context.Context, team *mongo_model.Team) (err error)
 	UpdatePartialTeam(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Player
+	FetchListPlayer(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountPlayer(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOnePlayer(ctx context.Context, options map[string]interface{}) (row *mongo_model.Player, err error)
+	CreateOnePlayer(ctx context.Context, venue *mongo_model.Player) (err error)
+	UpdatePartialPlayer(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {

@@ -35,6 +35,13 @@ type SuperadminAppUsecase interface {
 	CreateTeam(ctx context.Context, payload request.TeamCreateRequest, request *http.Request) helpers.Response
 	UpdateTeam(ctx context.Context, id string, payload request.TeamUpdateRequest, request *http.Request) helpers.Response
 	DeleteTeam(ctx context.Context, id string) helpers.Response
+
+	// Player
+	GetPlayerList(ctx context.Context, query url.Values) helpers.Response
+	GetPlayerDetail(ctx context.Context, id string) helpers.Response
+	CreatePlayer(ctx context.Context, payload request.PlayerCreateRequest) helpers.Response
+	UpdatePlayer(ctx context.Context, id string, payload request.PlayerUpdateRequest) helpers.Response
+	DeletePlayer(ctx context.Context, id string) helpers.Response
 }
 
 type AdminAppUsecase interface {

@@ -15,6 +15,7 @@ type mongoDbRepo struct {
 	seasonCollection     string
 	venueCollection      string
 	teamCollection       string
+	playerCollection     string
 }
 
 func NewMongoDbRepo(conn *mongo.Database) domain.MongoDbRepo {
@@ -27,5 +28,6 @@ func NewMongoDbRepo(conn *mongo.Database) domain.MongoDbRepo {
 		seasonCollection:     "seasons",
 		venueCollection:      "venues",
 		teamCollection:       "teams",
+		playerCollection:     "players",
 	}
 }
