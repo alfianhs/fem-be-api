@@ -435,6 +435,124 @@ paths:
       summary: Update Season Status
       tags:
       - Season-Superadmin
+  /superadmin/teams:
+    get:
+      consumes:
+      - application/json
+      description: Get Teams List
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Teams List
+      tags:
+      - Team-Superadmin
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create Team
+      parameters:
+      - in: formData
+        name: name
+        required: true
+        type: string
+      - description: Logo
+        in: formData
+        name: logo
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Team
+      tags:
+      - Team-Superadmin
+  /superadmin/teams/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Team
+      parameters:
+      - description: Team ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Team
+      tags:
+      - Team-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Team Detail
+      parameters:
+      - description: Team ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Team Detail
+      tags:
+      - Team-Superadmin
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update Team
+      parameters:
+      - description: Team ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: name
+        required: true
+        type: string
+      - description: Logo
+        in: formData
+        name: logo
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Team
+      tags:
+      - Team-Superadmin
   /superadmin/venues:
     get:
       consumes:
