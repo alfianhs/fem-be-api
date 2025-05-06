@@ -35,11 +35,9 @@ func (h *routeSuperadmin) handleVenueRoute(prefixPath string) {
 func (h *routeSuperadmin) GetVenuesList(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	options := map[string]interface{}{
-		"query": c.Request.URL.Query(),
-	}
+	query := c.Request.URL.Query()
 
-	response := h.Usecase.GetVenueList(ctx, options)
+	response := h.Usecase.GetVenueList(ctx, query)
 	c.JSON(response.Status, response)
 }
 
@@ -57,11 +55,9 @@ func (h *routeSuperadmin) GetVenuesList(c *gin.Context) {
 func (h *routeSuperadmin) GetVenueDetail(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	options := map[string]interface{}{
-		"id": c.Param("id"),
-	}
+	id := c.Param("id")
 
-	response := h.Usecase.GetVenueDetail(ctx, options)
+	response := h.Usecase.GetVenueDetail(ctx, id)
 	c.JSON(response.Status, response)
 }
 
@@ -112,12 +108,9 @@ func (h *routeSuperadmin) UpdateVenue(c *gin.Context) {
 		return
 	}
 
-	options := map[string]interface{}{
-		"id":      c.Param("id"),
-		"payload": payload,
-	}
+	id := c.Param("id")
 
-	response := h.Usecase.UpdateVenue(ctx, options)
+	response := h.Usecase.UpdateVenue(ctx, id, payload)
 	c.JSON(response.Status, response)
 }
 
@@ -135,10 +128,8 @@ func (h *routeSuperadmin) UpdateVenue(c *gin.Context) {
 func (h *routeSuperadmin) DeleteVenue(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	options := map[string]interface{}{
-		"id": c.Param("id"),
-	}
+	id := c.Param("id")
 
-	response := h.Usecase.DeleteVenue(ctx, options)
+	response := h.Usecase.DeleteVenue(ctx, id)
 	c.JSON(response.Status, response)
 }

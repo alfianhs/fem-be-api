@@ -36,11 +36,9 @@ func (h *routeSuperadmin) handleSeasonRoute(prefixPath string) {
 func (h *routeSuperadmin) GetSeasonsList(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	options := map[string]interface{}{
-		"query": c.Request.URL.Query(),
-	}
+	query := c.Request.URL.Query()
 
-	response := h.Usecase.GetSeasonsList(ctx, options)
+	response := h.Usecase.GetSeasonsList(ctx, query)
 	c.JSON(response.Status, response)
 }
 
@@ -58,11 +56,9 @@ func (h *routeSuperadmin) GetSeasonsList(c *gin.Context) {
 func (h *routeSuperadmin) GetSeasonDetail(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	options := map[string]interface{}{
-		"id": c.Param("id"),
-	}
+	id := c.Param("id")
 
-	response := h.Usecase.GetSeasonDetail(ctx, options)
+	response := h.Usecase.GetSeasonDetail(ctx, id)
 	c.JSON(response.Status, response)
 }
 
@@ -117,12 +113,9 @@ func (h *routeSuperadmin) UpdateSeason(c *gin.Context) {
 		return
 	}
 
-	options := map[string]interface{}{
-		"id":      c.Param("id"),
-		"payload": payload,
-	}
+	id := c.Param("id")
 
-	response := h.Usecase.UpdateSeason(ctx, options, c.Request)
+	response := h.Usecase.UpdateSeason(ctx, id, payload, c.Request)
 	c.JSON(response.Status, response)
 }
 
@@ -140,11 +133,9 @@ func (h *routeSuperadmin) UpdateSeason(c *gin.Context) {
 func (h *routeSuperadmin) DeleteSeason(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	options := map[string]interface{}{
-		"id": c.Param("id"),
-	}
+	id := c.Param("id")
 
-	response := h.Usecase.DeleteSeason(ctx, options)
+	response := h.Usecase.DeleteSeason(ctx, id)
 	c.JSON(response.Status, response)
 }
 
@@ -170,11 +161,8 @@ func (h *routeSuperadmin) UpdateSeasonStatus(c *gin.Context) {
 		return
 	}
 
-	options := map[string]interface{}{
-		"id":      c.Param("id"),
-		"payload": payload,
-	}
+	id := c.Param("id")
 
-	response := h.Usecase.UpdateSeasonStatus(ctx, options)
+	response := h.Usecase.UpdateSeasonStatus(ctx, id, payload)
 	c.JSON(response.Status, response)
 }
