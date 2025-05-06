@@ -14,12 +14,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (u *superadminAppUsecase) GetSeasonsList(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) GetSeasonsList(ctx context.Context, queryParam url.Values) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
-
-	// get query param from url
-	queryParam := options["query"].(url.Values)
 
 	// get limit offset
 	page, offset, limit := helpers.GetOffsetLimit(queryParam)
@@ -75,12 +72,12 @@ func (u *superadminAppUsecase) GetSeasonsList(ctx context.Context, options map[s
 	})
 }
 
-func (u *superadminAppUsecase) GetSeasonDetail(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) GetSeasonDetail(ctx context.Context, id string) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
 	season, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": id,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -212,11 +209,9 @@ func (u *superadminAppUsecase) CreateSeason(ctx context.Context, payload request
 	return helpers.NewResponse(http.StatusCreated, "Create season success", nil, season.Format())
 }
 
-func (u *superadminAppUsecase) UpdateSeason(ctx context.Context, options map[string]interface{}, requestHttp *http.Request) helpers.Response {
+func (u *superadminAppUsecase) UpdateSeason(ctx context.Context, id string, payload request.SeasonUpdateRequest, requestHttp *http.Request) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
-
-	payload := options["payload"].(request.SeasonUpdateRequest)
 
 	// validate payload
 	errValidation := make(map[string]string)
@@ -229,7 +224,7 @@ func (u *superadminAppUsecase) UpdateSeason(ctx context.Context, options map[str
 
 	// check season
 	season, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": id,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -353,13 +348,13 @@ func (u *superadminAppUsecase) UpdateSeason(ctx context.Context, options map[str
 	return helpers.NewResponse(http.StatusOK, "Update season success", nil, season.Format())
 }
 
-func (u *superadminAppUsecase) DeleteSeason(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) DeleteSeason(ctx context.Context, id string) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
 	// get season
 	season, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": id,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -392,11 +387,9 @@ func (u *superadminAppUsecase) DeleteSeason(ctx context.Context, options map[str
 	return helpers.NewResponse(http.StatusOK, "Delete season success", nil, nil)
 }
 
-func (u *superadminAppUsecase) UpdateSeasonStatus(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) UpdateSeasonStatus(ctx context.Context, id string, payload request.SeasonStatusUpdateRequest) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
-
-	payload := options["payload"].(request.SeasonStatusUpdateRequest)
 
 	// validate payload
 	errValidation := make(map[string]string)
@@ -409,7 +402,7 @@ func (u *superadminAppUsecase) UpdateSeasonStatus(ctx context.Context, options m
 
 	// get season
 	season, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": id,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)

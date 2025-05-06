@@ -13,12 +13,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (u *superadminAppUsecase) GetVenueList(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) GetVenueList(ctx context.Context, queryParam url.Values) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
-
-	// get query param from url
-	queryParam := options["query"].(url.Values)
 
 	// get limit offset
 	page, offset, limit := helpers.GetOffsetLimit(queryParam)
@@ -74,12 +71,12 @@ func (u *superadminAppUsecase) GetVenueList(ctx context.Context, options map[str
 	})
 }
 
-func (u *superadminAppUsecase) GetVenueDetail(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) GetVenueDetail(ctx context.Context, id string) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
 	venue, err := u.mongoDbRepo.FetchOneVenue(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": id,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -122,11 +119,9 @@ func (u *superadminAppUsecase) CreateVenue(ctx context.Context, payload request.
 	return helpers.NewResponse(http.StatusCreated, "Create venue success", nil, venue)
 }
 
-func (u *superadminAppUsecase) UpdateVenue(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) UpdateVenue(ctx context.Context, id string, payload request.VenueUpdateRequest) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
-
-	payload := options["payload"].(request.VenueUpdateRequest)
 
 	// validate payload
 	errValidation := make(map[string]string)
@@ -139,7 +134,7 @@ func (u *superadminAppUsecase) UpdateVenue(ctx context.Context, options map[stri
 
 	// get venue
 	venue, err := u.mongoDbRepo.FetchOneVenue(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": id,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -154,7 +149,7 @@ func (u *superadminAppUsecase) UpdateVenue(ctx context.Context, options map[stri
 
 	// save
 	err = u.mongoDbRepo.UpdatePartialVenue(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": venue.ID,
 	}, map[string]interface{}{
 		"name":      venue.Name,
 		"updatedAt": venue.UpdatedAt,
@@ -166,13 +161,13 @@ func (u *superadminAppUsecase) UpdateVenue(ctx context.Context, options map[stri
 	return helpers.NewResponse(http.StatusOK, "Update venue success", nil, venue)
 }
 
-func (u *superadminAppUsecase) DeleteVenue(ctx context.Context, options map[string]interface{}) helpers.Response {
+func (u *superadminAppUsecase) DeleteVenue(ctx context.Context, id string) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
 	// get venue
 	venue, err := u.mongoDbRepo.FetchOneVenue(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": id,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -187,7 +182,7 @@ func (u *superadminAppUsecase) DeleteVenue(ctx context.Context, options map[stri
 
 	// save
 	err = u.mongoDbRepo.UpdatePartialVenue(ctx, map[string]interface{}{
-		"id": options["id"],
+		"id": venue.ID,
 	}, map[string]interface{}{
 		"deletedAt": venue.DeletedAt,
 	})
