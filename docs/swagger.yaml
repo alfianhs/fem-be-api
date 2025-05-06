@@ -42,6 +42,16 @@ definitions:
       password:
         type: string
     type: object
+  request.PlayerCreateRequest:
+    properties:
+      name:
+        type: string
+    type: object
+  request.PlayerUpdateRequest:
+    properties:
+      name:
+        type: string
+    type: object
   request.ResendEmailVerificationRequest:
     properties:
       email:
@@ -262,6 +272,136 @@ paths:
       summary: Get Profile Superadmin
       tags:
       - Auth-Superadmin
+  /superadmin/players:
+    get:
+      consumes:
+      - application/json
+      description: Get Players List
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Players List
+      tags:
+      - Player-Superadmin
+    post:
+      consumes:
+      - application/json
+      description: Create Player
+      parameters:
+      - description: Create Player
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.PlayerCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Player
+      tags:
+      - Player-Superadmin
+  /superadmin/players/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Player
+      tags:
+      - Player-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Player Detail
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Player Detail
+      tags:
+      - Player-Superadmin
+    put:
+      consumes:
+      - application/json
+      description: Update Player
+      parameters:
+      - description: Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Player
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.PlayerUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Player
+      tags:
+      - Player-Superadmin
   /superadmin/seasons:
     get:
       consumes:
