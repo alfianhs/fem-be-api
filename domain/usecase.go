@@ -42,6 +42,12 @@ type SuperadminAppUsecase interface {
 	CreatePlayer(ctx context.Context, payload request.PlayerCreateRequest) helpers.Response
 	UpdatePlayer(ctx context.Context, id string, payload request.PlayerUpdateRequest) helpers.Response
 	DeletePlayer(ctx context.Context, id string) helpers.Response
+
+	// SeasonTeam
+	GetSeasonTeamsList(ctx context.Context, query url.Values) helpers.Response
+	GetSeasonTeamDetail(ctx context.Context, id string) helpers.Response
+	CreateSeasonTeam(ctx context.Context, payload request.SeasonTeamCreateRequest) helpers.Response
+	DeleteSeasonTeam(ctx context.Context, id string) helpers.Response
 }
 
 type AdminAppUsecase interface {

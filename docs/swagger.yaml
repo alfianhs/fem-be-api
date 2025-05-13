@@ -62,6 +62,13 @@ definitions:
       status:
         $ref: '#/definitions/mongo_model.SeasonStatus'
     type: object
+  request.SeasonTeamCreateRequest:
+    properties:
+      teamIds:
+        items:
+          type: string
+        type: array
+    type: object
   request.SuperadminLoginRequest:
     properties:
       email:
@@ -402,6 +409,112 @@ paths:
       summary: Update Player
       tags:
       - Player-Superadmin
+  /superadmin/season-teams:
+    get:
+      consumes:
+      - application/json
+      description: Get Season Teams List
+      parameters:
+      - description: Season ID
+        in: query
+        name: seasonId
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Season Teams List
+      tags:
+      - SeasonTeam-Superadmin
+    post:
+      consumes:
+      - application/json
+      description: Create Season Team
+      parameters:
+      - description: Create Season Team
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SeasonTeamCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Season Team
+      tags:
+      - SeasonTeam-Superadmin
+  /superadmin/season-teams/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Season Team
+      parameters:
+      - description: Season Team ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Season Team
+      tags:
+      - SeasonTeam-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Season Team Detail
+      parameters:
+      - description: Season Team ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Season Team Detail
+      tags:
+      - SeasonTeam-Superadmin
   /superadmin/seasons:
     get:
       consumes:

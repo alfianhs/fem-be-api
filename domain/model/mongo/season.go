@@ -18,6 +18,11 @@ type Season struct {
 	DeletedAt    *time.Time         `bson:"deletedAt" json:"-"`
 }
 
+type SeasonFK struct {
+	ID   string `bson:"id" json:"id"`
+	Name string `bson:"name" json:"name"`
+}
+
 func (s *Season) Format() *Season {
 	s.StatusString = SeasonStatusMap[s.Status].Name
 
