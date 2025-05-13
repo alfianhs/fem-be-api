@@ -259,6 +259,9 @@ func (u *superadminAppUsecase) UpdateTeam(ctx context.Context, id string, payloa
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 	}
 
+	// bg update active season team
+	go u.updateActiveSeasonTeamBackground(context.Background(), team.ID.Hex(), team)
+
 	return helpers.NewResponse(http.StatusOK, "Update team success", nil, team)
 }
 
@@ -275,6 +278,26 @@ func (u *superadminAppUsecase) DeleteTeam(ctx context.Context, id string) helper
 	}
 	if team == nil {
 		return helpers.NewResponse(http.StatusBadRequest, "Team not found", nil, nil)
+	}
+
+	// check if team is in active season team
+	activeSeason, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
+		"status": mongo_model.SeasonStatusActive,
+	})
+	if err != nil {
+		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+	}
+	if activeSeason != nil {
+		seasonTeam, err := u.mongoDbRepo.FetchOneSeasonTeam(ctx, map[string]interface{}{
+			"season.id": activeSeason.ID.Hex(),
+			"team.id":   team.ID.Hex(),
+		})
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+		if seasonTeam != nil {
+			return helpers.NewResponse(http.StatusBadRequest, "Team is in active season", nil, nil)
+		}
 	}
 
 	// delete team
