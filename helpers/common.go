@@ -23,3 +23,16 @@ func ExtractIds[T any](items []T, extractor func(T) string) []string {
 
 	return result
 }
+
+func InArrayString(array []string, val string) bool {
+	for _, a := range array {
+		if a == val {
+			return true
+		}
+	}
+	return false
+}
+
+func ArrayStringtoString(array []string) string {
+	return strings.Join(array, ", ")
+}

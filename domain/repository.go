@@ -62,6 +62,13 @@ type MongoDbRepo interface {
 	FetchOneSeasonTeam(ctx context.Context, options map[string]interface{}) (row *mongo_model.SeasonTeam, err error)
 	CreateManySeasonTeam(ctx context.Context, seasonTeams []*mongo_model.SeasonTeam) (err error)
 	UpdatePartialSeasonTeam(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Season TeamPlayer
+	FetchListSeasonTeamPlayer(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountSeasonTeamPlayer(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneSeasonTeamPlayer(ctx context.Context, options map[string]interface{}) (row *mongo_model.SeasonTeamPlayer, err error)
+	CreateOneSeasonTeamPlayer(ctx context.Context, seasonTeamPlayer *mongo_model.SeasonTeamPlayer) (err error)
+	UpdatePartialSeasonTeamPlayer(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {

@@ -16,3 +16,10 @@ var SeasonStatusMap = map[SeasonStatus]SeasonStatusStruct{
 	SeasonStatusActive:   {ID: SeasonStatusActive, Name: "Active"},
 	SeasonStatusInactive: {ID: SeasonStatusInactive, Name: "Inactive"},
 }
+
+var PlayerPositionList = []string{
+	"Goalkeeper",
+	"Flank",
+	"Pivot",
+	"Anchor",
+}
