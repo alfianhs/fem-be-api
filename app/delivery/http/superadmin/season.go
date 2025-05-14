@@ -13,6 +13,7 @@ func (h *routeSuperadmin) handleSeasonRoute(prefixPath string) {
 
 	api.GET("", h.Middleware.AuthSuperadmin(), h.GetSeasonsList)
 	api.GET("/:id", h.Middleware.AuthSuperadmin(), h.GetSeasonDetail)
+	api.GET("/active", h.Middleware.AuthSuperadmin(), h.GetActiveSeasonDetail)
 	api.POST("", h.Middleware.AuthSuperadmin(), h.CreateSeason)
 	api.PUT("/:id", h.Middleware.AuthSuperadmin(), h.UpdateSeason)
 	api.DELETE("/:id", h.Middleware.AuthSuperadmin(), h.DeleteSeason)
@@ -59,6 +60,23 @@ func (h *routeSuperadmin) GetSeasonDetail(c *gin.Context) {
 	id := c.Param("id")
 
 	response := h.Usecase.GetSeasonDetail(ctx, id)
+	c.JSON(response.Status, response)
+}
+
+// GetActiveSeasonDetail
+//
+// @Summary Get Active Season Detail
+// @Description Get Active Season Detail
+// @Tags Season-Superadmin
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Success 200 {object} helpers.Response
+// @Router /superadmin/seasons/active [get]
+func (h *routeSuperadmin) GetActiveSeasonDetail(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	response := h.Usecase.GetActiveSeasonDetail(ctx)
 	c.JSON(response.Status, response)
 }
 

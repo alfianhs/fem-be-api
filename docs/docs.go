@@ -786,6 +786,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/superadmin/seasons/active": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Active Season Detail",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Season-Superadmin"
+                ],
+                "summary": "Get Active Season Detail",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/superadmin/seasons/{id}": {
             "get": {
                 "security": [

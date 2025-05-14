@@ -17,6 +17,7 @@ type SuperadminAppUsecase interface {
 	// Season
 	GetSeasonsList(ctx context.Context, query url.Values) helpers.Response
 	GetSeasonDetail(ctx context.Context, id string) helpers.Response
+	GetActiveSeasonDetail(ctx context.Context) helpers.Response
 	CreateSeason(ctx context.Context, payload request.SeasonCreateRequest, request *http.Request) helpers.Response
 	UpdateSeason(ctx context.Context, id string, payload request.SeasonUpdateRequest, request *http.Request) helpers.Response
 	DeleteSeason(ctx context.Context, id string) helpers.Response
