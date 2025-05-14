@@ -13,3 +13,8 @@ type Player struct {
 	UpdatedAt time.Time          `bson:"updatedAt" json:"updatedAt"`
 	DeletedAt *time.Time         `bson:"deletedAt" json:"-"`
 }
+
+type PlayerFK struct {
+	ID   string `bson:"id" json:"id"`
+	Name string `bson:"name" json:"name"`
+}

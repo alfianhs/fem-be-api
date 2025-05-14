@@ -409,6 +409,170 @@ paths:
       summary: Update Player
       tags:
       - Player-Superadmin
+  /superadmin/season-team-players:
+    get:
+      consumes:
+      - application/json
+      description: Get Season Team Players List
+      parameters:
+      - description: Season Team ID
+        in: query
+        name: seasonTeamId
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Season Team Players List
+      tags:
+      - SeasonTeamPlayer-Superadmin
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create Season Team Player
+      parameters:
+      - in: formData
+        name: playerId
+        required: true
+        type: string
+      - in: formData
+        name: position
+        required: true
+        type: string
+      - in: formData
+        name: seasonTeamId
+        required: true
+        type: string
+      - description: Image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Season Team Player
+      tags:
+      - SeasonTeamPlayer-Superadmin
+  /superadmin/season-team-players/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Season Team Player
+      parameters:
+      - description: Season Team Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Season Team Player
+      tags:
+      - SeasonTeamPlayer-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Season Team Player Detail
+      parameters:
+      - description: Season Team Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Season Team Player Detail
+      tags:
+      - SeasonTeamPlayer-Superadmin
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update Season Team Player
+      parameters:
+      - description: Season Team Player ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: position
+        required: true
+        type: string
+      - description: Image
+        in: formData
+        name: image
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Season Team Player
+      tags:
+      - SeasonTeamPlayer-Superadmin
+  /superadmin/season-team-players/position-list:
+    get:
+      consumes:
+      - application/json
+      description: Get Season Team Players Position List
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Season Team Players Position List
+      tags:
+      - SeasonTeamPlayer-Superadmin
   /superadmin/season-teams:
     get:
       consumes:

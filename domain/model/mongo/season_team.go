@@ -15,3 +15,10 @@ type SeasonTeam struct {
 	UpdatedAt time.Time          `bson:"updatedAt" json:"updatedAt"`
 	DeletedAt *time.Time         `bson:"deletedAt" json:"-"`
 }
+
+type SeasonTeamFK struct {
+	ID       string `bson:"id" json:"id"`
+	SeasonID string `bson:"seasonId" json:"seasonId"`
+	TeamID   string `bson:"teamId" json:"teamId"`
+	Team     TeamFK `bson:"-" json:"team"`
+}
