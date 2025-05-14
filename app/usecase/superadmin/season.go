@@ -89,6 +89,23 @@ func (u *superadminAppUsecase) GetSeasonDetail(ctx context.Context, id string) h
 	return helpers.NewResponse(http.StatusOK, "Success", nil, season.Format())
 }
 
+func (u *superadminAppUsecase) GetActiveSeasonDetail(ctx context.Context) helpers.Response {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	season, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
+		"status": mongo_model.SeasonStatusActive,
+	})
+	if err != nil {
+		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+	}
+	if season == nil {
+		return helpers.NewResponse(http.StatusBadRequest, "Active season not found", nil, nil)
+	}
+
+	return helpers.NewResponse(http.StatusOK, "Success", nil, season.Format())
+}
+
 func (u *superadminAppUsecase) CreateSeason(ctx context.Context, payload request.SeasonCreateRequest, request *http.Request) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
@@ -361,6 +378,11 @@ func (u *superadminAppUsecase) DeleteSeason(ctx context.Context, id string) help
 	}
 	if season == nil {
 		return helpers.NewResponse(http.StatusBadRequest, "Season not found", nil, nil)
+	}
+
+	// check if season active
+	if season.Status == mongo_model.SeasonStatusActive {
+		return helpers.NewResponse(http.StatusBadRequest, "Cannot delete active season", nil, nil)
 	}
 
 	// delete season

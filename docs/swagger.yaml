@@ -688,6 +688,23 @@ paths:
       summary: Update Season Status
       tags:
       - Season-Superadmin
+  /superadmin/seasons/active:
+    get:
+      consumes:
+      - application/json
+      description: Get Active Season Detail
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Active Season Detail
+      tags:
+      - Season-Superadmin
   /superadmin/teams:
     get:
       consumes:
