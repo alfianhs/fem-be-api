@@ -36,3 +36,17 @@ func InArrayString(array []string, val string) bool {
 func ArrayStringtoString(array []string) string {
 	return strings.Join(array, ", ")
 }
+
+func Intersect(a, b []string) []string {
+	set := make(map[string]struct{})
+	for _, val := range a {
+		set[val] = struct{}{}
+	}
+	var common []string
+	for _, val := range b {
+		if _, ok := set[val]; ok {
+			common = append(common, val)
+		}
+	}
+	return common
+}

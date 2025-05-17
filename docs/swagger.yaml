@@ -69,6 +69,17 @@ definitions:
           type: string
         type: array
     type: object
+  request.SeasonTeamManageRequest:
+    properties:
+      addedTeamIds:
+        items:
+          type: string
+        type: array
+      removedTeamIds:
+        items:
+          type: string
+        type: array
+    type: object
   request.SuperadminLoginRequest:
     properties:
       email:
@@ -679,6 +690,30 @@ paths:
       summary: Get Season Team Detail
       tags:
       - SeasonTeam-Superadmin
+  /superadmin/season-teams/manage:
+    post:
+      consumes:
+      - application/json
+      description: Manage Season Team (Add or Remove Season Team)
+      parameters:
+      - description: Manage Season Team
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SeasonTeamManageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Manage Season Team
+      tags:
+      - SeasonTeam-Superadmin
   /superadmin/seasons:
     get:
       consumes:
@@ -874,6 +909,28 @@ paths:
       consumes:
       - application/json
       description: Get Teams List
+      parameters:
+      - description: Value = active/season id to include selected in season teams
+          mark
+        in: query
+        name: seasonId
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
       produces:
       - application/json
       responses:

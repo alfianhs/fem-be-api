@@ -26,6 +26,52 @@ func (u *superadminAppUsecase) GetTeamsList(ctx context.Context, queryParam url.
 		"offset": offset,
 	}
 
+	// handle selected in season team
+	seasonIdParam := queryParam.Get("seasonId")
+	var selectedTeamMap map[string]struct{}
+	if seasonIdParam != "" {
+		var seasonId string
+		if seasonIdParam == "active" {
+			season, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
+				"status": mongo_model.SeasonStatusActive,
+			})
+			if err != nil {
+				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			}
+			if season == nil {
+				return helpers.NewResponse(http.StatusOK, "Success", nil, helpers.PaginatedResponse{
+					List:  []interface{}{},
+					Limit: limit,
+					Page:  page,
+					Total: 0,
+				})
+			}
+			seasonId = season.ID.Hex()
+		} else {
+			seasonId = seasonIdParam
+		}
+
+		// fetch season teams
+		seasonTeamsCursor, err := u.mongoDbRepo.FetchListSeasonTeam(ctx, map[string]interface{}{
+			"seasonId": seasonId,
+		})
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+		defer seasonTeamsCursor.Close(ctx)
+
+		selectedTeamMap = make(map[string]struct{})
+		for seasonTeamsCursor.Next(ctx) {
+			var st mongo_model.SeasonTeam
+			err = seasonTeamsCursor.Decode(&st)
+			if err != nil {
+				logrus.Error("SeasonTeam Decode:", err)
+				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			}
+			selectedTeamMap[st.Team.ID] = struct{}{}
+		}
+	}
+
 	// count total
 	total := u.mongoDbRepo.CountTeam(ctx, fetchOptions)
 	if total == 0 {
@@ -60,6 +106,17 @@ func (u *superadminAppUsecase) GetTeamsList(ctx context.Context, queryParam url.
 			logrus.Error("GetListTeam Decode:", err)
 			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 		}
+
+		// handle selected in season team
+		var isSelected *bool
+		if selectedTeamMap != nil {
+			selected := false
+			if _, found := selectedTeamMap[row.ID.Hex()]; found {
+				selected = true
+			}
+			isSelected = &selected
+		}
+		row.IsSelected = isSelected
 
 		list = append(list, row)
 	}

@@ -26,6 +26,11 @@ func (h *routeSuperadmin) handleTeamRoute(prefixPath string) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
+// @Param seasonId query string false "Value = active/season id to include selected in season teams mark"
+// @Param page query int false "Page"
+// @Param limit query int false "Limit"
+// @Param sort query string false "Sort"
+// @Param dir query string false "Direction asc or desc"
 // @Success 200 {object} helpers.Response
 // @Router /superadmin/teams [get]
 func (h *routeSuperadmin) GetTeamsList(c *gin.Context) {

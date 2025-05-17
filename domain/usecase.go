@@ -49,6 +49,7 @@ type SuperadminAppUsecase interface {
 	GetSeasonTeamDetail(ctx context.Context, id string) helpers.Response
 	CreateSeasonTeam(ctx context.Context, payload request.SeasonTeamCreateRequest) helpers.Response
 	DeleteSeasonTeam(ctx context.Context, id string) helpers.Response
+	ManageSeasonTeam(ctx context.Context, payload request.SeasonTeamManageRequest) helpers.Response
 
 	// SeasonTeamPlayer
 	GetSeasonTeamPlayersList(ctx context.Context, query url.Values) helpers.Response

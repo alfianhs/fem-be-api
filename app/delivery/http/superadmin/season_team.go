@@ -15,6 +15,7 @@ func (h *routeSuperadmin) handleSeasonTeamRoute(prefixPath string) {
 	api.GET("/:id", h.Middleware.AuthSuperadmin(), h.GetSeasonTeamDetail)
 	api.POST("", h.Middleware.AuthSuperadmin(), h.CreateSeasonTeam)
 	api.DELETE("/:id", h.Middleware.AuthSuperadmin(), h.DeleteSeasonTeam)
+	api.POST("/manage", h.Middleware.AuthSuperadmin(), h.ManageSeasonTeam)
 }
 
 // GetSeasonTeamsList
@@ -103,5 +104,30 @@ func (h *routeSuperadmin) DeleteSeasonTeam(c *gin.Context) {
 	id := c.Param("id")
 
 	response := h.Usecase.DeleteSeasonTeam(ctx, id)
+	c.JSON(response.Status, response)
+}
+
+// ManageSeasonTeam
+//
+// @Summary Manage Season Team
+// @Description Manage Season Team (Add or Remove Season Team)
+// @Tags SeasonTeam-Superadmin
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param payload body request.SeasonTeamManageRequest true "Manage Season Team"
+// @Success 200 {object} helpers.Response
+// @Router /superadmin/season-teams/manage [post]
+func (h *routeSuperadmin) ManageSeasonTeam(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	payload := request.SeasonTeamManageRequest{}
+	err := c.ShouldBindJSON(&payload)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, helpers.NewResponse(http.StatusBadRequest, "Invalid json data", nil, nil))
+		return
+	}
+
+	response := h.Usecase.ManageSeasonTeam(ctx, payload)
 	c.JSON(response.Status, response)
 }
