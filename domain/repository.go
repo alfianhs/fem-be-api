@@ -70,6 +70,13 @@ type MongoDbRepo interface {
 	FetchOneSeasonTeamPlayer(ctx context.Context, options map[string]interface{}) (row *mongo_model.SeasonTeamPlayer, err error)
 	CreateOneSeasonTeamPlayer(ctx context.Context, seasonTeamPlayer *mongo_model.SeasonTeamPlayer) (err error)
 	UpdatePartialSeasonTeamPlayer(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Series
+	FetchListSeries(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountSeries(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneSeries(ctx context.Context, options map[string]interface{}) (row *mongo_model.Series, err error)
+	CreateOneSeries(ctx context.Context, season *mongo_model.Series) (err error)
+	UpdatePartialSeries(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {

@@ -23,3 +23,22 @@ var PlayerPositionList = []string{
 	"Pivot",
 	"Anchor",
 }
+
+type SeriesStatus int
+
+const (
+	SeasonStatusDraft     SeriesStatus = 1
+	SeriesStatusActive    SeriesStatus = 2
+	SeriesStatusNonActive SeriesStatus = 3
+)
+
+type SeriesStatusStruct struct {
+	ID   SeriesStatus `json:"id"`
+	Name string       `json:"name"`
+}
+
+var SeriesStatusMap = map[SeriesStatus]SeriesStatusStruct{
+	SeasonStatusDraft:     {ID: SeasonStatusDraft, Name: "Draft"},
+	SeriesStatusActive:    {ID: SeriesStatusActive, Name: "Active"},
+	SeriesStatusNonActive: {ID: SeriesStatusNonActive, Name: "Non-Active"},
+}
