@@ -19,6 +19,16 @@ definitions:
     x-enum-varnames:
     - SeasonStatusActive
     - SeasonStatusInactive
+  mongo_model.SeriesStatus:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - SeasonStatusDraft
+    - SeriesStatusActive
+    - SeriesStatusNonActive
   request.AdminLoginRequest:
     properties:
       password:
@@ -79,6 +89,34 @@ definitions:
         items:
           type: string
         type: array
+    type: object
+  request.SeriesCreateRequest:
+    properties:
+      endDate:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      startDate:
+        type: string
+      venueId:
+        type: string
+    type: object
+  request.SeriesUpdateRequest:
+    properties:
+      endDate:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      startDate:
+        type: string
+      status:
+        $ref: '#/definitions/mongo_model.SeriesStatus'
+      venueId:
+        type: string
     type: object
   request.SuperadminLoginRequest:
     properties:
@@ -904,6 +942,136 @@ paths:
       summary: Get Active Season Detail
       tags:
       - Season-Superadmin
+  /superadmin/series:
+    get:
+      consumes:
+      - application/json
+      description: Get Series
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Series
+      tags:
+      - Series-Superadmin
+    post:
+      consumes:
+      - application/json
+      description: Create Series
+      parameters:
+      - description: Create Series
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SeriesCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Series
+      tags:
+      - Series-Superadmin
+  /superadmin/series/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Series
+      parameters:
+      - description: Series ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Series
+      tags:
+      - Series-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Series Detail
+      parameters:
+      - description: Series ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Series Detail
+      tags:
+      - Series-Superadmin
+    put:
+      consumes:
+      - application/json
+      description: Update Series
+      parameters:
+      - description: Series ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Series
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.SeriesUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Series
+      tags:
+      - Series-Superadmin
   /superadmin/teams:
     get:
       consumes:
