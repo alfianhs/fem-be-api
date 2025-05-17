@@ -100,3 +100,15 @@ func (r *mongoDbRepo) UpdatePartialSeasonTeam(ctx context.Context, options, fiel
 
 	return
 }
+
+func (r *mongoDbRepo) UpdateManySeasonTeamPartial(ctx context.Context, options, field map[string]interface{}) (err error) {
+	query, _ := generateQueryFilterSeasonTeam(options, false)
+
+	_, err = r.Conn.Collection(r.seasonTeamCollection).UpdateMany(ctx, query, bson.M{"$set": field})
+	if err != nil {
+		logrus.Error("UpdateManySeasonTeamPartial UpdateMany:", err)
+		return
+	}
+
+	return
+}

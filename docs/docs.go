@@ -872,6 +872,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/superadmin/season-teams/manage": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Manage Season Team (Add or Remove Season Team)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SeasonTeam-Superadmin"
+                ],
+                "summary": "Manage Season Team",
+                "parameters": [
+                    {
+                        "description": "Manage Season Team",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SeasonTeamManageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/superadmin/season-teams/{id}": {
             "get": {
                 "security": [
@@ -1263,6 +1302,38 @@ const docTemplate = `{
                     "Team-Superadmin"
                 ],
                 "summary": "Get Teams List",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Value = active/season id to include selected in season teams mark",
+                        "name": "seasonId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Direction asc or desc",
+                        "name": "dir",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1743,6 +1814,23 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "teamIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "request.SeasonTeamManageRequest": {
+            "type": "object",
+            "properties": {
+                "addedTeamIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "removedTeamIds": {
                     "type": "array",
                     "items": {
                         "type": "string"

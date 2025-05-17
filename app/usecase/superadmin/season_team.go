@@ -284,6 +284,151 @@ func (u *superadminAppUsecase) DeleteSeasonTeam(ctx context.Context, id string) 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, nil)
 }
 
+func (u *superadminAppUsecase) ManageSeasonTeam(ctx context.Context, payload request.SeasonTeamManageRequest) helpers.Response {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	// get active season
+	activeSeason, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
+		"status": mongo_model.SeasonStatusActive,
+	})
+	if err != nil {
+		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+	}
+	if activeSeason == nil {
+		return helpers.NewResponse(http.StatusBadRequest, "There is no active season", nil, nil)
+	}
+
+	// validate no conflict ids
+	conflict := helpers.Intersect(payload.AddedTeamIds, payload.RemovedTeamIds)
+	if len(conflict) > 0 {
+		conflictString := helpers.ArrayStringtoString(conflict)
+		return helpers.NewResponse(http.StatusBadRequest, "Conflicted team IDs "+conflictString+" found in both add and remove", nil, nil)
+	}
+
+	if len(payload.AddedTeamIds) != 0 {
+		// check if existing
+		existing, err := u.mongoDbRepo.FetchListSeasonTeam(ctx, map[string]interface{}{
+			"seasonId": activeSeason.ID.Hex(),
+			"team.ids": payload.AddedTeamIds,
+		})
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+		defer existing.Close(ctx)
+
+		var existingTeamNames []string
+		for existing.Next(ctx) {
+			var seasonTeam mongo_model.SeasonTeam
+			if err := existing.Decode(&seasonTeam); err != nil {
+				logrus.Error("SeasonTeam Decode:", err)
+				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			}
+			existingTeamNames = append(existingTeamNames, seasonTeam.Team.Name)
+		}
+		if len(existingTeamNames) != 0 {
+			teamNames := helpers.ArrayStringtoString(existingTeamNames)
+			message := fmt.Sprintf("Team %s already exists in active season", teamNames)
+			return helpers.NewResponse(http.StatusBadRequest, message, nil, nil)
+		}
+
+		// get teams
+		teamFetchOptions := map[string]interface{}{
+			"ids": payload.AddedTeamIds,
+		}
+		teams, err := u.mongoDbRepo.FetchListTeam(ctx, teamFetchOptions)
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+		defer teams.Close(ctx)
+
+		teamMap := make(map[string]mongo_model.Team)
+		for teams.Next(ctx) {
+			var team mongo_model.Team
+			if err := teams.Decode(&team); err != nil {
+				logrus.Error("Team Decode:", err)
+				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			}
+			teamMap[team.ID.Hex()] = team
+		}
+
+		now := time.Now()
+
+		var seasonTeams []*mongo_model.SeasonTeam
+		for _, teamId := range payload.AddedTeamIds {
+			team, ok := teamMap[teamId]
+			if ok {
+				seasonTeams = append(seasonTeams, &mongo_model.SeasonTeam{
+					ID:       primitive.NewObjectID(),
+					SeasonID: activeSeason.ID.Hex(),
+					Season: mongo_model.SeasonFK{
+						ID:   activeSeason.ID.Hex(),
+						Name: activeSeason.Name,
+					},
+					Team: mongo_model.TeamFK{
+						ID:   team.ID.Hex(),
+						Name: team.Name,
+						Logo: team.Logo.URL,
+					},
+					CreatedAt: now,
+					UpdatedAt: now,
+				})
+			} else {
+				return helpers.NewResponse(http.StatusBadRequest, "Team with id "+teamId+" not found", nil, nil)
+			}
+		}
+
+		// save
+		err = u.mongoDbRepo.CreateManySeasonTeam(ctx, seasonTeams)
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+	}
+
+	if len(payload.RemovedTeamIds) != 0 {
+		// check if existing
+		existing, err := u.mongoDbRepo.FetchListSeasonTeam(ctx, map[string]interface{}{
+			"seasonId": activeSeason.ID.Hex(),
+			"team.ids": payload.RemovedTeamIds,
+		})
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+		defer existing.Close(ctx)
+		var list []*mongo_model.SeasonTeam
+		for existing.Next(ctx) {
+			var seasonTeam mongo_model.SeasonTeam
+			if err := existing.Decode(&seasonTeam); err != nil {
+				logrus.Error("SeasonTeam Decode:", err)
+				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			}
+			list = append(list, &seasonTeam)
+		}
+
+		// return error not found
+		if len(list) == 0 {
+			return helpers.NewResponse(http.StatusBadRequest, "No team found to remove", nil, nil)
+		}
+
+		// delete bulk
+		now := time.Now()
+		err = u.mongoDbRepo.UpdateManySeasonTeamPartial(ctx, map[string]interface{}{
+			"seasonId": activeSeason.ID.Hex(),
+			"team.ids": payload.RemovedTeamIds,
+		}, map[string]interface{}{
+			"deletedAt": now,
+		})
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+	}
+
+	return helpers.NewResponse(http.StatusOK, "Success", nil, map[string]interface{}{
+		"addedTeamIds":   payload.AddedTeamIds,
+		"removedTeamIds": payload.RemovedTeamIds,
+	})
+}
+
 func (u *superadminAppUsecase) updateActiveSeasonTeamBackground(ctx context.Context, teamId string, team *mongo_model.Team) {
 	// get active season
 	activeSeason, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
