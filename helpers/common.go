@@ -1,6 +1,9 @@
 package helpers
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 func StringReplacer(content string, data map[string]string) string {
 	for key, value := range data {
@@ -49,4 +52,14 @@ func Intersect(a, b []string) []string {
 		}
 	}
 	return common
+}
+
+func SetToStartOfDayUTC(t time.Time) time.Time {
+	utc := t.UTC()
+	return time.Date(utc.Year(), utc.Month(), utc.Day(), 0, 0, 0, 0, time.UTC)
+}
+
+func SetToEndOfDayUTC(t time.Time) time.Time {
+	utc := t.UTC()
+	return time.Date(utc.Year(), utc.Month(), utc.Day(), 23, 59, 59, 0, time.UTC)
 }

@@ -28,4 +28,5 @@ func NewSuperadminRouteHandler(usecase domain.SuperadminAppUsecase, ginEngine *g
 	handler.handleSeasonTeamRoute("/season-teams")
 	handler.handleSeasonTeamPlayerRoute("/season-team-players")
 	handler.handleSeriesRoute("/series")
+	handler.handleTicketRoute("/tickets")
 }
