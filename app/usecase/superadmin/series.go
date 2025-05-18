@@ -230,9 +230,19 @@ func (u *superadminAppUsecase) CreateSeries(ctx context.Context, payload request
 	}
 	if payload.StartDate == "" {
 		errValidation["startDate"] = "Start date field is required"
+	} else {
+		_, err := time.Parse(time.RFC3339, payload.StartDate)
+		if err != nil {
+			errValidation["startDate"] = "Start date format is invalid"
+		}
 	}
 	if payload.EndDate == "" {
 		errValidation["endDate"] = "End date field is required"
+	} else {
+		_, err := time.Parse(time.RFC3339, payload.EndDate)
+		if err != nil {
+			errValidation["endDate"] = "End date format is invalid"
+		}
 	}
 	if len(errValidation) > 0 {
 		return helpers.NewResponse(http.StatusUnprocessableEntity, "Validation error", errValidation, nil)
@@ -262,17 +272,15 @@ func (u *superadminAppUsecase) CreateSeries(ctx context.Context, payload request
 
 	// prepare series data
 	now := time.Now()
-	startDate, err := time.Parse(time.RFC3339, payload.StartDate)
-	if err != nil {
-		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-	}
-	endDate, err := time.Parse(time.RFC3339, payload.EndDate)
-	if err != nil {
-		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-	}
+	startDate, _ := time.Parse(time.RFC3339, payload.StartDate)
+	endDate, _ := time.Parse(time.RFC3339, payload.EndDate)
+
+	// set date to start of day and end of day
+	startDate = helpers.SetToStartOfDayUTC(startDate)
+	endDate = helpers.SetToEndOfDayUTC(endDate)
 
 	// validate date range
-	if startDate.After(endDate) {
+	if startDate.After(endDate) || startDate.Format("2006-01-02") == endDate.Format("2006-01-02") {
 		return helpers.NewResponse(http.StatusBadRequest, "Start date must be before end date", nil, nil)
 	}
 
@@ -338,15 +346,19 @@ func (u *superadminAppUsecase) UpdateSeries(ctx context.Context, id string, payl
 	if payload.StartDate != "" {
 		startDate, err := time.Parse(time.RFC3339, payload.StartDate)
 		if err != nil {
-			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			return helpers.NewResponse(http.StatusBadRequest, "Start date format is invalid", nil, nil)
 		}
+		// set date to start of day
+		startDate = helpers.SetToStartOfDayUTC(startDate)
 		series.StartDate = startDate
 	}
 	if payload.EndDate != "" {
 		endDate, err := time.Parse(time.RFC3339, payload.EndDate)
 		if err != nil {
-			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			return helpers.NewResponse(http.StatusBadRequest, "End date format is invalid", nil, nil)
 		}
+		// set date to end of day
+		endDate = helpers.SetToEndOfDayUTC(endDate)
 		series.EndDate = endDate
 	}
 	if payload.Status != nil {
@@ -354,7 +366,7 @@ func (u *superadminAppUsecase) UpdateSeries(ctx context.Context, id string, payl
 	}
 
 	// validate date range
-	if series.StartDate.After(series.EndDate) {
+	if series.StartDate.After(series.EndDate) || series.StartDate.Format("2006-01-02") == series.EndDate.Format("2006-01-02") {
 		return helpers.NewResponse(http.StatusBadRequest, "Start date must be before end date", nil, nil)
 	}
 
