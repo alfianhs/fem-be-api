@@ -65,6 +65,12 @@ type SuperadminAppUsecase interface {
 	CreateSeries(ctx context.Context, payload request.SeriesCreateRequest) helpers.Response
 	UpdateSeries(ctx context.Context, id string, payload request.SeriesUpdateRequest) helpers.Response
 	DeleteSeries(ctx context.Context, id string) helpers.Response
+
+	// Ticket
+	GetTicketsList(ctx context.Context, queryParam url.Values) helpers.Response
+	GetTicketDetail(ctx context.Context, id string) helpers.Response
+	CreateOrUpdateTicket(ctx context.Context, payload request.TicketCreateOrUpdateRequest) helpers.Response
+	DeleteTicket(ctx context.Context, id string) helpers.Response
 }
 
 type AdminAppUsecase interface {

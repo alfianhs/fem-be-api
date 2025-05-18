@@ -77,6 +77,14 @@ type MongoDbRepo interface {
 	FetchOneSeries(ctx context.Context, options map[string]interface{}) (row *mongo_model.Series, err error)
 	CreateOneSeries(ctx context.Context, season *mongo_model.Series) (err error)
 	UpdatePartialSeries(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Ticket
+	FetchListTicket(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountTicket(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneTicket(ctx context.Context, options map[string]interface{}) (row *mongo_model.Ticket, err error)
+	CreateOneTicket(ctx context.Context, ticket *mongo_model.Ticket) (err error)
+	CreateManyTicket(ctx context.Context, tickets []*mongo_model.Ticket) (err error)
+	UpdatePartialTicket(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {

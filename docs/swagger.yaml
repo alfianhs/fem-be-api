@@ -125,6 +125,41 @@ definitions:
       password:
         type: string
     type: object
+  request.TicketCreateOrUpdateRequest:
+    properties:
+      seriesId:
+        type: string
+      tickets:
+        items:
+          $ref: '#/definitions/request.TicketRequest'
+        type: array
+    type: object
+  request.TicketMatchRequest:
+    properties:
+      awaySeasonTeamId:
+        type: string
+      homeSeasonTeamId:
+        type: string
+      time:
+        type: string
+    type: object
+  request.TicketRequest:
+    properties:
+      date:
+        type: string
+      id:
+        type: string
+      matchs:
+        items:
+          $ref: '#/definitions/request.TicketMatchRequest'
+        type: array
+      name:
+        type: string
+      price:
+        type: number
+      quota:
+        type: integer
+    type: object
   request.VenueCreateRequest:
     properties:
       name:
@@ -1212,6 +1247,113 @@ paths:
       summary: Update Team
       tags:
       - Team-Superadmin
+  /superadmin/tickets:
+    get:
+      consumes:
+      - application/json
+      description: Get Tickets List
+      parameters:
+      - description: Series ID
+        in: query
+        name: seriesId
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Tickets List
+      tags:
+      - Ticket-Superadmin
+    post:
+      consumes:
+      - application/json
+      description: Create or Update Ticket, if ID is empty, it will create a new ticket,
+        otherwise it will update the existing ticket
+      parameters:
+      - description: Create or Update Ticket
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.TicketCreateOrUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create or Update Ticket
+      tags:
+      - Ticket-Superadmin
+  /superadmin/tickets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Ticket
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Ticket
+      tags:
+      - Ticket-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get Ticket Detail
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Ticket Detail
+      tags:
+      - Ticket-Superadmin
   /superadmin/venues:
     get:
       consumes:
