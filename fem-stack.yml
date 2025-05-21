@@ -1,0 +1,31 @@
+services:
+  fem:
+    image: alfian/fem:dev
+    ports:
+      - "8082:8080"
+    env_file:
+      - /home/emokids/tugas-akhir/catatsehat/.env.dev
+    networks:
+      - minio-network
+      - md_mongodb-network
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+
+networks:
+  minio-network:
+    name: minio-network
+    external: true
+
+  md_mongodb-network:
+    name: md_mongodb-network
+    external: true
