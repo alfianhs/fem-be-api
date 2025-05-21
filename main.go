@@ -42,7 +42,7 @@ func main() {
 	docs.SwaggerInfo.Title = appName
 	docs.SwaggerInfo.Description = "API Documentations"
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = "103.155.246.50:9881"
+	docs.SwaggerInfo.Host = os.Getenv("SWAGGER_HOST")
 	docs.SwaggerInfo.BasePath = "/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
