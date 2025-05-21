@@ -12,7 +12,6 @@ import (
 	superadmin_usecase "app/app/usecase/superadmin"
 	"app/docs"
 	"app/helpers"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -43,7 +42,7 @@ func main() {
 	docs.SwaggerInfo.Title = appName
 	docs.SwaggerInfo.Description = "API Documentations"
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.Host = fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
+	docs.SwaggerInfo.Host = "103.155.246.50:9881"
 	docs.SwaggerInfo.BasePath = "/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
