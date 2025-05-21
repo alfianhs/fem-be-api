@@ -1,10 +1,10 @@
 services:
   fem:
-    image: alfian/fem:dev
+    image: alfianhs7/fem-be-api:dev
     ports:
       - "8082:8080"
     env_file:
-      - /home/emokids/tugas-akhir/catatsehat/.env.dev
+      - /home/emokids/tugas-akhir/fem/.env.dev
     networks:
       - minio-network
       - md_mongodb-network

@@ -27,7 +27,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/catat-sehat:dev ######
+          tags: ${{ secrets.DOCKER_USERNAME }}/fem-be-api:dev ######
 
   deploy:
     needs: build
@@ -55,11 +55,8 @@ jobs:
           script: |
             cd /home/emokids/tugas-akhir/fem/tmp
 
-            echo "✅ Pull image terbaru..."
-            docker pull yudhapwa/catat-sehat:dev #######
-
             echo "🚀 Deploy stack..."
-            docker stack deploy -c fem-stack.yml fem
+            docker stack deploy --with-registry-auth -c fem-stack.yml fem
 
             echo "🧹 Membersihkan image yang tidak terpakai..."
             docker image prune -af --filter "label!=keep"
