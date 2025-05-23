@@ -29,6 +29,16 @@ definitions:
     - SeasonStatusDraft
     - SeriesStatusActive
     - SeriesStatusNonActive
+  mongo_model.VotingStatus:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - VotingStatusComingSoon
+    - VotingStatusActive
+    - VotingStatusNonActive
   request.AdminLoginRequest:
     properties:
       password:
@@ -1484,6 +1494,188 @@ paths:
       summary: Update Venue
       tags:
       - Venue-Superadmin
+  /superadmin/votings:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all votings
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      - description: Status filter
+        in: query
+        name: status
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Voting List
+      tags:
+      - Voting-Superadmin
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create a new voting
+      parameters:
+      - in: formData
+        name: endDate
+        required: true
+        type: string
+      - in: formData
+        name: seriesId
+        required: true
+        type: string
+      - in: formData
+        name: startDate
+        required: true
+        type: string
+      - enum:
+        - 1
+        - 2
+        - 3
+        in: formData
+        name: status
+        required: true
+        type: integer
+        x-enum-varnames:
+        - VotingStatusComingSoon
+        - VotingStatusActive
+        - VotingStatusNonActive
+      - in: formData
+        name: title
+        required: true
+        type: string
+      - description: Banner
+        in: formData
+        name: banner
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Voting
+      tags:
+      - Voting-Superadmin
+  /superadmin/votings/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete a voting by ID
+      parameters:
+      - description: Voting ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Voting
+      tags:
+      - Voting-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get detail of a single voting by ID
+      parameters:
+      - description: Voting ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Voting Detail
+      tags:
+      - Voting-Superadmin
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update a voting by ID
+      parameters:
+      - description: Voting ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - in: formData
+        name: endDate
+        type: string
+      - in: formData
+        name: seriesId
+        type: string
+      - in: formData
+        name: startDate
+        type: string
+      - enum:
+        - 1
+        - 2
+        - 3
+        in: formData
+        name: status
+        type: integer
+        x-enum-varnames:
+        - VotingStatusComingSoon
+        - VotingStatusActive
+        - VotingStatusNonActive
+      - in: formData
+        name: title
+        type: string
+      - description: Banner
+        in: formData
+        name: banner
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Voting
+      tags:
+      - Voting-Superadmin
 securityDefinitions:
   BearerAuth:
     in: header

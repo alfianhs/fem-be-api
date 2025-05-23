@@ -42,3 +42,22 @@ var SeriesStatusMap = map[SeriesStatus]SeriesStatusStruct{
 	SeriesStatusActive:    {ID: SeriesStatusActive, Name: "Active"},
 	SeriesStatusNonActive: {ID: SeriesStatusNonActive, Name: "Non-Active"},
 }
+
+type VotingStatus int
+
+const (
+	VotingStatusComingSoon VotingStatus = 1
+	VotingStatusActive     VotingStatus = 2
+	VotingStatusNonActive  VotingStatus = 3
+)
+
+type VotingStatusStruct struct {
+	ID   VotingStatus `json:"id"`
+	Name string       `json:"name"`
+}
+
+var VotingStatusMap = map[VotingStatus]VotingStatusStruct{
+	VotingStatusComingSoon: {ID: VotingStatusComingSoon, Name: "Coming Soon"},
+	VotingStatusActive:     {ID: VotingStatusActive, Name: "Active"},
+	VotingStatusNonActive:  {ID: VotingStatusNonActive, Name: "Non-Active"},
+}

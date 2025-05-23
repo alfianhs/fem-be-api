@@ -71,6 +71,13 @@ type SuperadminAppUsecase interface {
 	GetTicketDetail(ctx context.Context, id string) helpers.Response
 	CreateOrUpdateTicket(ctx context.Context, payload request.TicketCreateOrUpdateRequest) helpers.Response
 	DeleteTicket(ctx context.Context, id string) helpers.Response
+
+	// Voting
+	GetVotingList(ctx context.Context, queryParam url.Values) helpers.Response
+	GetVotingDetail(ctx context.Context, id string) helpers.Response
+	CreateVoting(ctx context.Context, payload request.VotingCreateRequest, request *http.Request) helpers.Response
+	UpdateVoting(ctx context.Context, id string, payload request.VotingUpdateRequest, request *http.Request) helpers.Response
+	DeleteVoting(ctx context.Context, id string) helpers.Response
 }
 
 type AdminAppUsecase interface {

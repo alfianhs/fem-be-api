@@ -85,6 +85,13 @@ type MongoDbRepo interface {
 	CreateOneTicket(ctx context.Context, ticket *mongo_model.Ticket) (err error)
 	CreateManyTicket(ctx context.Context, tickets []*mongo_model.Ticket) (err error)
 	UpdatePartialTicket(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Voting
+	FetchListVoting(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountVoting(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneVoting(ctx context.Context, options map[string]interface{}) (row *mongo_model.Voting, err error)
+	CreateOneVoting(ctx context.Context, voting *mongo_model.Voting) (err error)
+	UpdatePartialVoting(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {
