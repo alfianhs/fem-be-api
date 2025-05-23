@@ -23,6 +23,11 @@ type Series struct {
 	DeletedAt    *time.Time         `bson:"deletedAt" json:"-"`
 }
 
+type SeriesFK struct {
+	ID   string `bson:"id" json:"id"`
+	Name string `bson:"name" json:"name"`
+}
+
 func (s *Series) Format() *Series {
 	s.StatusString = SeriesStatusMap[s.Status].Name
 
