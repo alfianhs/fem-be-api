@@ -352,6 +352,46 @@ paths:
       summary: Verify Email Member
       tags:
       - Auth-Member
+  /member/votings:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all votings
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      - description: Filter by Series ID
+        in: query
+        name: seriesId
+        type: string
+      - description: Status filter
+        in: query
+        name: status
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Get Voting List
+      tags:
+      - Voting-Member
   /superadmin/auth/login:
     post:
       consumes:

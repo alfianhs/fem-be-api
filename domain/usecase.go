@@ -101,4 +101,7 @@ type MemberAppUsecase interface {
 	ResendEmailVerification(ctx context.Context, payload request.ResendEmailVerificationRequest) helpers.Response
 	Login(ctx context.Context, payload request.MemberLoginRequest) helpers.Response
 	GetProfile(ctx context.Context, claim jwt_helpers.MemberJWTClaims) helpers.Response
+
+	// Voting
+	GetVotingList(ctx context.Context, queryParam url.Values) helpers.Response
 }
