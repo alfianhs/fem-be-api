@@ -22,6 +22,12 @@ type Voting struct {
 	DeletedAt    *time.Time         `bson:"deletedAt" json:"-"`
 }
 
+type VotingFK struct {
+	ID         string `bson:"id" json:"id"`
+	Title      string `bson:"title" json:"title"`
+	TotalVoter int64  `bson:"totalVoter" json:"totalVoter"`
+}
+
 func (v *Voting) Format() *Voting {
 	v.StatusString = VotingStatusMap[v.Status].Name
 

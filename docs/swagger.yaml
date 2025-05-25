@@ -46,6 +46,26 @@ definitions:
       username:
         type: string
     type: object
+  request.CandidateCreateRequest:
+    properties:
+      performance:
+        type: string
+      seasonTeamPlayerId:
+        type: string
+      votingId:
+        type: string
+    required:
+    - performance
+    - seasonTeamPlayerId
+    - votingId
+    type: object
+  request.CandidateUpdateRequest:
+    properties:
+      performance:
+        type: string
+      seasonTeamPlayerId:
+        type: string
+    type: object
   request.MemberLoginRequest:
     properties:
       email:
@@ -373,6 +393,143 @@ paths:
       summary: Get Profile Superadmin
       tags:
       - Auth-Superadmin
+  /superadmin/candidates:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all candidates
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      - description: Filter by Voting ID
+        in: query
+        name: votingId
+        type: string
+      - description: Filter by SeasonTeamPlayer ID
+        in: query
+        name: seasonTeamPlayerId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Candidate List
+      tags:
+      - Candidate-Superadmin
+    post:
+      consumes:
+      - application/json
+      description: Create a new candidate
+      parameters:
+      - description: Create Candidate
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CandidateCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create Candidate
+      tags:
+      - Candidate-Superadmin
+  /superadmin/candidates/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft-delete a candidate by ID
+      parameters:
+      - description: Candidate ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete Candidate
+      tags:
+      - Candidate-Superadmin
+    get:
+      consumes:
+      - application/json
+      description: Get detail of a single candidate by ID
+      parameters:
+      - description: Candidate ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Candidate Detail
+      tags:
+      - Candidate-Superadmin
+    put:
+      consumes:
+      - application/json
+      description: Update an existing candidate by ID
+      parameters:
+      - description: Candidate ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Candidate
+        in: body
+        name: payload
+        schema:
+          $ref: '#/definitions/request.CandidateUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Update Candidate
+      tags:
+      - Candidate-Superadmin
   /superadmin/players:
     get:
       consumes:
