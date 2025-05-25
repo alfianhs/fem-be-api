@@ -22,7 +22,9 @@ func generateQueryFilterVoting(options map[string]interface{}, withOptions bool)
 	if status, ok := options["status"].(mongo_model.VotingStatus); ok {
 		query["status"] = status
 	}
-
+	if seriesId, ok := options["seriesId"].(string); ok {
+		query["seriesId"] = seriesId
+	}
 	return query, mongoOptions
 }
 
