@@ -47,7 +47,7 @@ func (u *superadminAppUsecase) Login(ctx context.Context, payload request.Supera
 
 	// generate token
 	now := time.Now()
-	jwtTTL := jwt_helpers.GetJWTTTL()
+	expiredAt := now.Add(time.Duration(jwt_helpers.GetJWTTTL()) * time.Minute)
 	token, err := jwt_helpers.GenerateJWTTokenSuperadmin(jwt_helpers.SuperadminJWTClaims{
 		UserID: superadmin.ID.Hex(),
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -55,7 +55,7 @@ func (u *superadminAppUsecase) Login(ctx context.Context, payload request.Supera
 			Issuer:    "superadmin",
 			IssuedAt:  jwt.NewNumericDate(now),
 			NotBefore: jwt.NewNumericDate(now),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(jwt_helpers.GetJWTTTL()) * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(expiredAt),
 		},
 	})
 	if err != nil {
@@ -63,9 +63,9 @@ func (u *superadminAppUsecase) Login(ctx context.Context, payload request.Supera
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Login successful", nil, map[string]any{
-		"token":  token,
-		"jwtTTL": jwtTTL,
-		"user":   superadmin,
+		"token":     token,
+		"expiredAt": expiredAt,
+		"user":      superadmin,
 	})
 }
 

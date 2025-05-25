@@ -249,6 +249,7 @@ func (u *memberAppUsecase) Login(ctx context.Context, payload request.MemberLogi
 
 	// generate token
 	now := time.Now()
+	expiredAt := now.Add(time.Duration(jwt_helpers.GetJWTTTL()) * time.Minute)
 	token, err := jwt_helpers.GenerateJWTTokenMember(jwt_helpers.MemberJWTClaims{
 		UserID: member.ID.Hex(),
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -256,7 +257,7 @@ func (u *memberAppUsecase) Login(ctx context.Context, payload request.MemberLogi
 			Issuer:    "member",
 			IssuedAt:  jwt.NewNumericDate(now),
 			NotBefore: jwt.NewNumericDate(now),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(jwt_helpers.GetJWTTTL()) * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(expiredAt),
 		},
 	})
 	if err != nil {
@@ -264,8 +265,9 @@ func (u *memberAppUsecase) Login(ctx context.Context, payload request.MemberLogi
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Login successful", nil, map[string]any{
-		"token": token,
-		"user":  member,
+		"token":     token,
+		"expiredAt": expiredAt,
+		"user":      member,
 	})
 }
 
