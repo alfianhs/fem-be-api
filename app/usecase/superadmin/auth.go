@@ -10,7 +10,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -48,7 +47,7 @@ func (u *superadminAppUsecase) Login(ctx context.Context, payload request.Supera
 
 	// generate token
 	now := time.Now()
-	logrus.Info(time.Duration(jwt_helpers.GetJWTTTL()))
+	jwtTTL := jwt_helpers.GetJWTTTL()
 	token, err := jwt_helpers.GenerateJWTTokenSuperadmin(jwt_helpers.SuperadminJWTClaims{
 		UserID: superadmin.ID.Hex(),
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -64,8 +63,9 @@ func (u *superadminAppUsecase) Login(ctx context.Context, payload request.Supera
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Login successful", nil, map[string]any{
-		"token": token,
-		"user":  superadmin,
+		"token":  token,
+		"jwtTTL": jwtTTL,
+		"user":   superadmin,
 	})
 }
 
