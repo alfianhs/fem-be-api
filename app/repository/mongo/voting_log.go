@@ -21,6 +21,11 @@ func generateQueryFilterVotingLog(options map[string]interface{}, withOptions bo
 	if candidateId, ok := options["candidateId"].(string); ok {
 		query["candidate.id"] = candidateId
 	}
+	if candidateIds, ok := options["candidate.ids"].([]string); ok {
+		query["candidate.id"] = bson.M{
+			"$in": candidateIds,
+		}
+	}
 	if votingId, ok := options["votingId"].(string); ok {
 		query["candidate.votingId"] = votingId
 	}

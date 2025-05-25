@@ -66,6 +66,16 @@ definitions:
       seasonTeamPlayerId:
         type: string
     type: object
+  request.CandidateVoteRequest:
+    properties:
+      candidateId:
+        type: string
+      votingId:
+        type: string
+    required:
+    - candidateId
+    - votingId
+    type: object
   request.MemberLoginRequest:
     properties:
       email:
@@ -352,6 +362,72 @@ paths:
       summary: Verify Email Member
       tags:
       - Auth-Member
+  /member/candidates:
+    get:
+      consumes:
+      - application/json
+      description: Get list of all candidates
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort field
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      - description: Filter by Voting ID
+        in: query
+        name: votingId
+        type: string
+      - description: Filter by SeasonTeamPlayer ID
+        in: query
+        name: seasonTeamPlayerId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Candidate List
+      tags:
+      - Candidate-Member
+  /member/candidates/vote:
+    post:
+      consumes:
+      - application/json
+      description: Candidate Vote
+      parameters:
+      - description: Candidate Vote
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CandidateVoteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Candidate Vote
+      tags:
+      - Candidate-Member
   /member/votings:
     get:
       consumes:

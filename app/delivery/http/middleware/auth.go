@@ -274,3 +274,85 @@ func (m *appMiddleware) AuthMember() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func (m *appMiddleware) OptionalAuthMember() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// get token from header
+		requestToken := c.Request.Header.Get("Authorization")
+		if requestToken == "" {
+			return
+		}
+
+		// prepend prefix "Bearer "
+		if !strings.HasPrefix(requestToken, "Bearer ") {
+			requestToken = "Bearer " + requestToken
+		}
+
+		// check token format
+		splitToken := strings.Split(requestToken, "Bearer ")
+		if len(splitToken) != 2 {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, helpers.NewResponse(
+				http.StatusUnauthorized,
+				"Unauthorized: Invalid Token Format",
+				nil,
+				nil,
+			))
+			return
+		}
+
+		// get token from split
+		tokenString := splitToken[1]
+
+		// validate token
+		token, err := jwt.ParseWithClaims(tokenString, &jwt_helpers.MemberJWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return []byte(m.secretKeyMember), nil
+		})
+
+		// check if token is valid
+		if !token.Valid {
+			if errors.Is(err, jwt.ErrTokenSignatureInvalid) {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, helpers.NewResponse(
+					http.StatusUnauthorized,
+					"Unauthorized: Invalid Token Signature",
+					nil,
+					nil,
+				))
+				return
+			}
+
+			if errors.Is(err, jwt.ErrTokenExpired) {
+				c.AbortWithStatusJSON(http.StatusUnauthorized, helpers.NewResponse(
+					http.StatusUnauthorized,
+					"Unauthorized: Token Expired",
+					nil,
+					nil,
+				))
+				return
+			}
+		}
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, helpers.NewResponse(
+				http.StatusUnauthorized,
+				err.Error(),
+				nil,
+				nil,
+			))
+			return
+		}
+
+		claims, ok := token.Claims.(*jwt_helpers.MemberJWTClaims)
+		if !ok || !token.Valid {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, helpers.NewResponse(
+				http.StatusUnauthorized,
+				"Unauthorized: Invalid Token Claims",
+				nil,
+				nil,
+			))
+			return
+		}
+
+		// set claims to context
+		c.Set("user_data", *claims)
+		c.Next()
+	}
+}

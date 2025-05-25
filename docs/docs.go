@@ -241,6 +241,111 @@ const docTemplate = `{
                 }
             }
         },
+        "/member/candidates": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get list of all candidates",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Candidate-Member"
+                ],
+                "summary": "Get Candidate List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Direction asc or desc",
+                        "name": "dir",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by Voting ID",
+                        "name": "votingId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by SeasonTeamPlayer ID",
+                        "name": "seasonTeamPlayerId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/member/candidates/vote": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Candidate Vote",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Candidate-Member"
+                ],
+                "summary": "Candidate Vote",
+                "parameters": [
+                    {
+                        "description": "Candidate Vote",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CandidateVoteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/member/votings": {
             "get": {
                 "description": "Get list of all votings",
@@ -2743,6 +2848,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "seasonTeamPlayerId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CandidateVoteRequest": {
+            "type": "object",
+            "required": [
+                "candidateId",
+                "votingId"
+            ],
+            "properties": {
+                "candidateId": {
+                    "type": "string"
+                },
+                "votingId": {
                     "type": "string"
                 }
             }

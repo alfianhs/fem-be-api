@@ -10,3 +10,8 @@ type CandidateUpdateRequest struct {
 	SeasonTeamPlayerID string `json:"seasonTeamPlayerId"`
 	Performance        string `json:"performance"`
 }
+
+type CandidateVoteRequest struct {
+	VotingID    string `json:"votingId" binding:"required"`
+	CandidateID string `json:"candidateId" binding:"required"`
+}
