@@ -308,6 +308,224 @@ const docTemplate = `{
                 }
             }
         },
+        "/superadmin/candidates": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get list of all candidates",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Candidate-Superadmin"
+                ],
+                "summary": "Get Candidate List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort field",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Direction asc or desc",
+                        "name": "dir",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by Voting ID",
+                        "name": "votingId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Filter by SeasonTeamPlayer ID",
+                        "name": "seasonTeamPlayerId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new candidate",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Candidate-Superadmin"
+                ],
+                "summary": "Create Candidate",
+                "parameters": [
+                    {
+                        "description": "Create Candidate",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CandidateCreateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/superadmin/candidates/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get detail of a single candidate by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Candidate-Superadmin"
+                ],
+                "summary": "Get Candidate Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Candidate ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update an existing candidate by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Candidate-Superadmin"
+                ],
+                "summary": "Update Candidate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Candidate ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Candidate",
+                        "name": "payload",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/request.CandidateUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Soft-delete a candidate by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Candidate-Superadmin"
+                ],
+                "summary": "Delete Candidate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Candidate ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/superadmin/players": {
             "get": {
                 "security": [
@@ -2434,6 +2652,36 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CandidateCreateRequest": {
+            "type": "object",
+            "required": [
+                "performance",
+                "seasonTeamPlayerId",
+                "votingId"
+            ],
+            "properties": {
+                "performance": {
+                    "type": "string"
+                },
+                "seasonTeamPlayerId": {
+                    "type": "string"
+                },
+                "votingId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CandidateUpdateRequest": {
+            "type": "object",
+            "properties": {
+                "performance": {
+                    "type": "string"
+                },
+                "seasonTeamPlayerId": {
                     "type": "string"
                 }
             }

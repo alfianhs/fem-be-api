@@ -30,4 +30,5 @@ func NewSuperadminRouteHandler(usecase domain.SuperadminAppUsecase, ginEngine *g
 	handler.handleSeriesRoute("/series")
 	handler.handleTicketRoute("/tickets")
 	handler.handleVotingRoute("/votings")
+	handler.handleCandidateRoute("/candidates")
 }

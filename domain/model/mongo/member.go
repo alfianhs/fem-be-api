@@ -22,3 +22,9 @@ type Member struct {
 	UpdatedAt     time.Time          `bson:"updatedAt" json:"updatedAt"`
 	DeletedAt     *time.Time         `bson:"deletedAt" json:"-"`
 }
+
+type MemberFK struct {
+	ID    string `bson:"id" json:"id"`
+	Name  string `bson:"name" json:"name"`
+	Email string `bson:"email" json:"email"`
+}

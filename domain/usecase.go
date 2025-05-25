@@ -78,6 +78,14 @@ type SuperadminAppUsecase interface {
 	CreateVoting(ctx context.Context, payload request.VotingCreateRequest, request *http.Request) helpers.Response
 	UpdateVoting(ctx context.Context, id string, payload request.VotingUpdateRequest, request *http.Request) helpers.Response
 	DeleteVoting(ctx context.Context, id string) helpers.Response
+
+	// Candidate
+
+	GetCandidateList(ctx context.Context, q url.Values) helpers.Response
+	GetCandidateDetail(ctx context.Context, id string) helpers.Response
+	CreateCandidate(ctx context.Context, req request.CandidateCreateRequest) helpers.Response
+	UpdateCandidate(ctx context.Context, id string, req request.CandidateUpdateRequest) helpers.Response
+	DeleteCandidate(ctx context.Context, id string) helpers.Response
 }
 
 type AdminAppUsecase interface {

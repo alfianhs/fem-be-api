@@ -92,6 +92,20 @@ type MongoDbRepo interface {
 	FetchOneVoting(ctx context.Context, options map[string]interface{}) (row *mongo_model.Voting, err error)
 	CreateOneVoting(ctx context.Context, voting *mongo_model.Voting) (err error)
 	UpdatePartialVoting(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Candidate
+	FetchListCandidate(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountCandidate(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneCandidate(ctx context.Context, options map[string]interface{}) (row *mongo_model.Candidate, err error)
+	CreateOneCandidate(ctx context.Context, candidate *mongo_model.Candidate) (err error)
+	UpdatePartialCandidate(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Voting Log
+	FetchListVotingLog(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountVotingLog(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneVotingLog(ctx context.Context, options map[string]interface{}) (row *mongo_model.VotingLog, err error)
+	CreateOneVotingLog(ctx context.Context, candidate *mongo_model.VotingLog) (err error)
+	UpdatePartialVotingLog(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {
