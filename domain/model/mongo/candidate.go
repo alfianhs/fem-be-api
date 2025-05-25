@@ -17,6 +17,7 @@ type Candidate struct {
 	SeasonTeamPlayer   SeasonTeamPlayerFK `bson:"-" json:"seasonTeamPlayer"`
 	Performance        string             `bson:"performance" json:"performance"`
 	Voters             Voters             `bson:"voters" json:"voters"`
+	IsChosen           *bool              `bson:"-" json:"isChosen,omitempty"`
 	CreatedAt          time.Time          `bson:"createdAt" json:"createdAt"`
 	UpdatedAt          time.Time          `bson:"updatedAt" json:"updatedAt"`
 	DeletedAt          *time.Time         `bson:"deletedAt" json:"-"`

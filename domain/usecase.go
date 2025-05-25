@@ -104,4 +104,8 @@ type MemberAppUsecase interface {
 
 	// Voting
 	GetVotingList(ctx context.Context, queryParam url.Values) helpers.Response
+
+	// Candidate
+	GetCandidateList(ctx context.Context, claim jwt_helpers.MemberJWTClaims, q url.Values) helpers.Response
+	CandidateVote(ctx context.Context, claim jwt_helpers.MemberJWTClaims, payload request.CandidateVoteRequest) helpers.Response
 }

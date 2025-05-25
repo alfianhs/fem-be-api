@@ -25,6 +25,7 @@ type AppMiddleware interface {
 	AuthSuperadmin() gin.HandlerFunc
 	AuthAdmin() gin.HandlerFunc
 	AuthMember() gin.HandlerFunc
+	OptionalAuthMember() gin.HandlerFunc
 	Logger(writer io.Writer) gin.HandlerFunc
 	Recovery() gin.HandlerFunc
 }
