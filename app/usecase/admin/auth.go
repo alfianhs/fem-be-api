@@ -47,6 +47,7 @@ func (u *adminAppUsecase) Login(ctx context.Context, payload request.AdminLoginR
 
 	// generate token
 	now := time.Now()
+	expiredAt := now.Add(time.Duration(jwt_helpers.GetJWTTTL()) * time.Minute)
 	token, err := jwt_helpers.GenerateJWTTokenAdmin(jwt_helpers.AdminJWTClaims{
 		UserID: admin.ID.Hex(),
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -54,7 +55,7 @@ func (u *adminAppUsecase) Login(ctx context.Context, payload request.AdminLoginR
 			Issuer:    "admin",
 			IssuedAt:  jwt.NewNumericDate(now),
 			NotBefore: jwt.NewNumericDate(now),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(jwt_helpers.GetJWTTTL()) * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(expiredAt),
 		},
 	})
 	if err != nil {
@@ -62,8 +63,9 @@ func (u *adminAppUsecase) Login(ctx context.Context, payload request.AdminLoginR
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Login successful", nil, map[string]any{
-		"token": token,
-		"user":  admin,
+		"token":     token,
+		"expiredAt": expiredAt,
+		"user":      admin,
 	})
 }
 
