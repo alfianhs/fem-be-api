@@ -16,6 +16,14 @@ var allowedImageMimeTypes = []string{
 }
 
 func ImageUploadValidation(file multipart.File, header *multipart.FileHeader) error {
+	// get max size config
+	maxSize := GetMaxFileUploadSize()
+
+	// check max size
+	if header.Size > maxSize {
+		return fmt.Errorf("file size can not exceed %d mb", maxSize/(1024*1024))
+	}
+
 	// get mimetype
 	mimeType := header.Header.Get("Content-Type")
 
@@ -29,14 +37,6 @@ func ImageUploadValidation(file multipart.File, header *multipart.FileHeader) er
 	}
 	if !isValidType {
 		return fmt.Errorf("invalid image extension, expected extension: JPG, JPEG, GIF, PNG, WEBP, SVG")
-	}
-
-	// get max size config
-	maxSize := GetMaxFileUploadSize()
-
-	// check max size
-	if header.Size > maxSize {
-		return fmt.Errorf("file size can not exceed %d mb", maxSize)
 	}
 
 	return nil
