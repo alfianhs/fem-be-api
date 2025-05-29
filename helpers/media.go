@@ -12,7 +12,7 @@ import (
 )
 
 var allowedImageMimeTypes = []string{
-	"image/jpeg", "image/png", "image/gif", "image/webp",
+	"image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml",
 }
 
 func ImageUploadValidation(file multipart.File, header *multipart.FileHeader) error {
@@ -28,7 +28,7 @@ func ImageUploadValidation(file multipart.File, header *multipart.FileHeader) er
 		}
 	}
 	if !isValidType {
-		return fmt.Errorf("invalid image extension, expected extension: JPG, JPEG, GIF, PNG, WEBP")
+		return fmt.Errorf("invalid image extension, expected extension: JPG, JPEG, GIF, PNG, WEBP, SVG")
 	}
 
 	// get max size config
