@@ -72,6 +72,11 @@ func (u *superadminAppUsecase) GetTeamsList(ctx context.Context, queryParam url.
 		}
 	}
 
+	// filtering
+	if queryParam.Get("search") != "" {
+		fetchOptions["name"] = queryParam.Get("search")
+	}
+
 	// count total
 	total := u.mongoDbRepo.CountTeam(ctx, fetchOptions)
 	if total == 0 {
