@@ -202,11 +202,12 @@ func (u *superadminAppUsecase) GetCandidateDetail(ctx context.Context, id string
 	if voting == nil {
 		c.Voting = mongo_model.VotingFK{}
 		logrus.Error("Voting not found:", c.VotingID)
-	}
-	c.Voting = mongo_model.VotingFK{
-		ID:         voting.ID.Hex(),
-		Title:      voting.Title,
-		TotalVoter: voting.TotalVoter,
+	} else {
+		c.Voting = mongo_model.VotingFK{
+			ID:         voting.ID.Hex(),
+			Title:      voting.Title,
+			TotalVoter: voting.TotalVoter,
+		}
 	}
 
 	// fetch seasonTeam
@@ -217,12 +218,13 @@ func (u *superadminAppUsecase) GetCandidateDetail(ctx context.Context, id string
 	if seasonTeam == nil {
 		c.SeasonTeam = mongo_model.SeasonTeamFK{}
 		logrus.Error("SeasonTeam not found:", c.SeasonTeamID)
-	}
-	c.SeasonTeam = mongo_model.SeasonTeamFK{
-		ID:       seasonTeam.ID.Hex(),
-		SeasonID: seasonTeam.SeasonID,
-		TeamID:   seasonTeam.Team.ID,
-		Team:     seasonTeam.Team,
+	} else {
+		c.SeasonTeam = mongo_model.SeasonTeamFK{
+			ID:       seasonTeam.ID.Hex(),
+			SeasonID: seasonTeam.SeasonID,
+			TeamID:   seasonTeam.Team.ID,
+			Team:     seasonTeam.Team,
+		}
 	}
 
 	// fetch seasonTeamPlayer
@@ -233,13 +235,14 @@ func (u *superadminAppUsecase) GetCandidateDetail(ctx context.Context, id string
 	if seasonTeamPlayer == nil {
 		c.SeasonTeamPlayer = mongo_model.SeasonTeamPlayerFK{}
 		logrus.Error("SeasonTeamPlayer not found:", c.SeasonTeamPlayerID)
-	}
-	c.SeasonTeamPlayer = mongo_model.SeasonTeamPlayerFK{
-		ID:         seasonTeamPlayer.ID.Hex(),
-		SeasonTeam: seasonTeamPlayer.SeasonTeam,
-		Player:     seasonTeamPlayer.Player,
-		Position:   seasonTeamPlayer.Position,
-		Image:      seasonTeamPlayer.Image.URL,
+	} else {
+		c.SeasonTeamPlayer = mongo_model.SeasonTeamPlayerFK{
+			ID:         seasonTeamPlayer.ID.Hex(),
+			SeasonTeam: seasonTeamPlayer.SeasonTeam,
+			Player:     seasonTeamPlayer.Player,
+			Position:   seasonTeamPlayer.Position,
+			Image:      seasonTeamPlayer.Image.URL,
+		}
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, c.Format(&c.Voting))
