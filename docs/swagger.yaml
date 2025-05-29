@@ -1401,6 +1401,10 @@ paths:
         in: query
         name: seasonId
         type: string
+      - description: Search by team name
+        in: query
+        name: search
+        type: string
       - description: Page
         in: query
         name: page

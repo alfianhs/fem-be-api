@@ -27,6 +27,7 @@ func (h *routeSuperadmin) handleTeamRoute(prefixPath string) {
 // @Accept json
 // @Produce json
 // @Param seasonId query string false "Value = active/season id to include selected in season teams mark"
+// @Param search query string false "Search by team name"
 // @Param page query int false "Page"
 // @Param limit query int false "Limit"
 // @Param sort query string false "Sort"

@@ -7,6 +7,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	moptions "go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -19,6 +20,15 @@ func generateQueryFilterTeam(options map[string]interface{}, withOptions bool) (
 	}
 
 	// custom filter
+	if teamName, ok := options["name"].(string); ok {
+		regex := bson.M{
+			"$regex": primitive.Regex{
+				Pattern: teamName,
+				Options: "i",
+			},
+		}
+		query["name"] = regex
+	}
 
 	return query, mongoOptions
 }
