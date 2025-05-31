@@ -26,6 +26,7 @@ func (h *routeSuperadmin) handleSeriesRoute(prefixPath string) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
+// @Param seasonId query string false "Season ID"
 // @Param page query int false "Page"
 // @Param limit query int false "Limit"
 // @Param sort query string false "Sort"

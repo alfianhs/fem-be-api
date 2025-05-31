@@ -25,6 +25,11 @@ func (u *superadminAppUsecase) GetPlayerList(ctx context.Context, queryParam url
 		"offset": offset,
 	}
 
+	// filtering
+	if queryParam.Get("search") != "" {
+		fetchOptions["name"] = queryParam.Get("search")
+	}
+
 	// count total
 	total := u.mongoDbRepo.CountPlayer(ctx, fetchOptions)
 	if total == 0 {

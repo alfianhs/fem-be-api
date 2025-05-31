@@ -645,6 +645,10 @@ paths:
       - application/json
       description: Get Players List
       parameters:
+      - description: Search
+        in: query
+        name: search
+        type: string
       - description: Page
         in: query
         name: page
@@ -1259,6 +1263,10 @@ paths:
       - application/json
       description: Get Series
       parameters:
+      - description: Season ID
+        in: query
+        name: seasonId
+        type: string
       - description: Page
         in: query
         name: page

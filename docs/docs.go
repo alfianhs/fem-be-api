@@ -712,6 +712,12 @@ const docTemplate = `{
                 "summary": "Get Players List",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Search",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page",
                         "name": "page",
@@ -1687,6 +1693,12 @@ const docTemplate = `{
                 ],
                 "summary": "Get Series",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Season ID",
+                        "name": "seasonId",
+                        "in": "query"
+                    },
                     {
                         "type": "integer",
                         "description": "Page",
