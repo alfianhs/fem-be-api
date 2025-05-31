@@ -1,9 +1,9 @@
 package request
 
 type CandidateCreateRequest struct {
-	VotingID           string `json:"votingId" binding:"required"`
-	SeasonTeamPlayerID string `json:"seasonTeamPlayerId" binding:"required"`
-	Performance        string `json:"performance" binding:"required"`
+	VotingID           string `json:"votingId"`
+	SeasonTeamPlayerID string `json:"seasonTeamPlayerId"`
+	Performance        string `json:"performance"`
 }
 
 type CandidateUpdateRequest struct {
@@ -12,6 +12,6 @@ type CandidateUpdateRequest struct {
 }
 
 type CandidateVoteRequest struct {
-	VotingID    string `json:"votingId" binding:"required"`
-	CandidateID string `json:"candidateId" binding:"required"`
+	VotingID    string `json:"votingId"`
+	CandidateID string `json:"candidateId"`
 }

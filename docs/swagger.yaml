@@ -26,7 +26,7 @@ definitions:
     - 3
     type: integer
     x-enum-varnames:
-    - SeasonStatusDraft
+    - SeriesStatusDraft
     - SeriesStatusActive
     - SeriesStatusNonActive
   mongo_model.VotingStatus:
@@ -54,10 +54,6 @@ definitions:
         type: string
       votingId:
         type: string
-    required:
-    - performance
-    - seasonTeamPlayerId
-    - votingId
     type: object
   request.CandidateUpdateRequest:
     properties:
@@ -72,9 +68,6 @@ definitions:
         type: string
       votingId:
         type: string
-    required:
-    - candidateId
-    - votingId
     type: object
   request.MemberLoginRequest:
     properties:

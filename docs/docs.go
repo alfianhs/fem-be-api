@@ -2799,7 +2799,7 @@ const docTemplate = `{
                 3
             ],
             "x-enum-varnames": [
-                "SeasonStatusDraft",
+                "SeriesStatusDraft",
                 "SeriesStatusActive",
                 "SeriesStatusNonActive"
             ]
@@ -2830,11 +2830,6 @@ const docTemplate = `{
         },
         "request.CandidateCreateRequest": {
             "type": "object",
-            "required": [
-                "performance",
-                "seasonTeamPlayerId",
-                "votingId"
-            ],
             "properties": {
                 "performance": {
                     "type": "string"
@@ -2860,10 +2855,6 @@ const docTemplate = `{
         },
         "request.CandidateVoteRequest": {
             "type": "object",
-            "required": [
-                "candidateId",
-                "votingId"
-            ],
             "properties": {
                 "candidateId": {
                     "type": "string"
