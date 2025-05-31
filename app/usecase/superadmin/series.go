@@ -26,6 +26,7 @@ func (u *superadminAppUsecase) GetSeriesList(ctx context.Context, queryParam url
 		"offset": offset,
 	}
 
+	// filtering
 	if queryParam.Get("status") != "" {
 		status := queryParam.Get("status")
 		statusInt, err := strconv.Atoi(status)
@@ -33,6 +34,9 @@ func (u *superadminAppUsecase) GetSeriesList(ctx context.Context, queryParam url
 			return helpers.NewResponse(http.StatusBadRequest, "Invalid status", nil, nil)
 		}
 		fetchOptions["status"] = mongo_model.SeriesStatus(statusInt)
+	}
+	if queryParam.Get("seasonId") != "" {
+		fetchOptions["seasonId"] = queryParam.Get("seasonId")
 	}
 
 	// count total

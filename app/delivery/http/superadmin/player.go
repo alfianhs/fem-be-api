@@ -26,6 +26,7 @@ func (h *routeSuperadmin) handlePlayerRoute(prefixPath string) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
+// @Param search query string false "Search"
 // @Param page query int false "Page"
 // @Param limit query int false "Limit"
 // @Param sort query string false "Sort"

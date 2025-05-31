@@ -22,6 +22,9 @@ func generateQueryFilterSeries(options map[string]interface{}, withOptions bool)
 	if status, ok := options["status"].(mongo_model.SeriesStatus); ok {
 		query["status"] = status
 	}
+	if seasonId, ok := options["seasonId"].(string); ok {
+		query["seasonId"] = seasonId
+	}
 
 	return query, mongoOptions
 }
