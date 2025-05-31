@@ -27,7 +27,7 @@ var PlayerPositionList = []string{
 type SeriesStatus int
 
 const (
-	SeasonStatusDraft     SeriesStatus = 1
+	SeriesStatusDraft     SeriesStatus = 1
 	SeriesStatusActive    SeriesStatus = 2
 	SeriesStatusNonActive SeriesStatus = 3
 )
@@ -38,7 +38,7 @@ type SeriesStatusStruct struct {
 }
 
 var SeriesStatusMap = map[SeriesStatus]SeriesStatusStruct{
-	SeasonStatusDraft:     {ID: SeasonStatusDraft, Name: "Draft"},
+	SeriesStatusDraft:     {ID: SeriesStatusDraft, Name: "Draft"},
 	SeriesStatusActive:    {ID: SeriesStatusActive, Name: "Active"},
 	SeriesStatusNonActive: {ID: SeriesStatusNonActive, Name: "Non-Active"},
 }

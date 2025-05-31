@@ -295,7 +295,7 @@ func (u *superadminAppUsecase) CreateSeries(ctx context.Context, payload request
 		Price:     payload.Price,
 		StartDate: startDate,
 		EndDate:   endDate,
-		Status:    mongo_model.SeasonStatusDraft,
+		Status:    mongo_model.SeriesStatusDraft,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
