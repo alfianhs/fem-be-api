@@ -27,6 +27,9 @@ func (u *superadminAppUsecase) GetSeasonTeamPlayersList(ctx context.Context, que
 	}
 
 	// filtering
+	if queryParam.Get("seasonId") != "" {
+		fetchOptions["seasonId"] = queryParam.Get("seasonId")
+	}
 	if queryParam.Get("seasonTeamId") != "" {
 		fetchOptions["seasonTeamId"] = queryParam.Get("seasonTeamId")
 	}
@@ -105,9 +108,6 @@ func (u *superadminAppUsecase) GetSeasonTeamPlayersList(ctx context.Context, que
 				Logo: team.Logo.URL,
 			}
 		} else {
-			row.SeasonTeam.Team = mongo_model.TeamFK{
-				ID: row.SeasonTeam.TeamID,
-			}
 			logrus.Error("team with id ", row.SeasonTeam.TeamID, " not found")
 		}
 		list = append(list, row)
@@ -213,14 +213,14 @@ func (u *superadminAppUsecase) CreateSeasonTeamPlayer(ctx context.Context, paylo
 
 	// check existing
 	existing, err := u.mongoDbRepo.FetchOneSeasonTeamPlayer(ctx, map[string]interface{}{
-		"teamId":   seasonTeam.Team.ID,
+		"seasonId": seasonTeam.SeasonID,
 		"playerId": player.ID.Hex(),
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 	}
 	if existing != nil {
-		return helpers.NewResponse(http.StatusBadRequest, "Season team player already exists", nil, nil)
+		return helpers.NewResponse(http.StatusBadRequest, "Season team player already exists in this season", nil, nil)
 	}
 
 	now := time.Now()
