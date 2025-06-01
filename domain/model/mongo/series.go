@@ -14,6 +14,7 @@ type Series struct {
 	Venue        VenueFK            `bson:"-" json:"venue"`
 	Name         string             `bson:"name" json:"name"`
 	Price        float64            `bson:"price" json:"price"`
+	MatchCount   int64              `bson:"matchCount" json:"matchCount"`
 	StartDate    time.Time          `bson:"startDate" json:"startDate"`
 	EndDate      time.Time          `bson:"endDate" json:"endDate"`
 	Status       SeriesStatus       `bson:"status" json:"-"`
