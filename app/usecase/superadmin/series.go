@@ -425,3 +425,46 @@ func (u *superadminAppUsecase) DeleteSeries(ctx context.Context, id string) help
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, nil)
 }
+
+func (u *superadminAppUsecase) updateSeriesMatchCount(ctx context.Context, id string) {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	// check tickets with series id
+	cur, err := u.mongoDbRepo.FetchListTicket(ctx, map[string]interface{}{
+		"seriesId": id,
+	})
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	defer cur.Close(ctx)
+
+	var tickets []*mongo_model.Ticket
+	for cur.Next(ctx) {
+		var ticket mongo_model.Ticket
+		if err := cur.Decode(&ticket); err != nil {
+			logrus.Error("Ticket Decode:", err)
+			return
+		}
+		tickets = append(tickets, &ticket)
+	}
+
+	// count matchs
+	matchCount := 0
+	for _, ticket := range tickets {
+		matchCount += len(ticket.Matchs)
+	}
+
+	// update series
+	err = u.mongoDbRepo.UpdatePartialSeries(ctx, map[string]interface{}{
+		"id": id,
+	}, map[string]interface{}{
+		"matchCount": matchCount,
+		"updatedAt":  time.Now(),
+	})
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+}

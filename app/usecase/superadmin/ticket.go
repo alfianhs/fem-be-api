@@ -411,7 +411,6 @@ func (u *superadminAppUsecase) CreateOrUpdateTicket(ctx context.Context, payload
 		// set date to start of day
 		date, _ := time.Parse(time.RFC3339, ticketPayload.Date)
 		date = helpers.SetToStartOfDayUTC(date)
-		logrus.Info("Ticket Date:", date)
 
 		if date.Before(series.StartDate) || date.After(series.EndDate) {
 			return helpers.NewResponse(http.StatusBadRequest, "Date must be between "+series.StartDate.Format("2006-01-02")+
@@ -493,6 +492,9 @@ func (u *superadminAppUsecase) CreateOrUpdateTicket(ctx context.Context, payload
 		}
 	}
 
+	// update match count in related series in bg
+	go u.updateSeriesMatchCount(context.Background(), series.ID.Hex())
+
 	// return response
 	return helpers.NewResponse(http.StatusOK, "Success", nil, map[string]interface{}{
 		"created": createdTickets,
@@ -526,6 +528,9 @@ func (u *superadminAppUsecase) DeleteTicket(ctx context.Context, id string) help
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 	}
+
+	// update match count in related series in bg
+	go u.updateSeriesMatchCount(context.Background(), ticket.SeriesID)
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, nil)
 }
