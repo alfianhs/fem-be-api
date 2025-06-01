@@ -112,50 +112,6 @@ func (u *memberAppUsecase) GetCandidateList(ctx context.Context, claim jwt_helpe
 		votingsMap[s.ID.Hex()] = s
 	}
 
-	// extract seasonTeamIds
-	seasonTeamIds := helpers.ExtractIds(candidates, func(c mongo_model.Candidate) string {
-		return c.SeasonTeamID
-	})
-
-	// fetch seasonTeams
-	seasonTeams, err := u.mongoDbRepo.FetchListSeasonTeam(ctx, map[string]interface{}{"ids": seasonTeamIds})
-	if err != nil {
-		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-	}
-	defer seasonTeams.Close(ctx)
-
-	seasonTeamsMap := make(map[string]mongo_model.SeasonTeam)
-	for seasonTeams.Next(ctx) {
-		var s mongo_model.SeasonTeam
-		if err := seasonTeams.Decode(&s); err != nil {
-			logrus.Error("SeasonTeam Decode:", err)
-			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-		}
-		seasonTeamsMap[s.ID.Hex()] = s
-	}
-
-	// extract seasonTeamPlayerIds
-	seasonTeamPlayerIds := helpers.ExtractIds(candidates, func(c mongo_model.Candidate) string {
-		return c.SeasonTeamPlayerID
-	})
-
-	// fetch seasonTeamPlayers
-	seasonTeamPlayers, err := u.mongoDbRepo.FetchListSeasonTeamPlayer(ctx, map[string]interface{}{"ids": seasonTeamPlayerIds})
-	if err != nil {
-		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-	}
-	defer seasonTeamPlayers.Close(ctx)
-
-	seasonTeamPlayersMap := make(map[string]mongo_model.SeasonTeamPlayer)
-	for seasonTeamPlayers.Next(ctx) {
-		var s mongo_model.SeasonTeamPlayer
-		if err := seasonTeamPlayers.Decode(&s); err != nil {
-			logrus.Error("SeasonTeamPlayer Decode:", err)
-			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-		}
-		seasonTeamPlayersMap[s.ID.Hex()] = s
-	}
-
 	var list []interface{}
 	for _, c := range candidates {
 		v, ok := votingsMap[c.VotingID]
@@ -168,33 +124,6 @@ func (u *memberAppUsecase) GetCandidateList(ctx context.Context, claim jwt_helpe
 		} else {
 			c.Voting = mongo_model.VotingFK{}
 			logrus.Error("Voting not found:", c.VotingID)
-		}
-
-		st, ok := seasonTeamsMap[c.SeasonTeamID]
-		if ok {
-			c.SeasonTeam = mongo_model.SeasonTeamFK{
-				ID:       st.ID.Hex(),
-				SeasonID: st.SeasonID,
-				TeamID:   st.Team.ID,
-				Team:     st.Team,
-			}
-		} else {
-			c.SeasonTeam = mongo_model.SeasonTeamFK{}
-			logrus.Error("SeasonTeam not found:", c.SeasonTeamID)
-		}
-
-		stp, ok := seasonTeamPlayersMap[c.SeasonTeamPlayerID]
-		if ok {
-			c.SeasonTeamPlayer = mongo_model.SeasonTeamPlayerFK{
-				ID:         stp.ID.Hex(),
-				SeasonTeam: stp.SeasonTeam,
-				Player:     stp.Player,
-				Position:   stp.Position,
-				Image:      stp.Image.URL,
-			}
-		} else {
-			c.SeasonTeamPlayer = mongo_model.SeasonTeamPlayerFK{}
-			logrus.Error("SeasonTeamPlayer not found:", c.SeasonTeamPlayerID)
 		}
 
 		if chosenCandidateMap[c.ID.Hex()] {

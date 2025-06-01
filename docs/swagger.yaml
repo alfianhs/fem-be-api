@@ -779,6 +779,10 @@ paths:
       - application/json
       description: Get Season Team Players List
       parameters:
+      - description: Season ID
+        in: query
+        name: seasonId
+        type: string
       - description: Season Team ID
         in: query
         name: seasonTeamId

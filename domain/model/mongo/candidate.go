@@ -8,19 +8,17 @@ import (
 )
 
 type Candidate struct {
-	ID                 primitive.ObjectID `bson:"_id" json:"id"`
-	VotingID           string             `bson:"votingId" json:"votingId"`
-	Voting             VotingFK           `bson:"-" json:"voting"`
-	SeasonTeamID       string             `bson:"seasonTeamId" json:"seasonTeamId"`
-	SeasonTeam         SeasonTeamFK       `bson:"-" json:"seasonTeam"`
-	SeasonTeamPlayerID string             `bson:"seasonTeamPlayerId" json:"seasonTeamPlayerId"`
-	SeasonTeamPlayer   SeasonTeamPlayerFK `bson:"-" json:"seasonTeamPlayer"`
-	Performance        string             `bson:"performance" json:"performance"`
-	Voters             Voters             `bson:"voters" json:"voters"`
-	IsChosen           *bool              `bson:"-" json:"isChosen,omitempty"`
-	CreatedAt          time.Time          `bson:"createdAt" json:"createdAt"`
-	UpdatedAt          time.Time          `bson:"updatedAt" json:"updatedAt"`
-	DeletedAt          *time.Time         `bson:"deletedAt" json:"-"`
+	ID               primitive.ObjectID `bson:"_id" json:"id"`
+	VotingID         string             `bson:"votingId" json:"votingId"`
+	Voting           VotingFK           `bson:"-" json:"voting"`
+	SeasonTeam       SeasonTeamFK       `bson:"seasonTeam" json:"seasonTeam"`
+	SeasonTeamPlayer SeasonTeamPlayerFK `bson:"seasonTeamPlayer" json:"seasonTeamPlayer"`
+	Performance      string             `bson:"performance" json:"performance"`
+	Voters           Voters             `bson:"voters" json:"voters"`
+	IsChosen         *bool              `bson:"-" json:"isChosen,omitempty"`
+	CreatedAt        time.Time          `bson:"createdAt" json:"createdAt"`
+	UpdatedAt        time.Time          `bson:"updatedAt" json:"updatedAt"`
+	DeletedAt        *time.Time         `bson:"deletedAt" json:"-"`
 }
 
 type CandidateFK struct {
