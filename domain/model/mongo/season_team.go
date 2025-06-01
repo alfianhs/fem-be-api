@@ -20,5 +20,5 @@ type SeasonTeamFK struct {
 	ID       string `bson:"id" json:"id"`
 	SeasonID string `bson:"seasonId" json:"seasonId"`
 	TeamID   string `bson:"teamId" json:"teamId"`
-	Team     TeamFK `bson:"-" json:"team"`
+	Team     TeamFK `bson:"team" json:"team"`
 }

@@ -22,7 +22,7 @@ func generateQueryFilterCandidate(options map[string]interface{}, withOptions bo
 	}
 
 	if seasonTeamPlayerId, ok := options["seasonTeamPlayerId"].(string); ok {
-		query["seasonTeamPlayerId"] = seasonTeamPlayerId
+		query["seasonTeamPlayer.id"] = seasonTeamPlayerId
 	}
 
 	return
