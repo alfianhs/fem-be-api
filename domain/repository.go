@@ -3,6 +3,7 @@ package domain
 import (
 	mongo_model "app/domain/model/mongo"
 	s3_model "app/domain/model/s3"
+	"app/helpers"
 	"context"
 	"io"
 
@@ -85,6 +86,7 @@ type MongoDbRepo interface {
 	CreateOneTicket(ctx context.Context, ticket *mongo_model.Ticket) (err error)
 	CreateManyTicket(ctx context.Context, tickets []*mongo_model.Ticket) (err error)
 	UpdatePartialTicket(ctx context.Context, options, field map[string]interface{}) (err error)
+	IncrementOneTicket(ctx context.Context, id string, payload map[string]int64) (err error)
 
 	// Voting
 	FetchListVoting(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
@@ -106,8 +108,19 @@ type MongoDbRepo interface {
 	FetchOneVotingLog(ctx context.Context, options map[string]interface{}) (row *mongo_model.VotingLog, err error)
 	CreateOneVotingLog(ctx context.Context, candidate *mongo_model.VotingLog) (err error)
 	UpdatePartialVotingLog(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Purchase
+	FetchListPurchase(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountPurchase(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOnePurchase(ctx context.Context, options map[string]interface{}) (row *mongo_model.Purchase, err error)
+	CreateOnePurchase(ctx context.Context, purchase *mongo_model.Purchase) (err error)
+	UpdatePartialPurchase(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {
 	UploadFilePublic(ctx context.Context, objectName string, body io.Reader, mimeType string) (*s3_model.UploadResponse, error)
+}
+
+type XenditRepo interface {
+	GenereteSnapLink(ctx context.Context, purchase mongo_model.Purchase) (helpers.Response, error)
 }
