@@ -19,6 +19,11 @@ type Ticket struct {
 	DeletedAt *time.Time         `bson:"deletedAt" json:"-"`
 }
 
+type TicketFK struct {
+	ID   string `bson:"id" json:"id"`
+	Name string `bson:"name" json:"name"`
+}
+
 type TicketQuota struct {
 	Stock     int64 `bson:"stock" json:"stock"`
 	Used      int64 `bson:"used" json:"used"`

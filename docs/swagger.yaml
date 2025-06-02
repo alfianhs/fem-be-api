@@ -69,6 +69,13 @@ definitions:
       votingId:
         type: string
     type: object
+  request.CreatePurchaseRequest:
+    properties:
+      amount:
+        type: integer
+      productId:
+        type: string
+    type: object
   request.MemberLoginRequest:
     properties:
       email:
@@ -421,6 +428,30 @@ paths:
       summary: Candidate Vote
       tags:
       - Candidate-Member
+  /member/purchases:
+    post:
+      consumes:
+      - application/json
+      description: Create purchase
+      parameters:
+      - description: Create purchase
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreatePurchaseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create purchase
+      tags:
+      - Purchase-Member
   /member/votings:
     get:
       consumes:

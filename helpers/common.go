@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"strings"
 	"time"
 )
@@ -62,4 +63,13 @@ func SetToStartOfDayUTC(t time.Time) time.Time {
 func SetToEndOfDayUTC(t time.Time) time.Time {
 	utc := t.UTC()
 	return time.Date(utc.Year(), utc.Month(), utc.Day(), 23, 59, 59, 0, time.UTC)
+}
+
+func GenerateInvoiceExternalId(count int64) string {
+	prefix := "TRX"
+	randomChar, _ := GenerateSecureRandomChar(3)
+	timestamp := time.Now().Format("20060102")
+	counter := fmt.Sprintf("%03d", count+1)
+
+	return fmt.Sprintf("%s-%s%s-%s", prefix, timestamp, randomChar, counter)
 }

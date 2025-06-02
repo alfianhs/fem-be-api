@@ -346,6 +346,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/member/purchases": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create purchase",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Purchase-Member"
+                ],
+                "summary": "Create purchase",
+                "parameters": [
+                    {
+                        "description": "Create purchase",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreatePurchaseRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/member/votings": {
             "get": {
                 "description": "Get list of all votings",
@@ -2878,6 +2917,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "votingId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreatePurchaseRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "productId": {
                     "type": "string"
                 }
             }

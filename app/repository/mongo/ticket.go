@@ -7,6 +7,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	moptions "go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -99,5 +100,24 @@ func (r *mongoDbRepo) UpdatePartialTicket(ctx context.Context, options, field ma
 		return
 	}
 
+	return
+}
+
+func (r *mongoDbRepo) IncrementOneTicket(ctx context.Context, id string, payload map[string]int64) (err error) {
+	obj, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		logrus.Error("Invalid ticket ID:", err)
+		return err
+	}
+
+	_, err = r.Conn.Collection(r.ticketCollection).UpdateOne(ctx, map[string]any{
+		"_id": obj,
+	}, bson.M{
+		"$inc": payload,
+	})
+	if err != nil {
+		logrus.Error("IncrementOneTicket UpdateOne:", err)
+		return
+	}
 	return
 }

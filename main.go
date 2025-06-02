@@ -7,6 +7,7 @@ import (
 	superadmin_http "app/app/delivery/http/superadmin"
 	mongo_repository "app/app/repository/mongo"
 	s3_repository "app/app/repository/s3"
+	xendit_repository "app/app/repository/xendit"
 	admin_usecase "app/app/usecase/admin"
 	member_usecase "app/app/usecase/member"
 	superadmin_usecase "app/app/usecase/superadmin"
@@ -74,6 +75,9 @@ func main() {
 	// init s3 repository
 	s3Repo := s3_repository.NewS3Repository(timeoutContext)
 
+	// init xendit repository
+	xenditRepo := xendit_repository.NewXenditRepo()
+
 	// init superadmin usecase
 	superadminUsecase := superadmin_usecase.NewSuperadminAppUsecase(superadmin_usecase.RepoInjection{
 		MongoDbRepo: mongoDbRepo,
@@ -88,6 +92,7 @@ func main() {
 	// init member usecase
 	memberUsecase := member_usecase.NewMemberAppUsecase(member_usecase.RepoInjection{
 		MongoDbRepo: mongoDbRepo,
+		XenditRepo:  xenditRepo,
 	}, timeoutContext)
 
 	// init middleware
