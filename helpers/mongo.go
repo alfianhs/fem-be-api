@@ -103,13 +103,13 @@ func CommonMongoFindOptions(options map[string]any) *moptions.FindOptions {
 		mongoOptions.SetLimit(int64(limit))
 	}
 
+	sortQ := bson.D{}
 	if sortBy, ok := options["sort"].(string); ok {
 		sortDir, ok := options["dir"].(string)
 		if !ok {
 			sortDir = "asc"
 		}
 
-		sortQ := bson.D{}
 		sortDirMongo := int(1)
 		if strings.ToLower(sortDir) == "desc" {
 			sortDirMongo = -1
@@ -118,17 +118,27 @@ func CommonMongoFindOptions(options map[string]any) *moptions.FindOptions {
 			Key:   sortBy,
 			Value: sortDirMongo,
 		})
-		mongoOptions.SetSort(sortQ)
 	} else if sortBy, ok := options["sort"].(map[string]int); ok {
-		sortQ := bson.D{}
 		for k, sort := range sortBy {
 			sortQ = append(sortQ, bson.E{
 				Key:   k,
 				Value: sort,
 			})
 		}
-		mongoOptions.SetSort(sortQ)
 	}
+
+	// set secondary sorting by createdAt desc if not set
+	alreadySortedByCreatedAt := false
+	for _, field := range sortQ {
+		if field.Key == "createdAt" {
+			alreadySortedByCreatedAt = true
+			break
+		}
+	}
+	if !alreadySortedByCreatedAt {
+		sortQ = append(sortQ, bson.E{Key: "createdAt", Value: -1})
+	}
+	mongoOptions.SetSort(sortQ)
 
 	if projection, ok := options["projection"].(map[string]int); ok {
 		mongoOptions.SetProjection(projection)
