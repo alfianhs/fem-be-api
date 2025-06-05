@@ -27,9 +27,9 @@ var PlayerPositionList = []string{
 type SeriesStatus int
 
 const (
-	SeriesStatusDraft     SeriesStatus = 1
-	SeriesStatusActive    SeriesStatus = 2
-	SeriesStatusNonActive SeriesStatus = 3
+	SeriesStatusActive    SeriesStatus = 1
+	SeriesStatusNonActive SeriesStatus = 2
+	SeriesStatusDraft     SeriesStatus = 3
 )
 
 type SeriesStatusStruct struct {
@@ -38,17 +38,17 @@ type SeriesStatusStruct struct {
 }
 
 var SeriesStatusMap = map[SeriesStatus]SeriesStatusStruct{
-	SeriesStatusDraft:     {ID: SeriesStatusDraft, Name: "Draft"},
 	SeriesStatusActive:    {ID: SeriesStatusActive, Name: "Active"},
 	SeriesStatusNonActive: {ID: SeriesStatusNonActive, Name: "Non-Active"},
+	SeriesStatusDraft:     {ID: SeriesStatusDraft, Name: "Draft"},
 }
 
 type VotingStatus int
 
 const (
-	VotingStatusComingSoon VotingStatus = 1
-	VotingStatusActive     VotingStatus = 2
-	VotingStatusNonActive  VotingStatus = 3
+	VotingStatusActive     VotingStatus = 1
+	VotingStatusNonActive  VotingStatus = 2
+	VotingStatusComingSoon VotingStatus = 3
 )
 
 type VotingStatusStruct struct {
@@ -57,9 +57,9 @@ type VotingStatusStruct struct {
 }
 
 var VotingStatusMap = map[VotingStatus]VotingStatusStruct{
-	VotingStatusComingSoon: {ID: VotingStatusComingSoon, Name: "Coming Soon"},
 	VotingStatusActive:     {ID: VotingStatusActive, Name: "Active"},
 	VotingStatusNonActive:  {ID: VotingStatusNonActive, Name: "Non-Active"},
+	VotingStatusComingSoon: {ID: VotingStatusComingSoon, Name: "Coming Soon"},
 }
 
 type PurchaseStatus int
