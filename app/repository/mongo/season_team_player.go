@@ -31,6 +31,11 @@ func generateQueryFilterSeasonTeamPlayer(options map[string]interface{}, withOpt
 	if playerId, ok := options["playerId"].(string); ok {
 		query["player.id"] = playerId
 	}
+	if seasonTeamIds, ok := options["seasonTeam.ids"].([]string); ok {
+		query["seasonTeam.id"] = bson.M{
+			"$in": seasonTeamIds,
+		}
+	}
 
 	return query, mongoOptions
 }
@@ -91,6 +96,18 @@ func (r *mongoDbRepo) UpdatePartialSeasonTeamPlayer(ctx context.Context, options
 	_, err = r.Conn.Collection(r.seasonTeamPlayerCollection).UpdateOne(ctx, query, bson.M{"$set": field})
 	if err != nil {
 		logrus.Error("UpdatePartialSeasonTeamPlayer UpdateOne:", err)
+		return
+	}
+
+	return
+}
+
+func (r *mongoDbRepo) UpdateManySeasonTeamPlayerPartial(ctx context.Context, options, field map[string]interface{}) (err error) {
+	query, _ := generateQueryFilterSeasonTeamPlayer(options, false)
+
+	_, err = r.Conn.Collection(r.seasonTeamPlayerCollection).UpdateMany(ctx, query, bson.M{"$set": field})
+	if err != nil {
+		logrus.Error("UpdateManySeasonTeamPlayerPartial UpdateMany:", err)
 		return
 	}
 
