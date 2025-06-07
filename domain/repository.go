@@ -71,6 +71,7 @@ type MongoDbRepo interface {
 	FetchOneSeasonTeamPlayer(ctx context.Context, options map[string]interface{}) (row *mongo_model.SeasonTeamPlayer, err error)
 	CreateOneSeasonTeamPlayer(ctx context.Context, seasonTeamPlayer *mongo_model.SeasonTeamPlayer) (err error)
 	UpdatePartialSeasonTeamPlayer(ctx context.Context, options, field map[string]interface{}) (err error)
+	UpdateManySeasonTeamPlayerPartial(ctx context.Context, options, field map[string]interface{}) (err error)
 
 	// Series
 	FetchListSeries(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)

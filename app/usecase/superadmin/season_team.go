@@ -281,6 +281,46 @@ func (u *superadminAppUsecase) DeleteSeasonTeam(ctx context.Context, id string) 
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 	}
 
+	// delete related season team player in bg
+	go func() {
+		ctx, cancel := context.WithTimeout(context.Background(), u.contextTimeout)
+		defer cancel()
+
+		// fetch season team player
+		seasonTeamPlayers, err := u.mongoDbRepo.FetchListSeasonTeamPlayer(ctx, map[string]interface{}{
+			"seasonTeam.id": id,
+		})
+		if err != nil {
+			logrus.Error("fetch season team player background error :", err)
+			return
+		}
+		defer seasonTeamPlayers.Close(ctx)
+
+		// bulk delete
+		err = u.mongoDbRepo.UpdateManySeasonTeamPlayerPartial(ctx, map[string]interface{}{
+			"seasonTeam.id": id,
+		}, map[string]interface{}{
+			"deletedAt": now,
+		})
+		if err != nil {
+			logrus.Error("delete season team player background error :", err)
+			return
+		}
+
+		// mark unused media
+		var mediaIds []string
+		for seasonTeamPlayers.Next(ctx) {
+			var seasonTeamPlayer mongo_model.SeasonTeamPlayer
+			if err := seasonTeamPlayers.Decode(&seasonTeamPlayer); err != nil {
+				logrus.Error("SeasonTeamPlayer Decode:", err)
+				return
+			}
+			mediaIds = append(mediaIds, seasonTeamPlayer.Image.ID)
+		}
+
+		u.markMediaAsUnusedByIds(ctx, mediaIds)
+	}()
+
 	return helpers.NewResponse(http.StatusOK, "Success", nil, nil)
 }
 
@@ -395,32 +435,71 @@ func (u *superadminAppUsecase) ManageSeasonTeam(ctx context.Context, payload req
 			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 		}
 		defer existing.Close(ctx)
-		var list []*mongo_model.SeasonTeam
+		var listIds []string
 		for existing.Next(ctx) {
 			var seasonTeam mongo_model.SeasonTeam
 			if err := existing.Decode(&seasonTeam); err != nil {
 				logrus.Error("SeasonTeam Decode:", err)
 				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 			}
-			list = append(list, &seasonTeam)
+			listIds = append(listIds, seasonTeam.ID.Hex())
 		}
 
 		// return error not found
-		if len(list) == 0 {
+		if len(listIds) == 0 {
 			return helpers.NewResponse(http.StatusBadRequest, "No team found to remove", nil, nil)
 		}
 
 		// delete bulk
 		now := time.Now()
 		err = u.mongoDbRepo.UpdateManySeasonTeamPartial(ctx, map[string]interface{}{
-			"seasonId": activeSeason.ID.Hex(),
-			"team.ids": payload.RemovedTeamIds,
+			"ids": listIds,
 		}, map[string]interface{}{
 			"deletedAt": now,
 		})
 		if err != nil {
 			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 		}
+
+		// delete related season team player in bg
+		go func() {
+			ctx, cancel := context.WithTimeout(context.Background(), u.contextTimeout)
+			defer cancel()
+
+			// fetch season team player
+			seasonTeamPlayers, err := u.mongoDbRepo.FetchListSeasonTeamPlayer(ctx, map[string]interface{}{
+				"seasonTeam.ids": listIds,
+			})
+			if err != nil {
+				logrus.Error("fetch season team player background error :", err)
+				return
+			}
+			defer seasonTeamPlayers.Close(ctx)
+
+			// bulk delete
+			err = u.mongoDbRepo.UpdateManySeasonTeamPlayerPartial(ctx, map[string]interface{}{
+				"seasonTeam.ids": listIds,
+			}, map[string]interface{}{
+				"deletedAt": now,
+			})
+			if err != nil {
+				logrus.Error("delete season team player background error :", err)
+				return
+			}
+
+			// mark unused media
+			var mediaIds []string
+			for seasonTeamPlayers.Next(ctx) {
+				var seasonTeamPlayer mongo_model.SeasonTeamPlayer
+				if err := seasonTeamPlayers.Decode(&seasonTeamPlayer); err != nil {
+					logrus.Error("SeasonTeamPlayer Decode:", err)
+					return
+				}
+				mediaIds = append(mediaIds, seasonTeamPlayer.Image.ID)
+			}
+
+			u.markMediaAsUnusedByIds(ctx, mediaIds)
+		}()
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, map[string]interface{}{
