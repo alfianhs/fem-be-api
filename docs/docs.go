@@ -2347,6 +2347,12 @@ const docTemplate = `{
                 "summary": "Get Venues List",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Search by name",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page",
                         "name": "page",
@@ -2637,9 +2643,9 @@ const docTemplate = `{
                         ],
                         "type": "integer",
                         "x-enum-varnames": [
-                            "VotingStatusComingSoon",
                             "VotingStatusActive",
-                            "VotingStatusNonActive"
+                            "VotingStatusNonActive",
+                            "VotingStatusComingSoon"
                         ],
                         "name": "status",
                         "in": "formData",
@@ -2753,9 +2759,9 @@ const docTemplate = `{
                         ],
                         "type": "integer",
                         "x-enum-varnames": [
-                            "VotingStatusComingSoon",
                             "VotingStatusActive",
-                            "VotingStatusNonActive"
+                            "VotingStatusNonActive",
+                            "VotingStatusComingSoon"
                         ],
                         "name": "status",
                         "in": "formData"
@@ -2856,9 +2862,9 @@ const docTemplate = `{
                 3
             ],
             "x-enum-varnames": [
-                "SeriesStatusDraft",
                 "SeriesStatusActive",
-                "SeriesStatusNonActive"
+                "SeriesStatusNonActive",
+                "SeriesStatusDraft"
             ]
         },
         "mongo_model.VotingStatus": {
@@ -2869,9 +2875,9 @@ const docTemplate = `{
                 3
             ],
             "x-enum-varnames": [
-                "VotingStatusComingSoon",
                 "VotingStatusActive",
-                "VotingStatusNonActive"
+                "VotingStatusNonActive",
+                "VotingStatusComingSoon"
             ]
         },
         "request.AdminLoginRequest": {

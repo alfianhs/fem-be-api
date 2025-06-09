@@ -26,9 +26,9 @@ definitions:
     - 3
     type: integer
     x-enum-varnames:
-    - SeriesStatusDraft
     - SeriesStatusActive
     - SeriesStatusNonActive
+    - SeriesStatusDraft
   mongo_model.VotingStatus:
     enum:
     - 1
@@ -36,9 +36,9 @@ definitions:
     - 3
     type: integer
     x-enum-varnames:
-    - VotingStatusComingSoon
     - VotingStatusActive
     - VotingStatusNonActive
+    - VotingStatusComingSoon
   request.AdminLoginRequest:
     properties:
       password:
@@ -1683,6 +1683,10 @@ paths:
       - application/json
       description: Get Venues List
       parameters:
+      - description: Search by name
+        in: query
+        name: search
+        type: string
       - description: Page
         in: query
         name: page
@@ -1871,9 +1875,9 @@ paths:
         required: true
         type: integer
         x-enum-varnames:
-        - VotingStatusComingSoon
         - VotingStatusActive
         - VotingStatusNonActive
+        - VotingStatusComingSoon
       - in: formData
         name: title
         required: true
@@ -1967,9 +1971,9 @@ paths:
         name: status
         type: integer
         x-enum-varnames:
-        - VotingStatusComingSoon
         - VotingStatusActive
         - VotingStatusNonActive
+        - VotingStatusComingSoon
       - in: formData
         name: title
         type: string
