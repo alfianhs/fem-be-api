@@ -6,7 +6,6 @@ services:
     env_file:
       - /home/emokids/tugas-akhir/fem/.env.dev
     networks:
-      - minio-network
       - md_mongodb-network
     deploy:
       replicas: 1
@@ -19,10 +18,6 @@ services:
         condition: on-failure
 
 networks:
-  minio-network:
-    name: minio-network
-    external: true
-
   md_mongodb-network:
     name: md_mongodb-network
     external: true
