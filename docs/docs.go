@@ -1438,6 +1438,12 @@ const docTemplate = `{
                 "summary": "Get Seasons",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Search by name",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page",
                         "name": "page",
