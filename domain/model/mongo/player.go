@@ -16,6 +16,7 @@ type Player struct {
 }
 
 type PlayerFK struct {
-	ID   string `bson:"id" json:"id"`
-	Name string `bson:"name" json:"name"`
+	ID        string  `bson:"id" json:"id"`
+	Name      string  `bson:"name" json:"name"`
+	StageName *string `bson:"stageName" json:"stageName"`
 }

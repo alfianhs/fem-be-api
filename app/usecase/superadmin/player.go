@@ -106,13 +106,12 @@ func (u *superadminAppUsecase) CreatePlayer(ctx context.Context, payload request
 		return helpers.NewResponse(http.StatusUnprocessableEntity, "Validation Error", errValidation, nil)
 	}
 
-	// handle empty string
-	if *payload.StageName == "" {
-		payload.StageName = nil
-	}
-
 	// check player with same stage name
 	if payload.StageName != nil {
+		// handle empty string
+		if *payload.StageName == "" {
+			payload.StageName = nil
+		}
 		player, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
 			"stageName": *payload.StageName,
 		})
@@ -162,7 +161,12 @@ func (u *superadminAppUsecase) UpdatePlayer(ctx context.Context, id string, payl
 	if payload.Name != "" {
 		player.Name = payload.Name
 	}
-	if payload.StageName != nil || *payload.StageName != "" {
+
+	if payload.StageName != nil {
+		// handle stage name empty string
+		if *payload.StageName == "" {
+			payload.StageName = nil
+		}
 		// check player with same stage name
 		existingStageName, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
 			"stageName": *payload.StageName,
@@ -191,7 +195,7 @@ func (u *superadminAppUsecase) UpdatePlayer(ctx context.Context, id string, payl
 	}
 
 	// update season team player in bg
-	go u.updateActiveSeasonTeamPlayerBackground(context.Background(), player.ID.Hex(), player)
+	go u.updateActiveSeasonTeamPlayerBackground(context.Background(), player)
 
 	return helpers.NewResponse(http.StatusOK, "Update player success", nil, player)
 }

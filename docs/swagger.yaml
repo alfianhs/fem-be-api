@@ -814,6 +814,10 @@ paths:
       - application/json
       description: Get Season Team Players List
       parameters:
+      - description: Search by player name or stage name
+        in: query
+        name: search
+        type: string
       - description: Season ID
         in: query
         name: seasonId
@@ -982,6 +986,10 @@ paths:
       - application/json
       description: Get Season Teams List
       parameters:
+      - description: Search by team name
+        in: query
+        name: search
+        type: string
       - description: Season ID
         in: query
         name: seasonId
@@ -1306,6 +1314,10 @@ paths:
       - application/json
       description: Get Series
       parameters:
+      - description: Search by name
+        in: query
+        name: search
+        type: string
       - description: Season ID
         in: query
         name: seasonId

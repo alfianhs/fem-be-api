@@ -27,6 +27,7 @@ func (h *routeSuperadmin) handleSeasonTeamPlayerRoute(prefixPath string) {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
+// @Param search query string false "Search by player name or stage name"
 // @Param seasonId query string false "Season ID"
 // @Param seasonTeamId query string false "Season Team ID"
 // @Param page query int false "Page"

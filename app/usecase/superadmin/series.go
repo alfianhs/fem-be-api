@@ -38,6 +38,9 @@ func (u *superadminAppUsecase) GetSeriesList(ctx context.Context, queryParam url
 	if queryParam.Get("seasonId") != "" {
 		fetchOptions["seasonId"] = queryParam.Get("seasonId")
 	}
+	if queryParam.Get("search") != "" {
+		fetchOptions["name"] = queryParam.Get("search")
+	}
 
 	// count total
 	total := u.mongoDbRepo.CountSeries(ctx, fetchOptions)

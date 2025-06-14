@@ -965,6 +965,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Search by player name or stage name",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Season ID",
                         "name": "seasonId",
                         "in": "query"
@@ -1229,6 +1235,12 @@ const docTemplate = `{
                 ],
                 "summary": "Get Season Teams List",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search by team name",
+                        "name": "search",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "Season ID",
@@ -1744,6 +1756,12 @@ const docTemplate = `{
                 ],
                 "summary": "Get Series",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Search by name",
+                        "name": "search",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "Season ID",
