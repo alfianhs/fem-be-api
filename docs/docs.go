@@ -1231,6 +1231,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Search by team name",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Season ID",
                         "name": "seasonId",
                         "in": "query"
