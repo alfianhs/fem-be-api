@@ -1112,6 +1112,10 @@ paths:
       - application/json
       description: Get Seasons
       parameters:
+      - description: Search by name
+        in: query
+        name: search
+        type: string
       - description: Page
         in: query
         name: page

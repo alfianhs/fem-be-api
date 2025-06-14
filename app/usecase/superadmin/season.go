@@ -26,6 +26,11 @@ func (u *superadminAppUsecase) GetSeasonsList(ctx context.Context, queryParam ur
 		"offset": offset,
 	}
 
+	// filtering
+	if queryParam.Get("search") != "" {
+		fetchOptions["name"] = queryParam.Get("search")
+	}
+
 	// count total
 	total := u.mongoDbRepo.CountSeason(ctx, fetchOptions)
 	if total == 0 {

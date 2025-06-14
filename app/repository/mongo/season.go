@@ -7,6 +7,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	moptions "go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -21,6 +22,15 @@ func generateQueryFilterSeason(options map[string]interface{}, withOptions bool)
 	// custom filter
 	if status, ok := options["status"].(mongo_model.SeasonStatus); ok {
 		query["status"] = status
+	}
+	if name, ok := options["name"].(string); ok {
+		regex := bson.M{
+			"$regex": primitive.Regex{
+				Pattern: name,
+				Options: "i",
+			},
+		}
+		query["name"] = regex
 	}
 
 	return query, mongoOptions
