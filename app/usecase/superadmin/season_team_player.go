@@ -422,7 +422,7 @@ func (u *superadminAppUsecase) DeleteSeasonTeamPlayer(ctx context.Context, id st
 	return helpers.NewResponse(http.StatusOK, "Success", nil, nil)
 }
 
-func (u *superadminAppUsecase) updateActiveSeasonTeamPlayerBackground(ctx context.Context, playerId string, player *mongo_model.Player) {
+func (u *superadminAppUsecase) updateActiveSeasonTeamPlayerBackground(ctx context.Context, player *mongo_model.Player) {
 	// get active season
 	activeSeason, err := u.mongoDbRepo.FetchOneSeason(ctx, map[string]interface{}{
 		"status": mongo_model.SeasonStatusActive,
@@ -437,9 +437,10 @@ func (u *superadminAppUsecase) updateActiveSeasonTeamPlayerBackground(ctx contex
 	// update
 	err = u.mongoDbRepo.UpdatePartialSeasonTeamPlayer(ctx, map[string]interface{}{
 		"seasonId": activeSeason.ID.Hex(),
-		"playerId": playerId,
+		"playerId": player.ID.Hex(),
 	}, map[string]interface{}{
-		"player.name": player.Name,
+		"player.name":      player.Name,
+		"player.stageName": player.StageName,
 	})
 	if err != nil {
 		logrus.Error("update season team player background error :", err)
