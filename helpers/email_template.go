@@ -15,7 +15,7 @@ func GetEmailVerificationTemplate() (subject string, body string) {
 			<div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px;">
 				
 				<!-- PFL Text -->
-				<div style="font-size: 32px; color: #0000aa; font-weight: bold; text-align: center; margin-bottom: 20px;">
+				<div style="font-size: 32px; color: #00009C; font-weight: bold; text-align: center; margin-bottom: 20px;">
 					PFL
 				</div>
 
@@ -46,7 +46,7 @@ func GetEmailVerificationTemplate() (subject string, body string) {
 				</p>
 
 				<!-- Footer -->
-				<div style="background-color: #0000aa; color: white; text-align: center; padding: 20px;">
+				<div style="background-image: linear-gradient(to right, #00009C, #000022); color: white; text-align: center; padding: 20px;">
 					<p>Mempunyai kendala terkait registrasi?</p>
 					<p>Silahkan kontak email CS kami di <a href="mailto:cs@profutsaleague" style="color: white;">cs@profutsaleague</a></p>
 				</div>

@@ -99,7 +99,7 @@ func sendEmailVerification(member *mongo_model.Member) {
 
 	// set verification link
 	baseFeUrl := helpers.GetFEUrl()
-	verificationLink := fmt.Sprintf("%s/verify-email/%s", baseFeUrl, member.EmailToken)
+	verificationLink := fmt.Sprintf("%s/verify-email/%s?email=%s", baseFeUrl, member.EmailToken, member.Email)
 
 	// get template
 	subject, body := helpers.GetEmailVerificationTemplate()
