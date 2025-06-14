@@ -965,6 +965,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Search by player name or stage name",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Season ID",
                         "name": "seasonId",
                         "in": "query"

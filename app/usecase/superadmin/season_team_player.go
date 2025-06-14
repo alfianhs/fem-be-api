@@ -33,6 +33,9 @@ func (u *superadminAppUsecase) GetSeasonTeamPlayersList(ctx context.Context, que
 	if queryParam.Get("seasonTeamId") != "" {
 		fetchOptions["seasonTeamId"] = queryParam.Get("seasonTeamId")
 	}
+	if queryParam.Get("search") != "" {
+		fetchOptions["search"] = queryParam.Get("search")
+	}
 
 	// count total
 	total := u.mongoDbRepo.CountSeasonTeamPlayer(ctx, fetchOptions)
