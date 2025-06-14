@@ -752,7 +752,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Search",
+                        "description": "Search by name or stage name",
                         "name": "search",
                         "in": "query"
                     },
@@ -2968,6 +2968,9 @@ const docTemplate = `{
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "stageName": {
+                    "type": "string"
                 }
             }
         },
@@ -2975,6 +2978,9 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "stageName": {
                     "type": "string"
                 }
             }

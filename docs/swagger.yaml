@@ -96,10 +96,14 @@ definitions:
     properties:
       name:
         type: string
+      stageName:
+        type: string
     type: object
   request.PlayerUpdateRequest:
     properties:
       name:
+        type: string
+      stageName:
         type: string
     type: object
   request.ResendEmailVerificationRequest:
@@ -676,7 +680,7 @@ paths:
       - application/json
       description: Get Players List
       parameters:
-      - description: Search
+      - description: Search by name or stage name
         in: query
         name: search
         type: string

@@ -20,6 +20,18 @@ func generateQueryFilterPlayer(options map[string]interface{}, withOptions bool)
 	}
 
 	// custom filter
+	if search, ok := options["search"].(string); ok {
+		regex := bson.M{
+			"$regex": primitive.Regex{
+				Pattern: search,
+				Options: "i",
+			},
+		}
+		query["$or"] = bson.A{
+			bson.M{"name": regex},
+			bson.M{"stageName": regex},
+		}
+	}
 	if name, ok := options["name"].(string); ok {
 		regex := bson.M{
 			"$regex": primitive.Regex{
@@ -28,6 +40,9 @@ func generateQueryFilterPlayer(options map[string]interface{}, withOptions bool)
 			},
 		}
 		query["name"] = regex
+	}
+	if stageName, ok := options["stageName"].(string); ok {
+		query["stageName"] = stageName
 	}
 
 	return query, mongoOptions

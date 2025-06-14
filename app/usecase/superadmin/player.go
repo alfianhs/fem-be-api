@@ -27,7 +27,7 @@ func (u *superadminAppUsecase) GetPlayerList(ctx context.Context, queryParam url
 
 	// filtering
 	if queryParam.Get("search") != "" {
-		fetchOptions["name"] = queryParam.Get("search")
+		fetchOptions["search"] = queryParam.Get("search")
 	}
 
 	// count total
@@ -106,11 +106,30 @@ func (u *superadminAppUsecase) CreatePlayer(ctx context.Context, payload request
 		return helpers.NewResponse(http.StatusUnprocessableEntity, "Validation Error", errValidation, nil)
 	}
 
+	// handle empty string
+	if *payload.StageName == "" {
+		payload.StageName = nil
+	}
+
+	// check player with same stage name
+	if payload.StageName != nil {
+		player, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
+			"stageName": *payload.StageName,
+		})
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+		if player != nil {
+			return helpers.NewResponse(http.StatusBadRequest, "Player with this stage name already exist", nil, nil)
+		}
+	}
+
 	// create player
 	now := time.Now()
 	player := mongo_model.Player{
 		ID:        primitive.NewObjectID(),
 		Name:      payload.Name,
+		StageName: payload.StageName,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -128,15 +147,6 @@ func (u *superadminAppUsecase) UpdatePlayer(ctx context.Context, id string, payl
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
-	// validate payload
-	errValidation := make(map[string]string)
-	if payload.Name == "" {
-		errValidation["name"] = "Name field is required"
-	}
-	if len(errValidation) > 0 {
-		return helpers.NewResponse(http.StatusUnprocessableEntity, "Validation Error", errValidation, nil)
-	}
-
 	// get player
 	player, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
 		"id": id,
@@ -149,7 +159,23 @@ func (u *superadminAppUsecase) UpdatePlayer(ctx context.Context, id string, payl
 	}
 
 	// update player
-	player.Name = payload.Name
+	if payload.Name != "" {
+		player.Name = payload.Name
+	}
+	if payload.StageName != nil || *payload.StageName != "" {
+		// check player with same stage name
+		existingStageName, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
+			"stageName": *payload.StageName,
+		})
+		if err != nil {
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+		if existingStageName != nil && existingStageName.ID != player.ID {
+			return helpers.NewResponse(http.StatusBadRequest, "Player with this stage name already exist", nil, nil)
+		}
+
+		player.StageName = payload.StageName
+	}
 	player.UpdatedAt = time.Now()
 
 	// save
@@ -157,6 +183,7 @@ func (u *superadminAppUsecase) UpdatePlayer(ctx context.Context, id string, payl
 		"id": player.ID,
 	}, map[string]interface{}{
 		"name":      player.Name,
+		"stageName": player.StageName,
 		"updatedAt": player.UpdatedAt,
 	})
 	if err != nil {

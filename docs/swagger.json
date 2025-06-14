@@ -741,7 +741,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Search",
+                        "description": "Search by name or stage name",
                         "name": "search",
                         "in": "query"
                     },
@@ -2957,6 +2957,9 @@
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "stageName": {
+                    "type": "string"
                 }
             }
         },
@@ -2964,6 +2967,9 @@
             "type": "object",
             "properties": {
                 "name": {
+                    "type": "string"
+                },
+                "stageName": {
                     "type": "string"
                 }
             }
