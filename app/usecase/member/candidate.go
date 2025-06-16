@@ -8,6 +8,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"sort"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -133,6 +134,20 @@ func (u *memberAppUsecase) GetCandidateList(ctx context.Context, claim jwt_helpe
 
 		list = append(list, c.Format(&c.Voting))
 	}
+
+	// sorting
+	sort.SliceStable(list, func(i, j int) bool {
+		a := list[i].(*mongo_model.Candidate)
+		b := list[j].(*mongo_model.Candidate)
+
+		// compare by voters percentage
+		if a.Voters.Percentage != b.Voters.Percentage {
+			return a.Voters.Percentage > b.Voters.Percentage
+		}
+
+		// compare by candidate performance score
+		return a.Performance.Score > b.Performance.Score
+	})
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, helpers.PaginatedResponse{
 		List:  list,
