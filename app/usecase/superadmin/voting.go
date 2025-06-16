@@ -23,12 +23,16 @@ func (u *superadminAppUsecase) GetVotingList(ctx context.Context, queryParam url
 		"limit":  limit,
 		"offset": offset,
 	}
+	// filtering
 	if s := queryParam.Get("status"); s != "" {
 		statusInt, err := strconv.Atoi(s)
 		if err != nil {
 			return helpers.NewResponse(http.StatusBadRequest, "Invalid status", nil, nil)
 		}
 		opts["status"] = mongo_model.VotingStatus(statusInt)
+	}
+	if queryParam.Get("search") != "" {
+		opts["title"] = queryParam.Get("search")
 	}
 
 	total := u.mongoDbRepo.CountVoting(ctx, opts)

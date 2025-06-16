@@ -155,6 +155,12 @@ func (u *superadminAppUsecase) CreateCandidate(ctx context.Context, payload requ
 	if payload.SeasonTeamPlayerID == "" {
 		errs["seasonTeamPlayerId"] = "SeasonTeamPlayer ID is required"
 	}
+	if payload.Performance.Goal == 0 && payload.Performance.Assist == 0 && payload.Performance.Save == 0 {
+		errs["performance.goal"] = "At least one of goal, assist, or save must be provided"
+		errs["performance.assist"] = "At least one of goal, assist, or save must be provided"
+		errs["performance.save"] = "At least one of goal, assist, or save must be provided"
+	}
+
 	if len(errs) > 0 {
 		return helpers.NewResponse(http.StatusUnprocessableEntity, "Validation error", errs, nil)
 	}
@@ -203,7 +209,12 @@ func (u *superadminAppUsecase) CreateCandidate(ctx context.Context, payload requ
 			Position:   seasonTeamPlayer.Position,
 			Image:      seasonTeamPlayer.Image.URL,
 		},
-		Performance: payload.Performance,
+		Performance: mongo_model.Performance{
+			Goal:   payload.Performance.Goal,
+			Assist: payload.Performance.Assist,
+			Save:   payload.Performance.Save,
+			Score:  helpers.CalculateScore(payload.Performance.Goal, payload.Performance.Assist, payload.Performance.Save),
+		},
 		Voters: mongo_model.Voters{
 			Count: 0,
 		},
@@ -224,6 +235,7 @@ func (u *superadminAppUsecase) UpdateCandidate(ctx context.Context, id string, p
 	defer cancel()
 
 	// 1) Fetch existing candidate
+
 	c, err := u.mongoDbRepo.FetchOneCandidate(ctx, map[string]interface{}{"id": id})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -279,9 +291,25 @@ func (u *superadminAppUsecase) UpdateCandidate(ctx context.Context, id string, p
 		}
 		fields["seasonTeamPlayer"] = c.SeasonTeamPlayer
 	}
-	if payload.Performance != "" {
-		c.Performance = payload.Performance
-		fields["performance"] = c.Performance
+
+	c.Performance.Goal = payload.Performance.Goal
+	fields["performance.goal"] = c.Performance.Goal
+
+	c.Performance.Assist = payload.Performance.Assist
+	fields["performance.assist"] = c.Performance.Assist
+
+	c.Performance.Save = payload.Performance.Save
+	fields["performance.save"] = c.Performance.Save
+
+	if payload.Performance.Goal != 0 || payload.Performance.Assist != 0 || payload.Performance.Save != 0 {
+		fields["performance.score"] = helpers.CalculateScore(c.Performance.Goal, c.Performance.Assist, c.Performance.Save)
+	} else {
+		errs := map[string]string{}
+		errs["performance.goal"] = "At least one of goal, assist, or save must be provided"
+		errs["performance.assist"] = "At least one of goal, assist, or save must be provided"
+		errs["performance.save"] = "At least one of goal, assist, or save must be provided"
+
+		return helpers.NewResponse(http.StatusUnprocessableEntity, "Validation error", errs, nil)
 	}
 
 	if len(fields) == 0 {

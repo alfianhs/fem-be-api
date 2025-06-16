@@ -7,6 +7,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	moptions "go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -25,7 +26,18 @@ func generateQueryFilterVoting(options map[string]interface{}, withOptions bool)
 	if seriesId, ok := options["seriesId"].(string); ok {
 		query["seriesId"] = seriesId
 	}
+	if title, ok := options["title"].(string); ok {
+		regex := bson.M{
+			"$regex": primitive.Regex{
+				Pattern: title,
+				Options: "i",
+			},
+		}
+		query["title"] = regex
+	}
+
 	return query, mongoOptions
+
 }
 
 func (r *mongoDbRepo) FetchListVoting(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error) {
