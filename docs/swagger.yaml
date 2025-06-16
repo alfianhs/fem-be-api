@@ -465,6 +465,30 @@ paths:
       summary: Create purchase
       tags:
       - Purchase-Member
+  /member/purchases/packages:
+    post:
+      consumes:
+      - application/json
+      description: Create package purchase
+      parameters:
+      - description: Create package purchase
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreatePurchaseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Create package purchase
+      tags:
+      - Purchase-Member
   /member/votings:
     get:
       consumes:
