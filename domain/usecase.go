@@ -111,4 +111,5 @@ type MemberAppUsecase interface {
 
 	// Purchase
 	CreatePurchase(ctx context.Context, claim jwt_helpers.MemberJWTClaims, payload request.CreatePurchaseRequest) helpers.Response
+	CreatePackagePurchase(ctx context.Context, claim jwt_helpers.MemberJWTClaims, payload request.CreatePurchaseRequest) helpers.Response
 }
