@@ -13,7 +13,7 @@ type Candidate struct {
 	Voting           VotingFK           `bson:"-" json:"voting"`
 	SeasonTeam       SeasonTeamFK       `bson:"seasonTeam" json:"seasonTeam"`
 	SeasonTeamPlayer SeasonTeamPlayerFK `bson:"seasonTeamPlayer" json:"seasonTeamPlayer"`
-	Performance      string             `bson:"performance" json:"performance"`
+	Performance      Performance        `bson:"performance" json:"performance"`
 	Voters           Voters             `bson:"voters" json:"voters"`
 	IsChosen         *bool              `bson:"-" json:"isChosen,omitempty"`
 	CreatedAt        time.Time          `bson:"createdAt" json:"createdAt"`
@@ -29,6 +29,13 @@ type CandidateFK struct {
 type Voters struct {
 	Count      int64   `bson:"count" json:"count"`
 	Percentage float64 `bson:"-" json:"percentage"`
+}
+
+type Performance struct {
+	Goal   int64 `bson:"goal" json:"goal"`
+	Assist int64 `bson:"assist" json:"assist"`
+	Save   int64 `bson:"save" json:"save"`
+	Score  int64 `bson:"score" json:"score"`
 }
 
 func (c *Candidate) Format(v *VotingFK) *Candidate {

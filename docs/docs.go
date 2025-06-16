@@ -2584,6 +2584,12 @@ const docTemplate = `{
                 "summary": "Get Voting List",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Search by title",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page",
                         "name": "page",
@@ -2919,7 +2925,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "performance": {
-                    "type": "string"
+                    "$ref": "#/definitions/request.CandidatePerformanceRequest"
                 },
                 "seasonTeamPlayerId": {
                     "type": "string"
@@ -2929,11 +2935,25 @@ const docTemplate = `{
                 }
             }
         },
+        "request.CandidatePerformanceRequest": {
+            "type": "object",
+            "properties": {
+                "assist": {
+                    "type": "integer"
+                },
+                "goal": {
+                    "type": "integer"
+                },
+                "save": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.CandidateUpdateRequest": {
             "type": "object",
             "properties": {
                 "performance": {
-                    "type": "string"
+                    "$ref": "#/definitions/request.CandidatePerformanceRequest"
                 },
                 "seasonTeamPlayerId": {
                     "type": "string"

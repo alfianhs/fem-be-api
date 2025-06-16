@@ -49,16 +49,25 @@ definitions:
   request.CandidateCreateRequest:
     properties:
       performance:
-        type: string
+        $ref: '#/definitions/request.CandidatePerformanceRequest'
       seasonTeamPlayerId:
         type: string
       votingId:
         type: string
     type: object
+  request.CandidatePerformanceRequest:
+    properties:
+      assist:
+        type: integer
+      goal:
+        type: integer
+      save:
+        type: integer
+    type: object
   request.CandidateUpdateRequest:
     properties:
       performance:
-        type: string
+        $ref: '#/definitions/request.CandidatePerformanceRequest'
       seasonTeamPlayerId:
         type: string
     type: object
@@ -1837,6 +1846,10 @@ paths:
       - application/json
       description: Get list of all votings
       parameters:
+      - description: Search by title
+        in: query
+        name: search
+        type: string
       - description: Page
         in: query
         name: page
