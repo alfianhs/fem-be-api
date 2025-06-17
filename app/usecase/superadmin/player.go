@@ -111,15 +111,16 @@ func (u *superadminAppUsecase) CreatePlayer(ctx context.Context, payload request
 		// handle empty string
 		if *payload.StageName == "" {
 			payload.StageName = nil
-		}
-		player, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
-			"stageName": *payload.StageName,
-		})
-		if err != nil {
-			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-		}
-		if player != nil {
-			return helpers.NewResponse(http.StatusBadRequest, "Player with this stage name already exist", nil, nil)
+		} else {
+			player, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
+				"stageName": *payload.StageName,
+			})
+			if err != nil {
+				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			}
+			if player != nil {
+				return helpers.NewResponse(http.StatusBadRequest, "Player with this stage name already exist", nil, nil)
+			}
 		}
 	}
 
@@ -166,20 +167,20 @@ func (u *superadminAppUsecase) UpdatePlayer(ctx context.Context, id string, payl
 		// handle stage name empty string
 		if *payload.StageName == "" {
 			payload.StageName = nil
+		} else {
+			// check player with same stage name
+			existingStageName, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
+				"stageName": *payload.StageName,
+			})
+			if err != nil {
+				return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+			}
+			if existingStageName != nil && existingStageName.ID != player.ID {
+				return helpers.NewResponse(http.StatusBadRequest, "Player with this stage name already exist", nil, nil)
+			}
 		}
-		// check player with same stage name
-		existingStageName, err := u.mongoDbRepo.FetchOnePlayer(ctx, map[string]interface{}{
-			"stageName": *payload.StageName,
-		})
-		if err != nil {
-			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
-		}
-		if existingStageName != nil && existingStageName.ID != player.ID {
-			return helpers.NewResponse(http.StatusBadRequest, "Player with this stage name already exist", nil, nil)
-		}
-
-		player.StageName = payload.StageName
 	}
+	player.StageName = payload.StageName
 	player.UpdatedAt = time.Now()
 
 	// save
