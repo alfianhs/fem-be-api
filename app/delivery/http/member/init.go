@@ -24,4 +24,7 @@ func NewMemberRouteHandler(usecase domain.MemberAppUsecase, ginEngine *gin.Engin
 	handler.handleVotingRoute("/votings")
 	handler.handleCandidateRoute("/candidates")
 	handler.handlePurchaseRoute("/purchases")
+	handler.handleSeasonRoute("/seasons")
+	handler.handleTicketRoute("/tickets")
+	handler.handleSeriesRoute("/series")
 }

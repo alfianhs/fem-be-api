@@ -489,6 +489,135 @@ paths:
       summary: Create package purchase
       tags:
       - Purchase-Member
+  /member/seasons/active:
+    get:
+      consumes:
+      - application/json
+      description: Get Active Season Detail
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Get Active Season Detail
+      tags:
+      - Season-Member
+  /member/series:
+    get:
+      consumes:
+      - application/json
+      description: Get Series
+      parameters:
+      - description: Search by name
+        in: query
+        name: search
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Get Series
+      tags:
+      - Series-Member
+  /member/series/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Series Detail
+      parameters:
+      - description: Series ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Get Series Detail
+      tags:
+      - Series-Member
+  /member/tickets:
+    get:
+      consumes:
+      - application/json
+      description: Get Tickets List
+      parameters:
+      - description: Series ID
+        in: query
+        name: seriesId
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Get Tickets List
+      tags:
+      - Ticket-Member
+  /member/tickets/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Ticket Detail
+      parameters:
+      - description: Ticket ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      summary: Get Ticket Detail
+      tags:
+      - Ticket-Member
   /member/votings:
     get:
       consumes:
