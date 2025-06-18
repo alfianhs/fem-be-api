@@ -112,4 +112,15 @@ type MemberAppUsecase interface {
 	// Purchase
 	CreatePurchase(ctx context.Context, claim jwt_helpers.MemberJWTClaims, payload request.CreatePurchaseRequest) helpers.Response
 	CreatePackagePurchase(ctx context.Context, claim jwt_helpers.MemberJWTClaims, payload request.CreatePurchaseRequest) helpers.Response
+
+	// Ticket
+	GetTicketsList(ctx context.Context, queryParam url.Values) helpers.Response
+	GetTicketDetail(ctx context.Context, id string) helpers.Response
+
+	// Season
+	GetActiveSeasonDetail(ctx context.Context) helpers.Response
+
+	// Series
+	GetSeriesList(ctx context.Context, queryParam url.Values) helpers.Response
+	GetSeriesDetail(ctx context.Context, id string) helpers.Response
 }
