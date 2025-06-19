@@ -23,6 +23,9 @@ func generateQueryFilterTicket(options map[string]interface{}, withOptions bool)
 	if seriesId, ok := options["seriesId"]; ok {
 		query["seriesId"] = seriesId
 	}
+	if seriesIds, ok := options["seriesIds"]; ok {
+		query["seriesId"] = bson.M{"$in": seriesIds}
+	}
 
 	return query, mongoOptions
 }

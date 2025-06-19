@@ -9,6 +9,7 @@ func (h *routeMember) handleSeriesRoute(prefixPath string) {
 
 	api.GET("", h.GetSeriesList)
 	api.GET("/:id", h.GetSeriesDetail)
+	api.GET("/with-tickets", h.GetSeriesListWithTickets)
 }
 
 // GetSeriesList
@@ -50,5 +51,28 @@ func (h *routeMember) GetSeriesDetail(c *gin.Context) {
 	id := c.Param("id")
 
 	response := h.Usecase.GetSeriesDetail(ctx, id)
+	c.JSON(response.Status, response)
+}
+
+// GetSeriesListWithTickets
+//
+//	@Summary Get Series with Tickets
+//	@Description Get Series with Tickets
+//	@Tags Series-Member
+//	@Accept json
+//	@Produce json
+//	@Param search query string false "Search by name"
+//	@Param page query int false "Page"
+//	@Param limit query int false "Limit"
+//	@Param sort query string false "Sort"
+//	@Param dir query string false "Direction asc or desc"
+//	@Success 200 {object} helpers.Response
+//	@Router /member/series/with-tickets [get]
+func (h *routeMember) GetSeriesListWithTickets(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	queryParam := c.Request.URL.Query()
+
+	response := h.Usecase.GetSeriesListWithTickets(ctx, queryParam)
 	c.JSON(response.Status, response)
 }

@@ -270,3 +270,93 @@ func (u *memberAppUsecase) GetTicketDetail(ctx context.Context, id string) helpe
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, ticket.Format())
 }
+
+func (u *memberAppUsecase) getTicketsBySeriesIDs(ctx context.Context, seriesIds []string) ([]mongo_model.Ticket, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	// fetch tickets by series IDs
+	ticketsCursor, err := u.mongoDbRepo.FetchListTicket(ctx, map[string]interface{}{
+		"seriesIds": seriesIds,
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer ticketsCursor.Close(ctx)
+
+	var tickets []mongo_model.Ticket
+	for ticketsCursor.Next(ctx) {
+		var t mongo_model.Ticket
+		if err := ticketsCursor.Decode(&t); err != nil {
+			return nil, err
+		}
+		tickets = append(tickets, t)
+	}
+
+	// check season team without duplicate
+	seasonTeamIdSet := make(map[string]struct{})
+	for _, t := range tickets {
+		for _, m := range t.Matchs {
+			seasonTeamIdSet[m.HomeSeasonTeamID] = struct{}{}
+			seasonTeamIdSet[m.AwaySeasonTeamID] = struct{}{}
+		}
+	}
+
+	seasonTeamIDs := make([]string, 0, len(seasonTeamIdSet))
+	for id := range seasonTeamIdSet {
+		seasonTeamIDs = append(seasonTeamIDs, id)
+	}
+
+	// fetch season teams
+	seasonTeamCursor, err := u.mongoDbRepo.FetchListSeasonTeam(ctx, map[string]interface{}{
+		"ids": seasonTeamIDs,
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer seasonTeamCursor.Close(ctx)
+
+	seasonTeamMap := make(map[string]mongo_model.SeasonTeam)
+	for seasonTeamCursor.Next(ctx) {
+		var st mongo_model.SeasonTeam
+		if err := seasonTeamCursor.Decode(&st); err != nil {
+			return nil, err
+		}
+		seasonTeamMap[st.ID.Hex()] = st
+	}
+
+	// set season teams to tickets
+	for i := range tickets {
+		tickets[i].Format()
+		for j := range tickets[i].Matchs {
+			homeID := tickets[i].Matchs[j].HomeSeasonTeamID
+			if st, ok := seasonTeamMap[homeID]; ok {
+				tickets[i].Matchs[j].HomeSeasonTeam = mongo_model.SeasonTeamFK{
+					ID:       st.ID.Hex(),
+					SeasonID: st.SeasonID,
+					TeamID:   st.Team.ID,
+					Team: mongo_model.TeamFK{
+						ID:   st.Team.ID,
+						Name: st.Team.Name,
+						Logo: st.Team.Logo,
+					},
+				}
+			}
+			awayID := tickets[i].Matchs[j].AwaySeasonTeamID
+			if st, ok := seasonTeamMap[awayID]; ok {
+				tickets[i].Matchs[j].AwaySeasonTeam = mongo_model.SeasonTeamFK{
+					ID:       st.ID.Hex(),
+					SeasonID: st.SeasonID,
+					TeamID:   st.Team.ID,
+					Team: mongo_model.TeamFK{
+						ID:   st.Team.ID,
+						Name: st.Team.Name,
+						Logo: st.Team.Logo,
+					},
+				}
+			}
+		}
+	}
+
+	return tickets, nil
+}
