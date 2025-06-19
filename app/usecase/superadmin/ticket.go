@@ -410,7 +410,7 @@ func (u *superadminAppUsecase) CreateOrUpdateTicket(ctx context.Context, payload
 	for _, ticketPayload := range payload.Tickets {
 		// set date to start of day
 		date, _ := time.Parse(time.RFC3339, ticketPayload.Date)
-		date = helpers.SetToStartOfDayUTC(date)
+		date = helpers.SetToStartOfDayWIB(date)
 
 		if date.Before(series.StartDate) || date.After(series.EndDate) {
 			return helpers.NewResponse(http.StatusBadRequest, "Date must be between "+series.StartDate.Format("2006-01-02")+

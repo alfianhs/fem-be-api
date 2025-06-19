@@ -256,8 +256,8 @@ func (u *superadminAppUsecase) CreateVoting(ctx context.Context, payload request
 		ID:         primitive.NewObjectID(),
 		SeriesID:   series.ID.Hex(),
 		Title:      payload.Title,
-		StartDate:  helpers.SetToStartOfDayUTC(start),
-		EndDate:    helpers.SetToEndOfDayUTC(end),
+		StartDate:  helpers.SetToStartOfDayWIB(start),
+		EndDate:    helpers.SetToEndOfDayWIB(end),
 		TotalVoter: 0,
 		Status:     mongo_model.VotingStatus(payload.Status),
 		CreatedAt:  now,
@@ -318,14 +318,14 @@ func (u *superadminAppUsecase) UpdateVoting(ctx context.Context, id string, payl
 		if err != nil {
 			return helpers.NewResponse(http.StatusBadRequest, "Start date format is invalid", nil, nil)
 		}
-		voting.StartDate = helpers.SetToStartOfDayUTC(start)
+		voting.StartDate = helpers.SetToStartOfDayWIB(start)
 	}
 	if payload.EndDate != "" {
 		end, err := time.Parse(time.RFC3339, payload.EndDate)
 		if err != nil {
 			return helpers.NewResponse(http.StatusBadRequest, "End date format is invalid", nil, nil)
 		}
-		voting.EndDate = helpers.SetToEndOfDayUTC(end)
+		voting.EndDate = helpers.SetToEndOfDayWIB(end)
 	}
 	if payload.Status != 0 {
 		voting.Status = mongo_model.VotingStatus(payload.Status)

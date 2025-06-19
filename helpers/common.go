@@ -65,6 +65,18 @@ func SetToEndOfDayUTC(t time.Time) time.Time {
 	return time.Date(utc.Year(), utc.Month(), utc.Day(), 23, 59, 59, 0, time.UTC)
 }
 
+func SetToStartOfDayWIB(t time.Time) time.Time {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	t = t.In(loc)
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, loc)
+}
+
+func SetToEndOfDayWIB(t time.Time) time.Time {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	t = t.In(loc)
+	return time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, int(time.Second-time.Nanosecond), loc)
+}
+
 func GenerateInvoiceExternalId(count int64) string {
 	prefix := "TRX"
 	randomChar, _ := GenerateSecureRandomChar(3)

@@ -283,8 +283,8 @@ func (u *superadminAppUsecase) CreateSeries(ctx context.Context, payload request
 	endDate, _ := time.Parse(time.RFC3339, payload.EndDate)
 
 	// set date to start of day and end of day
-	startDate = helpers.SetToStartOfDayUTC(startDate)
-	endDate = helpers.SetToEndOfDayUTC(endDate)
+	startDate = helpers.SetToStartOfDayWIB(startDate)
+	endDate = helpers.SetToEndOfDayWIB(endDate)
 
 	// validate date range
 	if startDate.After(endDate) || startDate.Format("2006-01-02") == endDate.Format("2006-01-02") {
@@ -356,7 +356,7 @@ func (u *superadminAppUsecase) UpdateSeries(ctx context.Context, id string, payl
 			return helpers.NewResponse(http.StatusBadRequest, "Start date format is invalid", nil, nil)
 		}
 		// set date to start of day
-		startDate = helpers.SetToStartOfDayUTC(startDate)
+		startDate = helpers.SetToStartOfDayWIB(startDate)
 		series.StartDate = startDate
 	}
 	if payload.EndDate != "" {
@@ -365,7 +365,7 @@ func (u *superadminAppUsecase) UpdateSeries(ctx context.Context, id string, payl
 			return helpers.NewResponse(http.StatusBadRequest, "End date format is invalid", nil, nil)
 		}
 		// set date to end of day
-		endDate = helpers.SetToEndOfDayUTC(endDate)
+		endDate = helpers.SetToEndOfDayWIB(endDate)
 		series.EndDate = endDate
 	}
 	if payload.Status != nil {
