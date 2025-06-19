@@ -19,6 +19,7 @@ type Series struct {
 	EndDate      time.Time          `bson:"endDate" json:"endDate"`
 	Status       SeriesStatus       `bson:"status" json:"-"`
 	StatusString string             `bson:"-" json:"status"`
+	Tickets      []Ticket           `bson:"tickets" json:"tickets"`
 	CreatedAt    time.Time          `bson:"createdAt" json:"createdAt"`
 	UpdatedAt    time.Time          `bson:"updatedAt" json:"updatedAt"`
 	DeletedAt    *time.Time         `bson:"deletedAt" json:"-"`

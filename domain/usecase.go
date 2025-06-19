@@ -123,4 +123,5 @@ type MemberAppUsecase interface {
 	// Series
 	GetSeriesList(ctx context.Context, queryParam url.Values) helpers.Response
 	GetSeriesDetail(ctx context.Context, id string) helpers.Response
+	GetSeriesListWithTickets(ctx context.Context, queryParam url.Values) helpers.Response
 }
