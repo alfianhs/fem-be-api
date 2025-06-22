@@ -18,6 +18,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o app .
 # Stage 2: Minimal Runtime
 FROM alpine:latest
 
+# Install tzdata
+RUN apk add --no-cache tzdata
+
 WORKDIR /app
 
 # Copy binary
