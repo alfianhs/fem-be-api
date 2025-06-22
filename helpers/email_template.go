@@ -58,3 +58,52 @@ func GetEmailVerificationTemplate() (subject string, body string) {
 	`
 	return
 }
+
+func GetEmailTicketPurchaseQRTemplate() (subject string, body string) {
+	subject = "Pembelian Tiket Pro Futsal League"
+	body = `
+		<!DOCTYPE html>
+		<html lang="id">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<title>QR Ticket - PFL</title>
+		</head>
+		<body style="font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; background-color: #f7f7f7;">
+			<div style="max-width: 680px; margin: 0 auto; background-color: #ffffff;">
+				<div style="margin: 0 auto; padding: 20px; max-width: 624px;">
+					<div style="text-align: center; margin-bottom: 20px;">
+						<img src="logo-blue.png" alt="PFL Logo" style="height: 96px;">
+						<p style="font-size: 20px; font-weight: bold; margin: 10px 0;">Tiket Anda Siap Digunakan</p>
+						<p style="font-size: 14px; margin: 0;">Terimakasih telah melakukan pembelian tiket Pro Futsal League</p>
+					</div>
+					<p style="font-size: 14px; margin-top: 20px;">Tiket Anda terlampir dalam email ini. Jika Anda mengalami masalah saat membuka lampiran, Anda tetap dapat mengakses tiket Anda kapan saja melalui halaman tiket atau dengan mengklik tautan berikut:</p>
+					<p style="font-size: 14px; text-align: center; padding: 20px 0;"><a
+							href="{{ticket_purchase_url}}"
+							style="color: #2b51c0;">{{ticket_purchase_url}}</a></p>
+
+					<div style="background-color: #FAFAFA; padding: 15px; border-radius: 8px;">
+						<h4 style="margin-top: 0;">Informasi Penting</h4>
+						<ul style="padding-left: 20px; font-size: 14px;">
+							<li>Setiap tiket hanya berlaku untuk satu hari pertandingan sesuai tanggal yang tertera</li>
+							<li>Pastikan untuk menyimpan tiket digital Anda dengan baik</li>
+							<li>Direkomendasikan hadir 30 menit sebelum pertandingan dimulai</li>
+							<li>Tiket tidak dapat dipindahkan atau dijual kembali</li>
+							<li>Anda dapat menunjukan QR tiket pada panitia untuk ditukar gelang</li>
+						</ul>
+					</div>
+				</div>
+				<div
+					style="margin-top: 30px; text-align: center; font-size: 13px; background: linear-gradient(to right, #00009B, #000035); color: #fff; padding: 15px;">
+					Memunyai kendala terkait pembelian tiket?<br>
+					Hubungi kami via email: <a style="color:#fff;" href="mailto:cs@profutsalleague">cs@profutsalleague</a>
+				</div>
+			</div>
+		</body>
+
+		</html>
+		<!-- End of One Day Ticket HTML -->
+	`
+
+	return subject, body
+}

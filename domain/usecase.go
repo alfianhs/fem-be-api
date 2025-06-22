@@ -125,3 +125,7 @@ type MemberAppUsecase interface {
 	GetSeriesDetail(ctx context.Context, id string) helpers.Response
 	GetSeriesListWithTickets(ctx context.Context, queryParam url.Values) helpers.Response
 }
+
+type WebhookAppUsecase interface {
+	HandleXenditWebhook(ctx context.Context, payload request.SnapWebhookRequest) helpers.Response
+}

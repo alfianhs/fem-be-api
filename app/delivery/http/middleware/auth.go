@@ -356,3 +356,32 @@ func (m *appMiddleware) OptionalAuthMember() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func (m *appMiddleware) AuthXendit() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		hAuth := c.GetHeader("X-Callback-Token")
+
+		if hAuth == "" {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, helpers.NewResponse(
+				http.StatusUnauthorized,
+				"Unauthorized: Missing X-Callback-Token Header",
+				nil,
+				nil,
+			))
+			return
+		}
+
+		// validating token
+		if hAuth != m.xenditCallbackToken {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, helpers.NewResponse(
+				http.StatusUnauthorized,
+				"Unauthorized: Invalid X-Callback-Token",
+				nil,
+				nil,
+			))
+			return
+		}
+
+		c.Next()
+	}
+}

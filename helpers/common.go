@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -84,4 +85,9 @@ func GenerateInvoiceExternalId(count int64) string {
 	counter := fmt.Sprintf("%03d", count+1)
 
 	return fmt.Sprintf("%s-%s%s-%s", prefix, timestamp, randomChar, counter)
+}
+
+func SanitizeString(str string) string {
+	re := regexp.MustCompile(`[^\w\d_-]`)
+	return re.ReplaceAllString(str, "_")
 }

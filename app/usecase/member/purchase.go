@@ -123,14 +123,15 @@ func (u *memberAppUsecase) CreatePurchase(ctx context.Context, claim jwt_helpers
 			ID:   series.ID.Hex(),
 			Name: series.Name,
 		},
-		TicketIds: []string{payload.ProductId},
 		Tickets: []mongo_model.TicketFK{
 			{
-				ID:   payload.ProductId,
-				Name: ticket.Name,
+				ID:      payload.ProductId,
+				Name:    ticket.Name,
+				Date:    ticket.Date,
+				VenueID: series.VenueID,
 			},
 		},
-		Invoice: mongo_model.InvoiceFK{
+		Invoice: mongo_model.Invoice{
 			InvoiceExternalID: externalId,
 		},
 		Amount:            payload.Amount,
@@ -242,17 +243,17 @@ func (u *memberAppUsecase) CreatePackagePurchase(ctx context.Context, claim jwt_
 	}
 
 	// check quota
-	var ticketIds []string
 	var ticketsFK []mongo_model.TicketFK
 	for _, ticket := range tickets {
 		ticket.Format()
 		if ticket.Quota.Remaining < payload.Amount {
 			return helpers.NewResponse(http.StatusBadRequest, "Ticket quota is not enough", nil, nil)
 		}
-		ticketIds = append(ticketIds, ticket.ID.Hex())
 		ticketsFK = append(ticketsFK, mongo_model.TicketFK{
-			ID:   ticket.ID.Hex(),
-			Name: ticket.Name,
+			ID:      ticket.ID.Hex(),
+			Name:    ticket.Name,
+			Date:    ticket.Date,
+			VenueID: series.VenueID,
 		})
 	}
 
@@ -315,9 +316,8 @@ func (u *memberAppUsecase) CreatePackagePurchase(ctx context.Context, claim jwt_
 			ID:   series.ID.Hex(),
 			Name: series.Name,
 		},
-		TicketIds: ticketIds,
-		Tickets:   ticketsFK,
-		Invoice: mongo_model.InvoiceFK{
+		Tickets: ticketsFK,
+		Invoice: mongo_model.Invoice{
 			InvoiceExternalID: externalId,
 		},
 		Amount:            payload.Amount,

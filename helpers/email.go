@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 
@@ -14,6 +15,7 @@ type Mailer interface {
 	To(receiver []string)
 	Subject(value string)
 	Body(value string)
+	Attachment(file []byte, filename string, contentType string)
 	Send() error
 }
 
@@ -36,6 +38,17 @@ func (mailer *smtpMailer) Subject(val string) {
 
 func (mailer *smtpMailer) Body(val string) {
 	mailer.email.SetBody("text/html", val)
+}
+
+func (mailer *smtpMailer) Attachment(file []byte, filename string, c string) {
+	mailer.email.Attach(
+		filename,
+		gomail.SetCopyFunc(func(w io.Writer) error {
+			_, err := w.Write(file)
+			return err
+		}),
+		gomail.SetHeader(map[string][]string{"Content-Type": {c}}),
+	)
 }
 
 func (mailer *smtpMailer) Send() error {

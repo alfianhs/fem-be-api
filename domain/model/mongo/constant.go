@@ -65,9 +65,9 @@ var VotingStatusMap = map[VotingStatus]VotingStatusStruct{
 type PurchaseStatus int
 
 const (
-	PurchaseStatusPending   PurchaseStatus = 1
-	PurchaseStatusCompleted PurchaseStatus = 2
-	PurchaseStatusFailed    PurchaseStatus = 3
+	PurchaseStatusPaid    PurchaseStatus = 1
+	PurchaseStatusPending PurchaseStatus = 2
+	PurchaseStatusFailed  PurchaseStatus = 3
 )
 
 type PurchaseStatusStruct struct {
@@ -76,7 +76,7 @@ type PurchaseStatusStruct struct {
 }
 
 var PurchaseStatusMap = map[PurchaseStatus]PurchaseStatusStruct{
-	PurchaseStatusPending:   {ID: PurchaseStatusPending, Name: "Pending"},
-	PurchaseStatusCompleted: {ID: PurchaseStatusCompleted, Name: "Completed"},
-	PurchaseStatusFailed:    {ID: PurchaseStatusFailed, Name: "Failed"},
+	PurchaseStatusPaid:    {ID: PurchaseStatusPaid, Name: "Paid"},
+	PurchaseStatusPending: {ID: PurchaseStatusPending, Name: "Pending"},
+	PurchaseStatusFailed:  {ID: PurchaseStatusFailed, Name: "Failed"},
 }

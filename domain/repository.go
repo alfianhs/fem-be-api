@@ -116,6 +116,15 @@ type MongoDbRepo interface {
 	FetchOnePurchase(ctx context.Context, options map[string]interface{}) (row *mongo_model.Purchase, err error)
 	CreateOnePurchase(ctx context.Context, purchase *mongo_model.Purchase) (err error)
 	UpdatePartialPurchase(ctx context.Context, options, field map[string]interface{}) (err error)
+
+	// Ticket Purchase
+	FetchListTicketPurchase(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)
+	CountTicketPurchase(ctx context.Context, options map[string]interface{}) (total int64)
+	FetchOneTicketPurchase(ctx context.Context, options map[string]interface{}) (row *mongo_model.TicketPurchase, err error)
+	CreateOneTicketPurchase(ctx context.Context, ticketPurchase *mongo_model.TicketPurchase) (err error)
+	CreateManyTicketPurchase(ctx context.Context, ticketPurchases []*mongo_model.TicketPurchase) (err error)
+	UpdatePartialTicketPurchase(ctx context.Context, options, field map[string]interface{}) (err error)
+	UpdateManyTicketPurchasePartial(ctx context.Context, options, field map[string]interface{}) (err error)
 }
 
 type S3Repo interface {
