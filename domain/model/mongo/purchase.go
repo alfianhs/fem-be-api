@@ -13,15 +13,15 @@ type Purchase struct {
 	Season            SeasonFK           `bson:"-" json:"season"`
 	SeriesId          string             `bson:"seriesId" json:"seriesId"`
 	Series            SeriesFK           `bson:"-" json:"series"`
-	TicketIds         []string           `bson:"ticketIds" json:"ticketIds"`
-	Tickets           []TicketFK         `bson:"-" json:"tickets"`
+	Tickets           []TicketFK         `bson:"tickets" json:"tickets"`
 	Amount            int64              `bson:"amount" json:"amount"`
-	Invoice           InvoiceFK          `bson:"invoice" json:"invoice"`
+	Invoice           Invoice            `bson:"invoice" json:"invoice"`
 	Price             float64            `bson:"price" json:"price"`
 	GrandTotal        float64            `bson:"grandTotal" json:"grandTotal"`
 	IsCheckoutPackage bool               `bson:"isCheckoutPackage" json:"isCheckoutPackage"`
 	Status            PurchaseStatus     `bson:"status" json:"-"`
 	ExpiresAt         time.Time          `bson:"expiresAt" json:"expiresAt"`
+	PaidAt            *time.Time         `bson:"paidAt" json:"paidAt"`
 	StatusString      string             `bson:"-" json:"status"`
 	CreatedAt         time.Time          `bson:"createdAt" json:"createdAt"`
 	UpdatedAt         time.Time          `bson:"updatedAt" json:"updatedAt"`
@@ -35,7 +35,7 @@ type MemberPurchaseFK struct {
 	Phone string `bson:"phone" json:"phone"`
 }
 
-type InvoiceFK struct {
+type Invoice struct {
 	InvoiceID          string `bson:"invoiceId" json:"invoiceId"`
 	InvoiceExternalID  string `bson:"invoiceExternalId" json:"invoiceExternalId"`
 	InvoiceUrl         string `bson:"invoiceUrl" json:"invoiceUrl"`

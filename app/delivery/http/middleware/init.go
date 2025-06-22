@@ -3,6 +3,7 @@ package middleware
 import (
 	jwt_helpers "app/helpers/jwt"
 	"io"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,7 @@ type appMiddleware struct {
 	secretKeySuperadmin string
 	secretKeyAdmin      string
 	secretKeyMember     string
+	xenditCallbackToken string
 }
 
 func NewAppMiddleware() AppMiddleware {
@@ -18,6 +20,7 @@ func NewAppMiddleware() AppMiddleware {
 		secretKeySuperadmin: jwt_helpers.GetJWTSecretKeySuperadmin(),
 		secretKeyAdmin:      jwt_helpers.GetJWTSecretKeyAdmin(),
 		secretKeyMember:     jwt_helpers.GetJWTSecretKeyMember(),
+		xenditCallbackToken: os.Getenv("XENDIT_CALLBACK_TOKEN"),
 	}
 }
 
@@ -26,6 +29,7 @@ type AppMiddleware interface {
 	AuthAdmin() gin.HandlerFunc
 	AuthMember() gin.HandlerFunc
 	OptionalAuthMember() gin.HandlerFunc
+	AuthXendit() gin.HandlerFunc
 	Logger(writer io.Writer) gin.HandlerFunc
 	Recovery() gin.HandlerFunc
 }

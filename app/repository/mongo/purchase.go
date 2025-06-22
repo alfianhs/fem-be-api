@@ -37,6 +37,12 @@ func generateQueryFilterPurchase(options map[string]interface{}, withOptions boo
 			}
 		}
 	}
+	if invoiceId, ok := options["invoiceId"].(string); ok {
+		query["invoice.invoiceId"] = invoiceId
+	}
+	if externalId, ok := options["externalId"].(string); ok {
+		query["invoice.invoiceExternalId"] = externalId
+	}
 
 	return query, mongoOptions
 }

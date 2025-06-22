@@ -5,12 +5,14 @@ import (
 	member_http "app/app/delivery/http/member"
 	"app/app/delivery/http/middleware"
 	superadmin_http "app/app/delivery/http/superadmin"
+	webhook_http "app/app/delivery/http/webhook"
 	mongo_repository "app/app/repository/mongo"
 	s3_repository "app/app/repository/s3"
 	xendit_repository "app/app/repository/xendit"
 	admin_usecase "app/app/usecase/admin"
 	member_usecase "app/app/usecase/member"
 	superadmin_usecase "app/app/usecase/superadmin"
+	webhook_usecase "app/app/usecase/webhook"
 	"app/docs"
 	"app/helpers"
 	"io"
@@ -95,6 +97,12 @@ func main() {
 		XenditRepo:  xenditRepo,
 	}, timeoutContext)
 
+	// init webhook usecase
+	webhookUsecase := webhook_usecase.NewWebhookAppUsecase(webhook_usecase.RepoInjection{
+		MongoDbRepo: mongoDbRepo,
+		XenditRepo:  xenditRepo,
+	}, timeoutContext)
+
 	// init middleware
 	middleware := middleware.NewAppMiddleware()
 
@@ -126,6 +134,7 @@ func main() {
 	superadmin_http.NewSuperadminRouteHandler(superadminUsecase, ginEngine, middleware)
 	admin_http.NewAdminRouteHandler(adminUsecase, ginEngine, middleware)
 	member_http.NewMemberRouteHandler(memberUsecase, ginEngine, middleware)
+	webhook_http.NewWebhookRouteHandler(webhookUsecase, ginEngine, middleware)
 
 	// default route
 	ginEngine.GET("/", func(c *gin.Context) {

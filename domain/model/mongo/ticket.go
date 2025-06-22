@@ -20,8 +20,10 @@ type Ticket struct {
 }
 
 type TicketFK struct {
-	ID   string `bson:"id" json:"id"`
-	Name string `bson:"name" json:"name"`
+	ID      string    `bson:"id" json:"id"`
+	Name    string    `bson:"name" json:"name"`
+	Date    time.Time `bson:"date" json:"date"`
+	VenueID string    `bson:"venueId" json:"venueId"`
 }
 
 type TicketQuota struct {
