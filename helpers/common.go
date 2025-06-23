@@ -78,6 +78,25 @@ func SetToEndOfDayWIB(t time.Time) time.Time {
 	return time.Date(t.Year(), t.Month(), t.Day(), 23, 59, 59, int(time.Second-time.Nanosecond), loc)
 }
 
+func IsSameDateWIB(a, b time.Time) bool {
+	loc, _ := time.LoadLocation("Asia/Jakarta")
+	a = a.In(loc)
+	b = b.In(loc)
+	return a.Year() == b.Year() && a.Month() == b.Month() && a.Day() == b.Day()
+}
+
+func ConvertUTCToWIB(t time.Time) time.Time {
+	loc, err := time.LoadLocation("Asia/Jakarta")
+	if err != nil {
+		return t
+	}
+	return t.In(loc)
+}
+
+func FormatDateWIB(t time.Time, layout string) string {
+	return ConvertUTCToWIB(t).Format(layout)
+}
+
 func GenerateInvoiceExternalId(count int64) string {
 	prefix := "TRX"
 	randomChar, _ := GenerateSecureRandomChar(3)

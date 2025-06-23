@@ -66,6 +66,45 @@
                 }
             }
         },
+        "/admin/ticket-purchases/scan": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Scan Ticket Purchase",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TicketPurchase-Admin"
+                ],
+                "summary": "Scan Ticket Purchase",
+                "parameters": [
+                    {
+                        "description": "Scan Ticket Purchase",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ScanTicketPurchaseRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/member/auth/login": {
             "post": {
                 "description": "Login Member",
@@ -3347,6 +3386,14 @@
             "type": "object",
             "properties": {
                 "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.ScanTicketPurchaseRequest": {
+            "type": "object",
+            "properties": {
+                "code": {
                     "type": "string"
                 }
             }
