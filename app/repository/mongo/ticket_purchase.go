@@ -19,6 +19,9 @@ func generateQueryFilterTicketPurchase(options map[string]interface{}, withOptio
 	}
 
 	// custom filter
+	if code, ok := options["code"].(string); ok {
+		query["code"] = code
+	}
 
 	return query, mongoOptions
 }

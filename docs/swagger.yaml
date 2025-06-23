@@ -120,6 +120,11 @@ definitions:
       email:
         type: string
     type: object
+  request.ScanTicketPurchaseRequest:
+    properties:
+      code:
+        type: string
+    type: object
   request.SeasonStatusUpdateRequest:
     properties:
       status:
@@ -309,6 +314,30 @@ paths:
       summary: Get Profile Admin
       tags:
       - Auth-Admin
+  /admin/ticket-purchases/scan:
+    post:
+      consumes:
+      - application/json
+      description: Scan Ticket Purchase
+      parameters:
+      - description: Scan Ticket Purchase
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/request.ScanTicketPurchaseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Scan Ticket Purchase
+      tags:
+      - TicketPurchase-Admin
   /member/auth/login:
     post:
       consumes:

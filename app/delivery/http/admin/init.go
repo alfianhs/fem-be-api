@@ -21,4 +21,5 @@ func NewAdminRouteHandler(usecase domain.AdminAppUsecase, ginEngine *gin.Engine,
 	}
 
 	handler.handleAuthRoute("/auth")
+	handler.handleTicketPurchaseRoute("/ticket-purchases")
 }

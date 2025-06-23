@@ -92,6 +92,9 @@ type AdminAppUsecase interface {
 	// Auth
 	Login(ctx context.Context, payload request.AdminLoginRequest) helpers.Response
 	GetProfile(ctx context.Context, claim jwt_helpers.AdminJWTClaims) helpers.Response
+
+	// Ticket Purchase
+	ScanTicketPurchase(ctx context.Context, payload request.ScanTicketPurchaseRequest) helpers.Response
 }
 
 type MemberAppUsecase interface {
