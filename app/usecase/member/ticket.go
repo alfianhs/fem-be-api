@@ -278,6 +278,8 @@ func (u *memberAppUsecase) getTicketsBySeriesIDs(ctx context.Context, seriesIds 
 	// fetch tickets by series IDs
 	ticketsCursor, err := u.mongoDbRepo.FetchListTicket(ctx, map[string]interface{}{
 		"seriesIds": seriesIds,
+		"sort":      "date",
+		"dir":       "asc",
 	})
 	if err != nil {
 		return nil, err
