@@ -412,9 +412,9 @@ func (u *superadminAppUsecase) CreateOrUpdateTicket(ctx context.Context, payload
 		date, _ := time.Parse(time.RFC3339, ticketPayload.Date)
 		date = helpers.SetToStartOfDayWIB(date)
 
-		if date.Before(series.StartDate) || date.After(series.EndDate) {
-			return helpers.NewResponse(http.StatusBadRequest, "Date must be between "+series.StartDate.Format("2006-01-02")+
-				" and "+series.EndDate.Format("2006-01-02"), nil, nil)
+		if !(date.Equal(series.StartDate) || date.After(series.StartDate)) || !(date.Equal(series.EndDate) || date.Before(series.EndDate)) {
+			return helpers.NewResponse(http.StatusBadRequest, "Date must be between "+helpers.FormatDateWIB(series.StartDate, "02 January 2006")+
+				" and "+helpers.FormatDateWIB(series.EndDate, "02 January 2006"), nil, nil)
 		}
 
 		// set ticket
