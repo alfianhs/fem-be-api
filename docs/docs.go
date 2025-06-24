@@ -507,6 +507,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "Season ID",
+                        "name": "seasonId",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "Page",
                         "name": "page",
@@ -559,6 +565,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Search by name",
                         "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Season ID",
+                        "name": "seasonId",
                         "in": "query"
                     },
                     {
@@ -2978,8 +2990,26 @@ const docTemplate = `{
                 "summary": "Create Voting",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "name": "assistPoint",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
                         "type": "string",
                         "name": "endDate",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "goalPoint",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "name": "savePoint",
                         "in": "formData",
                         "required": true
                     },
@@ -3097,8 +3127,23 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "integer",
+                        "name": "assistPoint",
+                        "in": "formData"
+                    },
+                    {
                         "type": "string",
                         "name": "endDate",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "goalPoint",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "savePoint",
                         "in": "formData"
                     },
                     {
@@ -3309,6 +3354,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "save": {
+                    "type": "integer"
+                },
+                "teamLeaderboard": {
                     "type": "integer"
                 }
             }
