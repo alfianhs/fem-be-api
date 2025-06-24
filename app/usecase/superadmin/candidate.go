@@ -155,6 +155,9 @@ func (u *superadminAppUsecase) CreateCandidate(ctx context.Context, payload requ
 	if payload.SeasonTeamPlayerID == "" {
 		errs["seasonTeamPlayerId"] = "SeasonTeamPlayer ID is required"
 	}
+	if payload.Performance.TeamLeaderboard == 0 {
+		errs["performance.teamLeaderboard"] = "TeamLeaderboard is required"
+	}
 	if payload.Performance.Goal == 0 && payload.Performance.Assist == 0 && payload.Performance.Save == 0 {
 		errs["performance.goal"] = "At least one of goal, assist, or save must be provided"
 		errs["performance.assist"] = "At least one of goal, assist, or save must be provided"
@@ -224,10 +227,11 @@ func (u *superadminAppUsecase) CreateCandidate(ctx context.Context, payload requ
 			Image:      seasonTeamPlayer.Image.URL,
 		},
 		Performance: mongo_model.Performance{
-			Goal:   payload.Performance.Goal,
-			Assist: payload.Performance.Assist,
-			Save:   payload.Performance.Save,
-			Score:  helpers.CalculateScore(scorePoint, candidatePerformanceCount),
+			TeamLeaderboard: payload.Performance.TeamLeaderboard,
+			Goal:            payload.Performance.Goal,
+			Assist:          payload.Performance.Assist,
+			Save:            payload.Performance.Save,
+			Score:           helpers.CalculateScore(scorePoint, candidatePerformanceCount),
 		},
 		Voters: mongo_model.Voters{
 			Count: 0,
@@ -305,6 +309,9 @@ func (u *superadminAppUsecase) UpdateCandidate(ctx context.Context, id string, p
 		}
 		fields["seasonTeamPlayer"] = c.SeasonTeamPlayer
 	}
+
+	c.Performance.TeamLeaderboard = payload.Performance.TeamLeaderboard
+	fields["performance.teamLeaderboard"] = c.Performance.TeamLeaderboard
 
 	c.Performance.Goal = payload.Performance.Goal
 	fields["performance.goal"] = c.Performance.Goal
