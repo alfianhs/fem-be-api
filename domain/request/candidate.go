@@ -17,7 +17,8 @@ type CandidateVoteRequest struct {
 }
 
 type CandidatePerformanceRequest struct {
-	Goal   int64 `json:"goal"`
-	Assist int64 `json:"assist"`
-	Save   int64 `json:"save"`
+	TeamLeaderboard int64 `json:"teamLeaderboard"`
+	Goal            int64 `json:"goal"`
+	Assist          int64 `json:"assist"`
+	Save            int64 `json:"save"`
 }

@@ -32,10 +32,11 @@ type Voters struct {
 }
 
 type Performance struct {
-	Goal   int64 `bson:"goal" json:"goal"`
-	Assist int64 `bson:"assist" json:"assist"`
-	Save   int64 `bson:"save" json:"save"`
-	Score  int64 `bson:"score" json:"score"`
+	TeamLeaderboard int64 `bson:"teamLeaderboard" json:"teamLeaderboard"`
+	Goal            int64 `bson:"goal" json:"goal"`
+	Assist          int64 `bson:"assist" json:"assist"`
+	Save            int64 `bson:"save" json:"save"`
+	Score           int64 `bson:"score" json:"score"`
 }
 
 func (c *Candidate) Format(v *VotingFK) *Candidate {

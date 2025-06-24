@@ -146,7 +146,12 @@ func (u *memberAppUsecase) GetCandidateList(ctx context.Context, claim jwt_helpe
 		}
 
 		// compare by candidate performance score
-		return a.Performance.Score > b.Performance.Score
+		if a.Performance.Score != b.Performance.Score {
+			return a.Performance.Score > b.Performance.Score
+		}
+
+		// compare by team leaderboard
+		return a.Performance.TeamLeaderboard < b.Performance.TeamLeaderboard
 	})
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, helpers.PaginatedResponse{
