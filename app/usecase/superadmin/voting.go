@@ -175,6 +175,15 @@ func (u *superadminAppUsecase) CreateVoting(ctx context.Context, payload request
 	if payload.Status == 0 {
 		errs["status"] = "Status is required"
 	}
+	if payload.GoalPoint == 0 {
+		errs["goalPoint"] = "Goal point is required"
+	}
+	if payload.AssistPoint == 0 {
+		errs["assistPoint"] = "Assist point is required"
+	}
+	if payload.SavePoint == 0 {
+		errs["savePoint"] = "Save point is required"
+	}
 	bannerFile, bannerFileHeader, err := request.FormFile("banner")
 	if err != nil {
 		errs["banner"] = "Banner field is required"
@@ -260,8 +269,13 @@ func (u *superadminAppUsecase) CreateVoting(ctx context.Context, payload request
 		EndDate:    helpers.SetToEndOfDayWIB(end),
 		TotalVoter: 0,
 		Status:     mongo_model.VotingStatus(payload.Status),
-		CreatedAt:  now,
-		UpdatedAt:  now,
+		PerformancePoint: mongo_model.PerformancePoint{
+			Goal:   payload.GoalPoint,
+			Assist: payload.AssistPoint,
+			Save:   payload.SavePoint,
+		},
+		CreatedAt: now,
+		UpdatedAt: now,
 		Banner: mongo_model.MediaFK{
 			ID:          media.ID.Hex(),
 			Name:        media.Name,
@@ -295,8 +309,6 @@ func (u *superadminAppUsecase) UpdateVoting(ctx context.Context, id string, payl
 		return helpers.NewResponse(http.StatusBadRequest, "Voting not found", nil, nil)
 	}
 
-	//
-
 	// update if not empty
 	if payload.SeriesID != "" {
 		series, err := u.mongoDbRepo.FetchOneSeries(ctx, map[string]interface{}{
@@ -329,6 +341,15 @@ func (u *superadminAppUsecase) UpdateVoting(ctx context.Context, id string, payl
 	}
 	if payload.Status != 0 {
 		voting.Status = mongo_model.VotingStatus(payload.Status)
+	}
+	if payload.GoalPoint != 0 {
+		voting.PerformancePoint.Goal = payload.GoalPoint
+	}
+	if payload.AssistPoint != 0 {
+		voting.PerformancePoint.Assist = payload.AssistPoint
+	}
+	if payload.SavePoint != 0 {
+		voting.PerformancePoint.Save = payload.SavePoint
 	}
 
 	// set timestamp
@@ -388,13 +409,14 @@ func (u *superadminAppUsecase) UpdateVoting(ctx context.Context, id string, payl
 	err = u.mongoDbRepo.UpdatePartialVoting(ctx, map[string]interface{}{
 		"id": voting.ID,
 	}, map[string]interface{}{
-		"seriesId":  voting.SeriesID,
-		"title":     voting.Title,
-		"startDate": voting.StartDate,
-		"endDate":   voting.EndDate,
-		"banner":    voting.Banner,
-		"status":    voting.Status,
-		"updatedAt": voting.UpdatedAt,
+		"seriesId":         voting.SeriesID,
+		"title":            voting.Title,
+		"startDate":        voting.StartDate,
+		"endDate":          voting.EndDate,
+		"performancePoint": voting.PerformancePoint,
+		"banner":           voting.Banner,
+		"status":           voting.Status,
+		"updatedAt":        voting.UpdatedAt,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
