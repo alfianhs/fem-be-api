@@ -20,6 +20,7 @@ func (h *routeMember) handleSeriesRoute(prefixPath string) {
 //	@Accept json
 //	@Produce json
 //	@Param search query string false "Search by name"
+//	@Param seasonId query string false "Season ID"
 //	@Param page query int false "Page"
 //	@Param limit query int false "Limit"
 //	@Param sort query string false "Sort"
@@ -62,6 +63,7 @@ func (h *routeMember) GetSeriesDetail(c *gin.Context) {
 //	@Accept json
 //	@Produce json
 //	@Param search query string false "Search by name"
+//	@Param seasonId query string false "Season ID"
 //	@Param page query int false "Page"
 //	@Param limit query int false "Limit"
 //	@Param sort query string false "Sort"

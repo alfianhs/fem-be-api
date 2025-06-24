@@ -63,6 +63,8 @@ definitions:
         type: integer
       save:
         type: integer
+      teamLeaderboard:
+        type: integer
     type: object
   request.CandidateUpdateRequest:
     properties:
@@ -582,6 +584,10 @@ paths:
         in: query
         name: search
         type: string
+      - description: Season ID
+        in: query
+        name: seasonId
+        type: string
       - description: Page
         in: query
         name: page
@@ -638,6 +644,10 @@ paths:
       - description: Search by name
         in: query
         name: search
+        type: string
+      - description: Season ID
+        in: query
+        name: seasonId
         type: string
       - description: Page
         in: query
@@ -2145,9 +2155,21 @@ paths:
       description: Create a new voting
       parameters:
       - in: formData
+        name: assistPoint
+        required: true
+        type: integer
+      - in: formData
         name: endDate
         required: true
         type: string
+      - in: formData
+        name: goalPoint
+        required: true
+        type: integer
+      - in: formData
+        name: savePoint
+        required: true
+        type: integer
       - in: formData
         name: seriesId
         required: true
@@ -2245,8 +2267,17 @@ paths:
         required: true
         type: string
       - in: formData
+        name: assistPoint
+        type: integer
+      - in: formData
         name: endDate
         type: string
+      - in: formData
+        name: goalPoint
+        type: integer
+      - in: formData
+        name: savePoint
+        type: integer
       - in: formData
         name: seriesId
         type: string
