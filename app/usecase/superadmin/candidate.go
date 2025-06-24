@@ -192,6 +192,20 @@ func (u *superadminAppUsecase) CreateCandidate(ctx context.Context, payload requ
 		return helpers.NewResponse(http.StatusBadRequest, "SeasonTeam not found", nil, nil)
 	}
 
+	// score point from voting
+	scorePoint := helpers.PerformancePoint{
+		Goal:   voting.PerformancePoint.Goal,
+		Assist: voting.PerformancePoint.Assist,
+		Save:   voting.PerformancePoint.Save,
+	}
+
+	// performance count from payload
+	candidatePerformanceCount := helpers.CandidatePerformanceCount{
+		Goal:   payload.Performance.Goal,
+		Assist: payload.Performance.Assist,
+		Save:   payload.Performance.Save,
+	}
+
 	now := time.Now()
 	candidate := &mongo_model.Candidate{
 		ID:       primitive.NewObjectID(),
@@ -213,7 +227,7 @@ func (u *superadminAppUsecase) CreateCandidate(ctx context.Context, payload requ
 			Goal:   payload.Performance.Goal,
 			Assist: payload.Performance.Assist,
 			Save:   payload.Performance.Save,
-			Score:  helpers.CalculateScore(payload.Performance.Goal, payload.Performance.Assist, payload.Performance.Save),
+			Score:  helpers.CalculateScore(scorePoint, candidatePerformanceCount),
 		},
 		Voters: mongo_model.Voters{
 			Count: 0,
@@ -302,7 +316,20 @@ func (u *superadminAppUsecase) UpdateCandidate(ctx context.Context, id string, p
 	fields["performance.save"] = c.Performance.Save
 
 	if payload.Performance.Goal != 0 || payload.Performance.Assist != 0 || payload.Performance.Save != 0 {
-		fields["performance.score"] = helpers.CalculateScore(c.Performance.Goal, c.Performance.Assist, c.Performance.Save)
+		// score point from voting
+		scorePoint := helpers.PerformancePoint{
+			Goal:   voting.PerformancePoint.Goal,
+			Assist: voting.PerformancePoint.Assist,
+			Save:   voting.PerformancePoint.Save,
+		}
+
+		// performance count from updated candidate
+		candidatePerformanceCount := helpers.CandidatePerformanceCount{
+			Goal:   c.Performance.Goal,
+			Assist: c.Performance.Assist,
+			Save:   c.Performance.Save,
+		}
+		fields["performance.score"] = helpers.CalculateScore(scorePoint, candidatePerformanceCount)
 	} else {
 		errs := map[string]string{}
 		errs["performance.goal"] = "At least one of goal, assist, or save must be provided"
