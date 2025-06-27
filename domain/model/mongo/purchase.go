@@ -20,7 +20,7 @@ type Purchase struct {
 	GrandTotal        float64            `bson:"grandTotal" json:"grandTotal"`
 	IsCheckoutPackage bool               `bson:"isCheckoutPackage" json:"isCheckoutPackage"`
 	Status            PurchaseStatus     `bson:"status" json:"-"`
-	ExpiresAt         time.Time          `bson:"expiresAt" json:"expiresAt"`
+	ExpiredAt         time.Time          `bson:"expiredAt" json:"expiredAt"`
 	PaidAt            *time.Time         `bson:"paidAt" json:"paidAt"`
 	StatusString      string             `bson:"-" json:"status"`
 	CreatedAt         time.Time          `bson:"createdAt" json:"createdAt"`
