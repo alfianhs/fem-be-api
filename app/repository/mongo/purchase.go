@@ -56,6 +56,9 @@ func generateQueryFilterPurchase(options map[string]interface{}, withOptions boo
 			bson.M{"invoice.invoiceExternalId": search},
 		}
 	}
+	if seasonId, ok := options["seasonId"].(string); ok {
+		query["seasonId"] = seasonId
+	}
 
 	return query, mongoOptions
 }

@@ -100,3 +100,40 @@ func (r *mongoDbRepo) UpdatePartialSeries(ctx context.Context, options, field ma
 
 	return
 }
+
+func (r *mongoDbRepo) SumSeriesMatchCount(ctx context.Context, options map[string]interface{}) (total int64, err error) {
+	// filter
+	filter := bson.D{}
+	for key, value := range options {
+		filter = append(filter, bson.E{Key: key, Value: value})
+	}
+
+	// pipeline
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: filter}},
+		{{Key: "$group", Value: bson.D{
+			{Key: "_id", Value: nil},
+			{Key: "totalMatchCount", Value: bson.D{{Key: "$sum", Value: "$matchCount"}}},
+		}}},
+	}
+
+	// aggregate
+	cur, err := r.Conn.Collection(r.seriesCollection).Aggregate(ctx, pipeline)
+	if err != nil {
+		return 0, err
+	}
+	defer cur.Close(ctx)
+
+	// decode
+	if cur.Next(ctx) {
+		var result struct {
+			TotalMatchCount int64 `bson:"totalMatchCount"`
+		}
+		if err := cur.Decode(&result); err != nil {
+			return 0, err
+		}
+		total = result.TotalMatchCount
+	}
+
+	return total, nil
+}
