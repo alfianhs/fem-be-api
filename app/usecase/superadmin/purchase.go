@@ -62,7 +62,7 @@ func (u *superadminAppUsecase) GetPurchasesList(ctx context.Context, queryParam 
 			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
 		}
 
-		list = append(list, row)
+		list = append(list, row.Format())
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, helpers.PaginatedResponse{
