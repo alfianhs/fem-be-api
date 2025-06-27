@@ -39,7 +39,7 @@ type Invoice struct {
 	InvoiceID          string `bson:"invoiceId" json:"invoiceId"`
 	InvoiceExternalID  string `bson:"invoiceExternalId" json:"invoiceExternalId"`
 	InvoiceUrl         string `bson:"invoiceUrl" json:"invoiceUrl"`
-	PaymentMethod      string `bson:"PaymentMethod" json:"PaymentMethod"`
+	PaymentMethod      string `bson:"paymentMethod" json:"paymentMethod"`
 	MerchantName       string `bson:"merchantName" json:"merchantName"`
 	BankCode           string `bson:"bankCode" json:"bankCode"`
 	PaymentChannel     string `bson:"paymentChannel" json:"paymentChannel"`
