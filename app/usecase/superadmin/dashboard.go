@@ -49,6 +49,8 @@ func (u *superadminAppUsecase) GetDashboard(ctx context.Context, queryParam url.
 	}
 
 	totalPurchase := len(purchases)
+	totalSeriesPurchase := 0
+	totalDayPurchase := 0
 	totalIncome := float64(0)
 	incomeByMonth := make(map[string]float64)
 
@@ -68,6 +70,12 @@ func (u *superadminAppUsecase) GetDashboard(ctx context.Context, queryParam url.
 			incomeByMonth[month] = 0
 		}
 		incomeByMonth[month] += purchase.GrandTotal
+
+		if purchase.IsCheckoutPackage {
+			totalSeriesPurchase += 1
+		} else {
+			totalDayPurchase += 1
+		}
 	}
 
 	// get all month
@@ -84,9 +92,11 @@ func (u *superadminAppUsecase) GetDashboard(ctx context.Context, queryParam url.
 	}
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, map[string]interface{}{
-		"totalMatch":    totalMatch,
-		"totalPurchase": totalPurchase,
-		"totalIncome":   totalIncome,
-		"chartData":     chartData,
+		"totalMatch":          totalMatch,
+		"totalPurchase":       totalPurchase,
+		"totalSeriesPurchase": totalSeriesPurchase,
+		"totalDayPurchase":    totalDayPurchase,
+		"totalIncome":         totalIncome,
+		"chartData":           chartData,
 	})
 }
