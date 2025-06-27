@@ -158,7 +158,7 @@ func (u *memberAppUsecase) CreatePurchase(ctx context.Context, claim jwt_helpers
 		newPurchase.Invoice.InvoiceID = respDataXendit.ID
 		newPurchase.Invoice.InvoiceUrl = respDataXendit.InvoiceURL
 		newPurchase.Invoice.MerchantName = respDataXendit.MerchantName
-		newPurchase.ExpiresAt = respDataXendit.ExpiryDate
+		newPurchase.ExpiredAt = respDataXendit.ExpiryDate
 	}
 
 	// save purchase
@@ -344,7 +344,7 @@ func (u *memberAppUsecase) CreatePackagePurchase(ctx context.Context, claim jwt_
 		newPurchase.Invoice.InvoiceID = respDataXendit.ID
 		newPurchase.Invoice.InvoiceUrl = respDataXendit.InvoiceURL
 		newPurchase.Invoice.MerchantName = respDataXendit.MerchantName
-		newPurchase.ExpiresAt = respDataXendit.ExpiryDate
+		newPurchase.ExpiredAt = respDataXendit.ExpiryDate
 	}
 
 	// save purchase
