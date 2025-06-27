@@ -13,7 +13,7 @@ type Purchase struct {
 	Season            SeasonFK           `bson:"-" json:"season"`
 	SeriesId          string             `bson:"seriesId" json:"seriesId"`
 	Series            SeriesFK           `bson:"-" json:"series"`
-	Tickets           []TicketFK         `bson:"tickets" json:"tickets"`
+	Tickets           []TicketFK         `bson:"tickets" json:"-"`
 	Amount            int64              `bson:"amount" json:"amount"`
 	Invoice           Invoice            `bson:"invoice" json:"invoice"`
 	Price             float64            `bson:"price" json:"price"`

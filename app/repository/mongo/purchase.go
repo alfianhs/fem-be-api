@@ -8,6 +8,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	moptions "go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -42,6 +43,18 @@ func generateQueryFilterPurchase(options map[string]interface{}, withOptions boo
 	}
 	if externalId, ok := options["externalId"].(string); ok {
 		query["invoice.invoiceExternalId"] = externalId
+	}
+	if search, ok := options["search"].(string); ok {
+		regex := bson.M{
+			"$regex": primitive.Regex{
+				Pattern: search,
+				Options: "i",
+			},
+		}
+		query["$or"] = bson.A{
+			bson.M{"member.email": regex},
+			bson.M{"invoice.invoiceExternalId": search},
+		}
 	}
 
 	return query, mongoOptions

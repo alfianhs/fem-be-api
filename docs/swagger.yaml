@@ -1084,6 +1084,44 @@ paths:
       summary: Update Player
       tags:
       - Player-Superadmin
+  /superadmin/purchases:
+    get:
+      consumes:
+      - application/json
+      description: Get Purchases List
+      parameters:
+      - description: Search by invoice external id / email
+        in: query
+        name: search
+        type: string
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Purchases List
+      tags:
+      - Purchase-Superadmin
   /superadmin/season-team-players:
     get:
       consumes:

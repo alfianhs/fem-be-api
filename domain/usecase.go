@@ -86,6 +86,9 @@ type SuperadminAppUsecase interface {
 	CreateCandidate(ctx context.Context, req request.CandidateCreateRequest) helpers.Response
 	UpdateCandidate(ctx context.Context, id string, req request.CandidateUpdateRequest) helpers.Response
 	DeleteCandidate(ctx context.Context, id string) helpers.Response
+
+	// Purchase
+	GetPurchasesList(ctx context.Context, queryParam url.Values) helpers.Response
 }
 
 type AdminAppUsecase interface {
