@@ -6,7 +6,6 @@ import (
 	"context"
 	"net/http"
 	"net/url"
-	"strconv"
 
 	"github.com/sirupsen/logrus"
 )
@@ -21,17 +20,10 @@ func (u *memberAppUsecase) GetSeriesList(ctx context.Context, queryParam url.Val
 	fetchOptions := map[string]interface{}{
 		"limit":  limit,
 		"offset": offset,
+		"status": mongo_model.SeriesStatusActive,
 	}
 
 	// filtering
-	if queryParam.Get("status") != "" {
-		status := queryParam.Get("status")
-		statusInt, err := strconv.Atoi(status)
-		if err != nil {
-			return helpers.NewResponse(http.StatusBadRequest, "Invalid status", nil, nil)
-		}
-		fetchOptions["status"] = mongo_model.SeriesStatus(statusInt)
-	}
 	if queryParam.Get("seasonId") != "" {
 		fetchOptions["seasonId"] = queryParam.Get("seasonId")
 	}
@@ -173,7 +165,8 @@ func (u *memberAppUsecase) GetSeriesDetail(ctx context.Context, id string) helpe
 
 	// fetch data
 	row, err := u.mongoDbRepo.FetchOneSeries(ctx, map[string]interface{}{
-		"id": id,
+		"id":     id,
+		"status": mongo_model.SeriesStatusActive,
 	})
 	if err != nil {
 		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
@@ -227,17 +220,10 @@ func (u *memberAppUsecase) GetSeriesListWithTickets(ctx context.Context, queryPa
 	fetchOptions := map[string]interface{}{
 		"limit":  limit,
 		"offset": offset,
+		"status": mongo_model.SeriesStatusActive,
 	}
 
 	// filtering
-	if queryParam.Get("status") != "" {
-		status := queryParam.Get("status")
-		statusInt, err := strconv.Atoi(status)
-		if err != nil {
-			return helpers.NewResponse(http.StatusBadRequest, "Invalid status", nil, nil)
-		}
-		fetchOptions["status"] = mongo_model.SeriesStatus(statusInt)
-	}
 	if queryParam.Get("seasonId") != "" {
 		fetchOptions["seasonId"] = queryParam.Get("seasonId")
 	}
