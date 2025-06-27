@@ -79,6 +79,7 @@ type MongoDbRepo interface {
 	FetchOneSeries(ctx context.Context, options map[string]interface{}) (row *mongo_model.Series, err error)
 	CreateOneSeries(ctx context.Context, season *mongo_model.Series) (err error)
 	UpdatePartialSeries(ctx context.Context, options, field map[string]interface{}) (err error)
+	SumSeriesMatchCount(ctx context.Context, options map[string]interface{}) (total int64, err error)
 
 	// Ticket
 	FetchListTicket(ctx context.Context, options map[string]interface{}) (cur *mongo.Cursor, err error)

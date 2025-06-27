@@ -89,6 +89,9 @@ type SuperadminAppUsecase interface {
 
 	// Purchase
 	GetPurchasesList(ctx context.Context, queryParam url.Values) helpers.Response
+
+	// Dashboard
+	GetDashboard(ctx context.Context, queryParam url.Values) helpers.Response
 }
 
 type AdminAppUsecase interface {

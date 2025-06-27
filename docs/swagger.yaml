@@ -950,6 +950,28 @@ paths:
       summary: Update Candidate
       tags:
       - Candidate-Superadmin
+  /superadmin/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: Get Dashboard
+      parameters:
+      - description: Season ID
+        in: query
+        name: seasonId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Dashboard
+      tags:
+      - Dashboard-Superadmin
   /superadmin/players:
     get:
       consumes:
