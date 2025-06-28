@@ -103,14 +103,11 @@ func (r *mongoDbRepo) UpdatePartialSeries(ctx context.Context, options, field ma
 
 func (r *mongoDbRepo) SumSeriesMatchCount(ctx context.Context, options map[string]interface{}) (total int64, err error) {
 	// filter
-	filter := bson.D{}
-	for key, value := range options {
-		filter = append(filter, bson.E{Key: key, Value: value})
-	}
+	query, _ := generateQueryFilterSeries(options, false)
 
 	// pipeline
 	pipeline := mongo.Pipeline{
-		{{Key: "$match", Value: filter}},
+		{{Key: "$match", Value: query}},
 		{{Key: "$group", Value: bson.D{
 			{Key: "_id", Value: nil},
 			{Key: "totalMatchCount", Value: bson.D{{Key: "$sum", Value: "$matchCount"}}},
