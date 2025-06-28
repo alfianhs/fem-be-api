@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -99,7 +100,11 @@ func sendEmailVerification(member *mongo_model.Member) {
 
 	// set verification link
 	baseFeUrl := helpers.GetFEUrl()
-	verificationLink := fmt.Sprintf("%s/verify-email/%s?email=%s", baseFeUrl, member.EmailToken, member.Email)
+	verificationLink := fmt.Sprintf(
+		"%s/verification/%s?email=%s",
+		baseFeUrl,
+		url.PathEscape(member.EmailToken),
+		url.PathEscape(member.Email))
 
 	// get template
 	subject, body := helpers.GetEmailVerificationTemplate()
