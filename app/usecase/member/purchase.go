@@ -14,6 +14,24 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func (u *memberAppUsecase) GetPurchaseDetail(ctx context.Context, claim jwt_helpers.MemberJWTClaims, id string) helpers.Response {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	purchase, err := u.mongoDbRepo.FetchOnePurchase(ctx, map[string]interface{}{
+		"id":       id,
+		"memberId": claim.UserID,
+	})
+	if err != nil {
+		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+	}
+	if purchase == nil {
+		return helpers.NewResponse(http.StatusBadRequest, "Purchase not found", nil, nil)
+	}
+
+	return helpers.NewResponse(http.StatusOK, "Success", nil, purchase.Format())
+}
+
 func (u *memberAppUsecase) CreatePurchase(ctx context.Context, claim jwt_helpers.MemberJWTClaims, payload request.CreatePurchaseRequest) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()

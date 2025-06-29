@@ -12,8 +12,30 @@ import (
 func (h *routeMember) handlePurchaseRoute(prefixPath string) {
 	api := h.Route.Group(prefixPath)
 
+	api.GET("/:id", h.Middleware.AuthMember(), h.GetPurchaseDetail)
 	api.POST("", h.Middleware.AuthMember(), h.CreatePurchase)
 	api.POST("/packages", h.Middleware.AuthMember(), h.CreatePackagePurchase)
+}
+
+// GetPurchaseDetail
+//
+//	@Summary		Get purchase detail
+//	@Description	Get purchase detail
+//	@Tags			Purchase-Member
+//	@Security		BearerAuth
+//	@Accept			json
+//	@Produce		json
+//	@Param			id path string true "Purchase ID"
+//	@Success		200		{object}	helpers.Response
+//	@Router			/member/purchases/{id} [get]
+func (h *routeMember) GetPurchaseDetail(c *gin.Context) {
+	ctx := c.Request.Context()
+
+	id := c.Param("id")
+	claim := c.MustGet("user_data").(jwt_helpers.MemberJWTClaims)
+
+	response := h.Usecase.GetPurchaseDetail(ctx, claim, id)
+	c.JSON(response.Status, response)
 }
 
 // CreatePurchase
