@@ -131,12 +131,10 @@ func (u *memberAppUsecase) CreatePurchase(ctx context.Context, claim jwt_helpers
 			Email: member.Email,
 			Phone: *member.Phone,
 		},
-		SeasonId: season.ID.Hex(),
 		Season: mongo_model.SeasonFK{
 			ID:   season.ID.Hex(),
 			Name: season.Name,
 		},
-		SeriesId: series.ID.Hex(),
 		Series: mongo_model.SeriesFK{
 			ID:   series.ID.Hex(),
 			Name: series.Name,
@@ -324,12 +322,10 @@ func (u *memberAppUsecase) CreatePackagePurchase(ctx context.Context, claim jwt_
 			Email: member.Email,
 			Phone: *member.Phone,
 		},
-		SeasonId: season.ID.Hex(),
 		Season: mongo_model.SeasonFK{
 			ID:   season.ID.Hex(),
 			Name: season.Name,
 		},
-		SeriesId: series.ID.Hex(),
 		Series: mongo_model.SeriesFK{
 			ID:   series.ID.Hex(),
 			Name: series.Name,
