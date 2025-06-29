@@ -17,6 +17,17 @@ services:
       restart_policy:
         condition: on-failure
 
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    ports:
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /home/emokids/certs:/certs
+    networks:
+      - md_mongodb-network
+
 networks:
   md_mongodb-network:
     name: md_mongodb-network
