@@ -9,11 +9,9 @@ import (
 type Purchase struct {
 	ID                primitive.ObjectID `bson:"_id" json:"id"`
 	Member            MemberPurchaseFK   `bson:"member" json:"member"`
-	SeasonId          string             `bson:"seasonId" json:"seasonId"`
-	Season            SeasonFK           `bson:"-" json:"season"`
-	SeriesId          string             `bson:"seriesId" json:"seriesId"`
-	Series            SeriesFK           `bson:"-" json:"series"`
-	Tickets           []TicketFK         `bson:"tickets" json:"-"`
+	Season            SeasonFK           `bson:"season" json:"season"`
+	Series            SeriesFK           `bson:"series" json:"series"`
+	Tickets           []TicketFK         `bson:"tickets" json:"tickets"`
 	Amount            int64              `bson:"amount" json:"amount"`
 	Invoice           Invoice            `bson:"invoice" json:"invoice"`
 	Price             float64            `bson:"price" json:"price"`
