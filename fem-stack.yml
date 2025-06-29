@@ -21,7 +21,7 @@ services:
     image: caddy:latest
     container_name: caddy
     ports:
-      - "443:443"
+      - "9882:9882"
     volumes:
       - /home/emokids/caddy/Caddyfile-fem:/etc/caddy/Caddyfile
       - /home/emokids/certs:/certs
