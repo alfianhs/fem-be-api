@@ -1,0 +1,4 @@
+https://103.155.246.50 {
+    tls /certs/selfsigned.crt /certs/selfsigned.key
+    reverse_proxy fem:8080
+}
