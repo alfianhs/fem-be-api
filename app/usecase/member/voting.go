@@ -118,3 +118,18 @@ func (u *memberAppUsecase) GetVotingList(ctx context.Context, queryParam url.Val
 		Total: total,
 	})
 }
+
+func (u *memberAppUsecase) GetVotingDetail(ctx context.Context, id string) helpers.Response {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	voting, err := u.mongoDbRepo.FetchOneVoting(ctx, map[string]interface{}{"id": id})
+	if err != nil {
+		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+	}
+	if voting == nil {
+		return helpers.NewResponse(http.StatusNotFound, "Voting not found", nil, nil)
+	}
+
+	return helpers.NewResponse(http.StatusOK, "Success", nil, voting.Format())
+}

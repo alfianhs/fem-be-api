@@ -948,6 +948,38 @@
                 }
             }
         },
+        "/member/votings/{id}": {
+            "get": {
+                "description": "Get detail of a single voting by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Voting-Member"
+                ],
+                "summary": "Get Voting Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Voting ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/superadmin/auth/login": {
             "post": {
                 "security": [
