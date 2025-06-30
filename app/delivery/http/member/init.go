@@ -27,4 +27,5 @@ func NewMemberRouteHandler(usecase domain.MemberAppUsecase, ginEngine *gin.Engin
 	handler.handleSeasonRoute("/seasons")
 	handler.handleTicketRoute("/tickets")
 	handler.handleSeriesRoute("/series")
+	handler.handleTicketPurchaseRoute("/ticket-purchases")
 }

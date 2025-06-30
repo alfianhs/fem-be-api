@@ -135,6 +135,9 @@ type MemberAppUsecase interface {
 	GetSeriesList(ctx context.Context, queryParam url.Values) helpers.Response
 	GetSeriesDetail(ctx context.Context, id string) helpers.Response
 	GetSeriesListWithTickets(ctx context.Context, queryParam url.Values) helpers.Response
+
+	// Ticket Purchase
+	GetTicketPurchasesList(ctx context.Context, claim jwt_helpers.MemberJWTClaims, queryParam url.Values) helpers.Response
 }
 
 type WebhookAppUsecase interface {
