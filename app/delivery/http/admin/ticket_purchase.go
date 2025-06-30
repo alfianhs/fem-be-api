@@ -11,24 +11,24 @@ import (
 func (h *routeAdmin) handleTicketPurchaseRoute(prefixPath string) {
 	api := h.Route.Group(prefixPath)
 
-	api.GET("/today", h.Middleware.AuthAdmin(), h.GetTicketPurchasesListToday)
+	api.GET("/used-today", h.Middleware.AuthAdmin(), h.GetTicketPurchasesListIsUsedToday)
 	api.POST("/scan", h.Middleware.AuthAdmin(), h.Scan)
 }
 
-// GetTicketPurchasesListToday
+// GetTicketPurchasesListIsUsedToday
 //
-// @Summary Get Ticket Purchases List Today
-// @Description Get Ticket Purchases List Today
+// @Summary Get Ticket Purchases List Is Used Today
+// @Description Get Ticket Purchases List Is Used Today
 // @Tags TicketPurchase-Admin
 // @Security BearerAuth
 // @Accept json
 // @Produce json
 // @Success 200 {object} helpers.Response
-// @Router /admin/ticket-purchases/today [get]
-func (h *routeAdmin) GetTicketPurchasesListToday(c *gin.Context) {
+// @Router /admin/ticket-purchases/used-today [get]
+func (h *routeAdmin) GetTicketPurchasesListIsUsedToday(c *gin.Context) {
 	ctx := c.Request.Context()
 
-	response := h.Usecase.GetListTicketPurchasesToday(ctx)
+	response := h.Usecase.GetListTicketPurchasesIsUsedToday(ctx)
 	c.JSON(response.Status, response)
 }
 

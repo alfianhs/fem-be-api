@@ -11,12 +11,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (u *adminAppUsecase) GetListTicketPurchasesToday(ctx context.Context) helpers.Response {
+func (u *adminAppUsecase) GetListTicketPurchasesIsUsedToday(ctx context.Context) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
 	fetchOptions := map[string]interface{}{
 		"today":  true,
+		"isUsed": true,
 	}
 
 	// count
