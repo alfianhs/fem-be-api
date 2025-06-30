@@ -340,6 +340,23 @@ paths:
       summary: Scan Ticket Purchase
       tags:
       - TicketPurchase-Admin
+  /admin/ticket-purchases/today:
+    get:
+      consumes:
+      - application/json
+      description: Get Ticket Purchases List Today
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get Ticket Purchases List Today
+      tags:
+      - TicketPurchase-Admin
   /member/auth/login:
     post:
       consumes:

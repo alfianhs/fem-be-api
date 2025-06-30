@@ -17,5 +17,5 @@ type TicketPurchase struct {
 	UsedAt     *time.Time         `bson:"usedAt" json:"usedAt"`
 	CreatedAt  time.Time          `bson:"createdAt" json:"createdAt"`
 	UpdatedAt  time.Time          `bson:"updatedAt" json:"updatedAt"`
-	DeletedAt  *time.Time         `bson:"deletedAt" json:"deletedAt"`
+	DeletedAt  *time.Time         `bson:"deletedAt" json:"-"`
 }

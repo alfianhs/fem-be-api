@@ -4,6 +4,7 @@ import (
 	mongo_model "app/domain/model/mongo"
 	"app/helpers"
 	"context"
+	"time"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,6 +25,17 @@ func generateQueryFilterTicketPurchase(options map[string]interface{}, withOptio
 	}
 	if code, ok := options["code"].(string); ok {
 		query["code"] = code
+	}
+	if today, ok := options["today"].(bool); ok {
+		now := time.Now()
+		startOfDay := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+		endOfDay := startOfDay.Add(24 * time.Hour)
+		if today {
+			query["ticket.date"] = bson.M{
+				"$gte": startOfDay,
+				"$lt":  endOfDay,
+			}
+		}
 	}
 
 	return query, mongoOptions
