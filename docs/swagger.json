@@ -105,6 +105,34 @@
                 }
             }
         },
+        "/admin/ticket-purchases/today": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get Ticket Purchases List Today",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TicketPurchase-Admin"
+                ],
+                "summary": "Get Ticket Purchases List Today",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/helpers.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/member/auth/login": {
             "post": {
                 "description": "Login Member",

@@ -1,12 +1,57 @@
 package admin_usecase
 
 import (
+	mongo_model "app/domain/model/mongo"
 	"app/domain/request"
 	"app/helpers"
 	"context"
 	"net/http"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
+
+func (u *adminAppUsecase) GetListTicketPurchasesToday(ctx context.Context) helpers.Response {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	fetchOptions := map[string]interface{}{
+		"today":  true,
+	}
+
+	// count
+	total := u.mongoDbRepo.CountTicketPurchase(ctx, fetchOptions)
+	if total == 0 {
+		return helpers.NewResponse(http.StatusOK, "Success", nil, map[string]interface{}{
+			"list": []interface{}{},
+			"total": 0,
+		})
+	}
+
+	// fetch ticket purchases
+	cur, err := u.mongoDbRepo.FetchListTicketPurchase(ctx, fetchOptions)
+	if err != nil {
+		return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+	}
+	defer cur.Close(ctx)
+
+	var list []interface{}
+	for cur.Next(ctx) {
+		row := mongo_model.TicketPurchase{}
+		err = cur.Decode(&row)
+		if err != nil {
+			logrus.Error("GetListPurhcase Decode:", err)
+			return helpers.NewResponse(http.StatusInternalServerError, err.Error(), nil, nil)
+		}
+
+		list = append(list, row)
+	}
+
+	return helpers.NewResponse(http.StatusOK, "Success", nil, map[string]interface{}{
+		"list":  list,
+		"total": total,
+	})
+}
 
 func (u *adminAppUsecase) ScanTicketPurchase(ctx context.Context, payload request.ScanTicketPurchaseRequest) helpers.Response {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
