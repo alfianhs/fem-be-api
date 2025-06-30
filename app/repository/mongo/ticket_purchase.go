@@ -19,6 +19,9 @@ func generateQueryFilterTicketPurchase(options map[string]interface{}, withOptio
 	}
 
 	// custom filter
+	if memberId, ok := options["memberId"].(string); ok {
+		query["member.id"] = memberId
+	}
 	if code, ok := options["code"].(string); ok {
 		query["code"] = code
 	}
