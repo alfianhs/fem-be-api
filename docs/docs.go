@@ -116,14 +116,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/ticket-purchases/today": {
+        "/admin/ticket-purchases/used-today": {
             "get": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get Ticket Purchases List Today",
+                "description": "Get Ticket Purchases List Is Used Today",
                 "consumes": [
                     "application/json"
                 ],
@@ -133,7 +133,7 @@ const docTemplate = `{
                 "tags": [
                     "TicketPurchase-Admin"
                 ],
-                "summary": "Get Ticket Purchases List Today",
+                "summary": "Get Ticket Purchases List Is Used Today",
                 "responses": {
                     "200": {
                         "description": "OK",

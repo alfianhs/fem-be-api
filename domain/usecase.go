@@ -100,7 +100,7 @@ type AdminAppUsecase interface {
 	GetProfile(ctx context.Context, claim jwt_helpers.AdminJWTClaims) helpers.Response
 
 	// Ticket Purchase
-	GetListTicketPurchasesToday(ctx context.Context) helpers.Response
+	GetListTicketPurchasesIsUsedToday(ctx context.Context) helpers.Response
 	ScanTicketPurchase(ctx context.Context, payload request.ScanTicketPurchaseRequest) helpers.Response
 }
 

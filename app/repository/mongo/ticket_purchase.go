@@ -37,6 +37,9 @@ func generateQueryFilterTicketPurchase(options map[string]interface{}, withOptio
 			}
 		}
 	}
+	if isUsed, ok := options["isUsed"].(bool); ok {
+		query["isUsed"] = isUsed
+	}
 
 	return query, mongoOptions
 }
