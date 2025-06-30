@@ -512,6 +512,39 @@ paths:
       tags:
       - Candidate-Member
   /member/purchases:
+    get:
+      consumes:
+      - application/json
+      description: Get purchases list
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort
+        in: query
+        name: sort
+        type: string
+      - description: Direction asc or desc
+        in: query
+        name: dir
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/helpers.Response'
+      security:
+      - BearerAuth: []
+      summary: Get purchases list
+      tags:
+      - Purchase-Member
     post:
       consumes:
       - application/json
