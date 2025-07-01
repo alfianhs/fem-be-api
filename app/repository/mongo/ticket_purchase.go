@@ -28,7 +28,8 @@ func generateQueryFilterTicketPurchase(options map[string]interface{}, withOptio
 	}
 	if today, ok := options["today"].(bool); ok {
 		now := time.Now()
-		startOfDay := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+		loc, _ := time.LoadLocation("Asia/Jakarta")
+		startOfDay := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, loc)
 		endOfDay := startOfDay.Add(24 * time.Hour)
 		if today {
 			query["ticket.date"] = bson.M{
