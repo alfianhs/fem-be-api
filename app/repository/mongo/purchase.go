@@ -57,7 +57,7 @@ func generateQueryFilterPurchase(options map[string]interface{}, withOptions boo
 		}
 	}
 	if seasonId, ok := options["seasonId"].(string); ok {
-		query["seasonId"] = seasonId
+		query["season.id"] = seasonId
 	}
 
 	return query, mongoOptions
