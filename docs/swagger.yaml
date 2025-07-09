@@ -492,6 +492,10 @@ paths:
         in: query
         name: seasonTeamPlayerId
         type: integer
+      - description: Filter by Closed Vote (true or false)
+        in: query
+        name: closedVote
+        type: boolean
       produces:
       - application/json
       responses:
