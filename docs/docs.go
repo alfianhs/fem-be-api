@@ -362,6 +362,12 @@ const docTemplate = `{
                         "description": "Filter by SeasonTeamPlayer ID",
                         "name": "seasonTeamPlayerId",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Filter by Closed Vote (true or false)",
+                        "name": "closedVote",
+                        "in": "query"
                     }
                 ],
                 "responses": {

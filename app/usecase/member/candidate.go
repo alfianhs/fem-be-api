@@ -26,6 +26,13 @@ func (u *memberAppUsecase) GetCandidateList(ctx context.Context, claim jwt_helpe
 	}
 	if v := queryParam.Get("votingId"); v != "" {
 		opts["votingId"] = v
+	} else {
+		return helpers.NewResponse(http.StatusOK, "Success", nil, helpers.PaginatedResponse{
+			List:  []interface{}{},
+			Limit: limit,
+			Page:  page,
+			Total: 0,
+		})
 	}
 	if stp := queryParam.Get("seasonTeamPlayerId"); stp != "" {
 		opts["seasonTeamPlayerId"] = stp
@@ -135,24 +142,26 @@ func (u *memberAppUsecase) GetCandidateList(ctx context.Context, claim jwt_helpe
 		list = append(list, c.Format(&c.Voting))
 	}
 
-	// sorting
-	sort.SliceStable(list, func(i, j int) bool {
-		a := list[i].(*mongo_model.Candidate)
-		b := list[j].(*mongo_model.Candidate)
+	// sorting if param closed true
+	if closedVote := queryParam.Get("closedVote"); closedVote == "true" {
+		sort.SliceStable(list, func(i, j int) bool {
+			a := list[i].(*mongo_model.Candidate)
+			b := list[j].(*mongo_model.Candidate)
 
-		// compare by voters percentage
-		if a.Voters.Percentage != b.Voters.Percentage {
-			return a.Voters.Percentage > b.Voters.Percentage
-		}
+			// compare by voters percentage
+			if a.Voters.Percentage != b.Voters.Percentage {
+				return a.Voters.Percentage > b.Voters.Percentage
+			}
 
-		// compare by candidate performance score
-		if a.Performance.Score != b.Performance.Score {
-			return a.Performance.Score > b.Performance.Score
-		}
+			// compare by candidate performance score
+			if a.Performance.Score != b.Performance.Score {
+				return a.Performance.Score > b.Performance.Score
+			}
 
-		// compare by team leaderboard
-		return a.Performance.TeamLeaderboard < b.Performance.TeamLeaderboard
-	})
+			// compare by team leaderboard
+			return a.Performance.TeamLeaderboard < b.Performance.TeamLeaderboard
+		})
+	}
 
 	return helpers.NewResponse(http.StatusOK, "Success", nil, helpers.PaginatedResponse{
 		List:  list,

@@ -29,6 +29,7 @@ func (h *routeMember) handleCandidateRoute(prefixPath string) {
 // @Param dir query string false "Direction asc or desc"
 // @Param votingId query string false "Filter by Voting ID"
 // @Param seasonTeamPlayerId query int false "Filter by SeasonTeamPlayer ID"
+// @Param closedVote query bool false "Filter by Closed Vote (true or false)"
 // @Success 200 {object} helpers.Response
 // @Router /member/candidates [get]
 func (h *routeMember) GetCandidateList(c *gin.Context) {
